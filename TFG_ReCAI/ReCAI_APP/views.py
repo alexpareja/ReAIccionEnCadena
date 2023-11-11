@@ -1,8 +1,9 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
 from .forms import RegistroFormulario
 
 
+def index(request):
+    return render(request, 'index.html')
 # Create your views here.
 def registro(request):
     if request.method == 'POST':
@@ -14,3 +15,5 @@ def registro(request):
         form = RegistroFormulario()
 
     return render(request, 'registro.html', {'form': form})
+
+
