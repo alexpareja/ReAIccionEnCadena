@@ -1,9 +1,11 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Inicio</title>
-</head>
-<body>
+{% extends 'base_generic.html' %}
+
+
+{% block title %}
+INICIO
+{% endblock %}
+
+{% block content %}
     <h1>Bienvenido a la Página de Inicio</h1>
-</body>
-</html>
+    <p><a href="{% url 'registro' %}">Registrarse</a></p>
+{% endblock %}

@@ -10,7 +10,7 @@ def registro(request):
         form = RegistroFormulario(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('inicio')  # Redirige a la página de inicio o a donde prefieras
+            return redirect('index')  # Redirige a la página de inicio o a donde prefieras
     else:
         form = RegistroFormulario()
 
