@@ -21,4 +21,5 @@ from ReCAI_APP import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('ReCAI_APP.urls')),
+    #path('chatgpt-api/', chatgpt_api, name='chatgpt_api'),
 ]

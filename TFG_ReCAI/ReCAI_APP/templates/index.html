@@ -1,11 +1,11 @@
-{% extends 'base_generic.html' %}
+{% extends 'base_generic.html' %} 
+{% load static %}
 
+{% block title %} INICIO {% endblock %} 
+{%block content %}
+<h1>Bienvenido a Reacción en Cadena</h1>
+<p><a href="{% url 'registro' %}">Registrarse</a></p>
+<p><a href="{% url 'game' %}">Iniciar Juego</a></p>
 
-{% block title %}
-INICIO
-{% endblock %}
-
-{% block content %}
-    <h1>Bienvenido a la Página de Inicio</h1>
-    <p><a href="{% url 'registro' %}">Registrarse</a></p>
+<img src="{%static 'img/fondoREC.jpg'%}">
 {% endblock %}

@@ -1,0 +1,22 @@
+/* styles.css */
+
+body {
+    background-image: url('img/fondoREC.jpg');
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+h1, p {
+    color: lightblue;
+    text-align: center;
+}
+
+a {
+    color: #3498db; /* Puedes ajustar el color del enlace según tu preferencia */
+}

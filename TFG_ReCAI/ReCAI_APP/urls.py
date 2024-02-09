@@ -4,5 +4,7 @@ from . import views
 urlpatterns = [
     path('', views.index, name='index'),
     path('registro/', views.registro, name='registro'),
+    path('game/', views.game, name='game'),
+
     # Agrega más URLs según sea necesario
 ]

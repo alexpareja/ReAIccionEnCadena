@@ -1,15 +1,10 @@
-{% extends 'base_generic.html' %}
+{% extends 'base_generic.html' %} 
+{% block title %} REGISTRATE {% endblock %} ç
 
-
-{% block title %}
-REGISTRATE
-{% endblock %}
-
-{% block content %}
-  <h2>Registro</h2>
-  <form method="post" action="{% url 'registro' %}">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Registrarse</button>
-  </form>
+{%block content %}
+<h2>Registro</h2>
+<form method="post" action="{% url 'registro' %}">
+  {% csrf_token %} {{ form.as_p }}
+  <button type="submit">Registrarse</button>
+</form>
 {% endblock %}
