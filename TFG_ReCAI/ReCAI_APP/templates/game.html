@@ -5,21 +5,16 @@
 {% block title %} PARTIDA EN JUEGO {% endblock %} 
 {%block content %}
     <h1>PARTIDA EN JUEGO</h1>
-
+    <button type="button" onclick="generateWords()">Generar Palabras</button>
     <form id="wordForm">
-        <label for="word1">Palabra 1:</label>
-        <input type="text" id="word1" value="Camión" readonly>
+        <p><span id="word1"></span></p>
+        <p><span id="word2"></span></p>
+        <p><span id="letter"></span></p>
+        <label for="solution">Ingresa la palabra secreta:</label>
+        <input type="text" id="solution" required>
+        <p><span id="result"></span></p>
 
-        <label for="word2">Palabra 2:</label>
-        <input type="text" id="word2" value="Payaso" readonly>
-
-        <p>Primera letra de la solución: <span id="firstLetter">S</span></p>
-
-
-        <label for="word3">Ingresa la palabra secreta:</label>
-        <input type="text" id="word3" required>
-
-        <button type="button" onclick="checkSolution()">Generar</button>
+        <button type="button" onclick="checkSolution()">Comprobar Solución</button>
 
     </form>
     <p id="result"></p>
@@ -28,23 +23,21 @@
 
 
 <script>
-            // Obtener las dos primeras palabras
-            var word1 = document.getElementById('word1').value.trim();
-        var word2 = document.getElementById('word2').value.trim();
+    function generateWords() {
+            document.getElementById('word1').textContent = "Palabra 1: " + "Payaso";
+            document.getElementById('word2').textContent = "Palabra 2: " + "Camión";
+            document.getElementById('letter').textContent = "Letra: " + "B";
+    }
 
-        // Mostrar la primera letra de la solución
-        var firstLetter = document.getElementById('firstLetter');
+    function checkSolution() {
+        var solution = document.getElementById('solution').value.trim();
 
-        function checkSolution() {
-            // Obtener la solución ingresada por el usuario
-            var userSolution = document.getElementById('word3').value.trim();
-
-            // Verificar la solución
-            if (userSolution.toLowerCase()[1] === firstLetter.toLowerCase()) {
-                document.getElementById('result').textContent = "¡Correcto!";
-            } else {
-                document.getElementById('result').textContent = "Incorrecto. Intenta de nuevo.";
-            }
+        if (solution.toLowerCase() === "Bombero".toLowerCase()) {
+            document.getElementById('result').textContent = "¡Correcto!";
+        } else {
+            document.getElementById('result').textContent = "Incorrecto. Intenta de nuevo.";
         }
+    }
+
 </script>
 {% endblock %}
