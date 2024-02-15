@@ -22,8 +22,8 @@ def registro(request):
 
 def game(request):
     return render(request, 'game.html')
-def usuario(request):
-    return render(request, 'usuario.html')
+def perfil_usuario(request):
+    return render(request, 'perfil_usuario.html')
 
 #@csrf_exempt
 #def chatgpt_api(request):
