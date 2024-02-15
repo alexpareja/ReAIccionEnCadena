@@ -1,0 +1,9 @@
+{% extends "base_generic.html" %}
+{% load static %}
+
+
+{% block content %}
+<p>¡Sesión finalizada!</p>
+
+<a href="{% url 'login'%}">Haga clic aquí para iniciar sesión nuevamente.</a>
+{% endblock %}

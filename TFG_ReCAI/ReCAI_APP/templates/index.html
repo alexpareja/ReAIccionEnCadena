@@ -4,8 +4,15 @@
 {% block title %} INICIO {% endblock %} 
 {%block content %}
 <h1>Bienvenido a Reacción en Cadena</h1>
-<p><a href="{% url 'registro' %}">Registrarse</a></p>
+{% if user.is_authenticated %}
+    <p>Hola, {{user.get_username}} <a href="{% url 'usuario' %}">Ver mi perfil</a></p>
+    <p><a href="{% url 'logout'%}?next={{request.path}}">Cerrar sesión</a></p>
+{% else %}
+    <p><a href="{% url 'login'%}">Iniciar Sesión</a>  <a href="{% url 'registro' %}">Registrarse</a></p>
+{% endif %}
 <p><a href="{% url 'game' %}">Iniciar Juego</a></p>
+
+
 
 <img src="{%static 'img/fondoREC.jpg'%}">
 {% endblock %}
