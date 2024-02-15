@@ -1,0 +1,29 @@
+{% extends 'base_generic.html' %} 
+{% load static %}
+
+{% block title %} USUARIO {% endblock %} 
+{%block content %}
+  <div class="container">
+    <aside class="sidebar">
+      <ul>
+        <li><a href="#profile">Perfil</a></li>
+        <li><a href="#stats">Estadísticas</a></li>
+        <!-- Más enlaces de navegación según sea necesario -->
+      </ul>
+    </aside>
+    
+    <div class="main-content">
+      <section id="profile" class="profile">
+        <!-- Contenido del perfil -->
+      </section>
+      
+      <section id="stats" class="stats">
+        <!-- Estadísticas del jugador -->
+      </section>
+    </div>
+  </div>
+  
+  <footer>
+    <p>Reacción en Cadena &copy; 2024</p>
+  </footer>
+{% endblock %}
