@@ -7,6 +7,25 @@
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 
   <body>
-    <div id="content">{% block content %}{% endblock %}</div>
+    <div id="content">
+      {% if request.path != '/' %}
+      <a href="{% url 'index' %}">Volver atrás</a>
+      {% endif %}
+
+      {% if user.is_authenticated %}
+        {% if request.path != '/accounts/logout/'  %}
+        <div class="mi_perfil">
+          <p>Hola, {{user.get_username}} <a href="{% url 'usuario' %}">Ver mi perfil</a></p>
+        </div>
+        {% endif %}
+      {% else %}
+        {% if request.path != '/accounts/login/'  %}
+        <p><a href="{% url 'login'%}">Invitado</a> </a></p>
+        {% endif %}
+      {% endif %}
+
+      {% block content %}{% endblock %}</div>
+
+
   </body>
 </html>
