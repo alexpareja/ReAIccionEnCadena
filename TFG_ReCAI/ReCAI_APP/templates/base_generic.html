@@ -9,18 +9,25 @@
   <body>
     <div id="content">
       {% if request.path != '/' %}
-      <a href="{% url 'index' %}">Volver atrás</a>
+      <div id="back">
+        <a href="{% url 'index' %}">
+          <img src="{% static '/img/back.png' %}" alt="Volver a inicio">
+        </a>
+      </div>
       {% endif %}
 
       {% if user.is_authenticated %}
         {% if request.path != '/accounts/logout/'  %}
-        <div class="mi_perfil">
+        <div id="mi_perfil">
+          <img src="{% static '/img/user.png' %}" alt="Foto de perfil">
           <p>Hola, {{user.get_username}} <a href="{% url 'usuario' %}">Ver mi perfil</a></p>
         </div>
         {% endif %}
       {% else %}
         {% if request.path != '/accounts/login/'  %}
-        <p><a href="{% url 'login'%}">Invitado</a> </a></p>
+        <div id="mi_perfil">
+          <p><a href="{% url 'login'%}">Invitado</a> </a></p>
+        </div>
         {% endif %}
       {% endif %}
 
