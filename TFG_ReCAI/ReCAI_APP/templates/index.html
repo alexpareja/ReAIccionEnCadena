@@ -6,7 +6,7 @@
 <h1>Bienvenido a Reacción en Cadena</h1>
 {% if user.is_authenticated %}
     <p>Hola, {{user.get_username}} <a href="{% url 'usuario' %}">Ver mi perfil</a></p>
-    <p><a href="{% url 'logout'%}?next={{request.path}}">Cerrar sesión</a></p>
+    <p><a href="{% url 'logout'%}">Cerrar sesión</a></p>
 {% else %}
     <p><a href="{% url 'login'%}">Iniciar Sesión</a>  <a href="{% url 'registro' %}">Registrarse</a></p>
 {% endif %}
