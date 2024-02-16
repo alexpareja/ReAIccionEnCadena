@@ -4,7 +4,7 @@ body {
     font-family: 'Segoe UI', sans-serif; 
     margin: 0; 
     padding: 0; 
-    background-image: url('../img/fondoREC.jpg'); 
+    /*background-image: url('../img/fondoREC.jpg'); */
     background-size: cover; 
     background-position: center; 
     color: #5a5a5a; 
@@ -26,6 +26,21 @@ a {
 }
 
 /* usuario.html*/
+body {
+    font-family: 'Segoe UI', sans-serif; 
+    margin: 0; 
+    padding: 0; 
+    background-size: cover; 
+    background-position: center; 
+    color: #5a5a5a; 
+    height: 100vh; 
+    overflow: hidden; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    flex-direction: column; 
+}
+
 .container {
     display: flex;
     flex-direction: row;

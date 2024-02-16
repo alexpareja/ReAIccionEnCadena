@@ -16,8 +16,8 @@
       <section id="profile" class="profile">
        <!-- Contenido del perfil -->
        <h2>Perfil de Usuario</h2>
-       <p>Aquí puedes encontrar información relevante sobre tu perfil de usuario.</p>
-       <!-- Puedes acceder a la información de la base de datos y mostrarla aquí -->
+       <p> Nombre de usuario: {{user.get_username}} </p>
+       <p><a href="{% url 'cambiar_contraseña' %}">Cambiar Contraseña</a></p>
       </section>
       
       <section id="stats" class="stats">
@@ -26,6 +26,8 @@
         <p>Estadísticas importantes sobre tu rendimiento.</p>
         <!-- Puedes acceder a la información de la base de datos y mostrarla aquí -->
       </section>
+
+      <p><a href="{% url 'logout'%}?next={{request.path}}">Cerrrar Sesión</a></p>
     </div>
   </div>
 {% endblock %}

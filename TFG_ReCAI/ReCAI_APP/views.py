@@ -1,8 +1,10 @@
 from django.shortcuts import render, redirect
-from .forms import RegistroFormulario
+from .forms import RegistroFormulario, CambiarContraseñaFormulario
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.decorators import login_required
 import openai
+from django.contrib.auth import update_session_auth_hash
 #from ReCAI_APP import settings
 
 
@@ -23,6 +25,22 @@ def registro(request):
 def game(request):
     return render(request, 'game.html')
 def perfil_usuario(request):
+    return render(request, 'perfil_usuario.html')
+
+@login_required
+def cambiar_contraseña(request):
+    if request.method == 'POST':
+        form = CambiarContraseñaFormulario(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)
+            return redirect('cambio_contraseña_exitoso')
+    else:
+        form = CambiarContraseñaFormulario(request.user)
+    return render(request, 'cambiar_contraseña.html', {'form': form})
+
+@login_required
+def cambio_contraseña_exitoso(request):
     return render(request, 'perfil_usuario.html')
 
 #@csrf_exempt

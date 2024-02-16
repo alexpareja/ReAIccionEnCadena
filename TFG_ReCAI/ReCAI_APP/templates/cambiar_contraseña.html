@@ -1,0 +1,10 @@
+{% extends 'base_generic.html' %} 
+{% block title %} Cambiar Contraseña {% endblock %} ç
+
+{%block content %}
+<h2>Cambiar Contraseña</h2>
+<form method="post" action="{% url 'cambiar_contraseña' %}">
+  {% csrf_token %} {{ form.as_p }}
+  <button type="submit">Cambiar Contraseña</button>
+</form>
+{% endblock %}
