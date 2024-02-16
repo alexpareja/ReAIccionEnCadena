@@ -12,7 +12,7 @@
 
     <p>Elige un modo de juego:</p>
     
-    <form method="post">
+    <form method="post" action="{% url 'pregame' %}">
         {% csrf_token %}
         {% for radio in form.opcion_elegida %}
         {{ radio }}

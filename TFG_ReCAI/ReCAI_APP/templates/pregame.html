@@ -1,0 +1,19 @@
+{% extends 'base_generic.html' %} 
+{% load static %}
+
+
+{% block title %} ¡BIENVENIDO AL JUEGO! {% endblock %} 
+{%block content %}
+    <h1>PARTIDA EN JUEGO</h1>
+    <form id="playerForm">
+        <label for="j1">Jugador:</label>
+        <input type="text" id="j1" required>
+        <p><a href="{% url 'game'%}">Jugar</a> 
+    </form>
+
+
+
+
+
+</script>
+{% endblock %}

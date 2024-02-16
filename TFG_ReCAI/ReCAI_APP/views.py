@@ -14,7 +14,7 @@ def index(request):
     if request.method == 'POST':
         if form.is_valid():
             opcion = form.cleaned_data['opcion_elegida']
-            return render(request, 'game.html', {'opcion': opcion})
+            return render(request, 'pregame.html', {'opcion': opcion})
     return render(request, 'index.html', {'form': form})
 
 # Create your views here.
@@ -31,6 +31,10 @@ def registro(request):
 
 def game(request):
     return render(request, 'game.html')
+
+def pregame(request):
+    return render(request, 'pregame.html')
+
 def perfil_usuario(request):
     return render(request, 'perfil_usuario.html')
 
