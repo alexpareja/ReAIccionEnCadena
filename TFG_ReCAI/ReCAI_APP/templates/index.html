@@ -5,13 +5,21 @@
 {%block content %}
 <h1>Bienvenido a Reacción en Cadena</h1>
 {% if user.is_authenticated %}
-    <p>Hola, {{user.get_username}} <a href="{% url 'usuario' %}">Ver mi perfil</a></p>
     <p><a href="{% url 'logout'%}">Cerrar sesión</a></p>
 {% else %}
     <p><a href="{% url 'login'%}">Iniciar Sesión</a>  <a href="{% url 'registro' %}">Registrarse</a></p>
 {% endif %}
-<p><a href="{% url 'game' %}">Iniciar Juego</a></p>
 
+    <p>Elige un modo de juego:</p>
+    
+    <form method="post">
+        {% csrf_token %}
+        {% for radio in form.opcion_elegida %}
+        {{ radio }}
+        {% endfor %}
+        <button type="submit">Jugar</button>
+    </form>
+    
 
 
 {% endblock %}

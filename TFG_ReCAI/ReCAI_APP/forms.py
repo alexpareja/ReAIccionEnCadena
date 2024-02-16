@@ -12,3 +12,11 @@ class RegistroFormulario(UserCreationForm):
 class CambiarContraseñaFormulario(PasswordChangeForm):
     class Meta:
         model = User
+
+class OpcionForm(forms.Form):
+    opciones = [
+        ('2_jugadores', '2 Jugadores'),
+        ('jugador_vs_ia', 'Jugador vs IA'),
+        ('ia_vs_ia', 'IA vs IA'),
+    ]
+    opcion_elegida = forms.ChoiceField(choices=opciones, widget=forms.RadioSelect)

@@ -5,11 +5,18 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 import openai
 from django.contrib.auth import update_session_auth_hash
+from .forms import OpcionForm
 #from ReCAI_APP import settings
 
 
 def index(request):
-    return render(request, 'index.html')
+    form = OpcionForm(request.POST or None)
+    if request.method == 'POST':
+        if form.is_valid():
+            opcion = form.cleaned_data['opcion_elegida']
+            return render(request, 'game.html', {'opcion': opcion})
+    return render(request, 'index.html', {'form': form})
+
 # Create your views here.
 def registro(request):
     if request.method == 'POST':
