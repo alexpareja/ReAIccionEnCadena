@@ -17,13 +17,77 @@ body {
 }
 
 h1, p {
-    color: lightblue;
+    color: black;
     text-align: center;
 }
 
 a {
     color: #3498db; /* Puedes ajustar el color del enlace según tu preferencia */
 }
+
+/*base_generic.html*/
+#mi_perfil {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: #fff; /* Fondo blanco */
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Sombra suave */
+    display: flex;
+    align-items: center;
+}
+
+#mi_perfil img {
+    width: 50px; /* Ajusta según sea necesario */
+    height: 50px; /* Ajusta según sea necesario */
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+#mi_perfil p {
+    margin: 0;
+    font-size: 14px; /* Ajusta según sea necesario */
+}
+
+#mi_perfil a {
+    color: #007bff; /* Color del enlace */
+    text-decoration: none;
+    font-weight: bold;
+    margin-left: 5px;
+}
+
+#back {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    background-color: #fff; /* Fondo blanco */
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Sombra suave */
+    display: flex;
+    align-items: center;
+}
+
+#back img {
+    width: 30px; /* Ajusta según sea necesario */
+    height: 30px; /* Ajusta según sea necesario */
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+#back p {
+    margin: 0;
+    font-size: 14px; /* Ajusta según sea necesario */
+}
+
+#back a {
+    color: #007bff; /* Color del enlace */
+    text-decoration: none;
+    font-weight: bold;
+    margin-left: 5px;
+}
+
 
 /* usuario.html*/
 body {
