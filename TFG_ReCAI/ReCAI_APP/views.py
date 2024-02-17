@@ -45,14 +45,11 @@ def cambiar_contraseña(request):
         if form.is_valid():
             user = form.save()
             update_session_auth_hash(request, user)
-            return redirect('cambio_contraseña_exitoso')
+            return render(request, 'perfil_usuario.html')
     else:
         form = CambiarContraseñaFormulario(request.user)
     return render(request, 'cambiar_contraseña.html', {'form': form})
 
-@login_required
-def cambio_contraseña_exitoso(request):
-    return render(request, 'perfil_usuario.html')
 
 #@csrf_exempt
 #def chatgpt_api(request):
