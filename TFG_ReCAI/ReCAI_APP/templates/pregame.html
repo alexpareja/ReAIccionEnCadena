@@ -5,13 +5,30 @@
 {% block title %} ¡BIENVENIDO AL JUEGO! {% endblock %} 
 {%block content %}
     <h1>PARTIDA EN JUEGO</h1>
+    
+
     <form id="playerForm">
+        {% if opcion_elegida == '2_jugadores' %}
+        <label for="j1">Jugador 1:</label>
+        <input type="text" id="j1" value = "{{ usuario}}" required>
+        <label for="j2">Jugador 2:</label>
+        <input type="text" id="j2" required>
+        {% elif opcion_elegida == 'jugador_vs_ia' %}
         <label for="j1">Jugador:</label>
         <input type="text" id="j1" required>
+        <label for="j2">IA:</label>
+        <input type="text" id="j2" value= "mozos" required>
+        {% endif %}
+
+        {%if opcion_elegida == 'ia_vs_ia' %}
+        <label for="j1">IA 1:</label>
+        <input type="text" id="j1" value= "los morile" required>
+        <label for="j2">IA 2:</label>
+        <input type="text" id="j2" value= "los pareja" required>
+        {% endif %}
+
         <p><a href="{% url 'game'%}">Jugar</a> 
     </form>
-
-
 
 
 

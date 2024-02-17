@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 import openai
 from django.contrib.auth import update_session_auth_hash
 from .forms import OpcionForm
+from django import template
 #from ReCAI_APP import settings
 
 
@@ -13,8 +14,8 @@ def index(request):
     form = OpcionForm(request.POST or None)
     if request.method == 'POST':
         if form.is_valid():
-            opcion = form.cleaned_data['opcion_elegida']
-            return render(request, 'pregame.html', {'opcion': opcion})
+            opcion_elegida = form.cleaned_data['opcion_elegida']
+            return render(request, 'pregame.html', {'opcion_elegida': opcion_elegida})
     return render(request, 'index.html', {'form': form})
 
 # Create your views here.
@@ -33,7 +34,14 @@ def game(request):
     return render(request, 'game.html')
 
 def pregame(request):
-    return render(request, 'pregame.html')
+    if request.method == 'POST':
+        form = OpcionForm(request.POST)
+        if form.is_valid():
+            opcion_elegida = form.cleaned_data['opcion_elegida']
+            return render(request, 'pregame.html', {'opcion_elegida': opcion_elegida})
+    else:
+        form = OpcionForm()
+    return render(request, 'index.html', {'form': form})
 
 def perfil_usuario(request):
     return render(request, 'perfil_usuario.html')
@@ -49,6 +57,8 @@ def cambiar_contraseña(request):
     else:
         form = CambiarContraseñaFormulario(request.user)
     return render(request, 'cambiar_contraseña.html', {'form': form})
+
+
 
 
 #@csrf_exempt
