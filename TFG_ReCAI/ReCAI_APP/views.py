@@ -34,11 +34,20 @@ def game(request):
     return render(request, 'game.html')
 
 def pregame(request):
+    j1 = "Jugador 1"
+    j2 = "Jugador 2"
     if request.method == 'POST':
         form = OpcionForm(request.POST)
         if form.is_valid():
             opcion_elegida = form.cleaned_data['opcion_elegida']
-            return render(request, 'pregame.html', {'opcion_elegida': opcion_elegida})
+            # Lógica para determinar el valor de j1
+            if opcion_elegida == 'jugador_vs_ia':
+                j1 = "Jugador"
+                j2 = "IA"
+            elif opcion_elegida == 'ia_vs_ia':
+                j1 = "IA 1"
+                j2 = "IA 2"
+            return render(request, 'pregame.html', {'opcion_elegida': opcion_elegida, 'j1': j1, 'j2' :j2})
     else:
         form = OpcionForm()
     return render(request, 'index.html', {'form': form})
