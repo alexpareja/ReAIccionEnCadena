@@ -186,7 +186,7 @@ a:hover {
 color: #0056b3;
 }
 
-button {
+.cerrar_sesion {
 background-color: #007bff;
 color: white;
 border: none;
@@ -197,7 +197,7 @@ cursor: pointer;
 transition: background-color 0.3s ease;
 }
 
-button:hover {
+.cerrar_sesion:hover {
 background-color: #0056b3;
 }
 
