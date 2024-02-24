@@ -1,0 +1,21 @@
+{% load static %}
+
+<h2>Turno del Jugador:</h2>
+<p>{{ turno_actual }}</p>
+
+<div>
+    <!-- Jugador 1 -->
+    <div id="mi_perfil">
+        <img src="{% static '/img/user.png' %}" alt="Foto de {{ jugador1 }}">
+        <p>{{ jugador1 }} ( {{j1}} )</p>
+        <p>Puntos:{{puntos_jugador1}}</p>
+    </div>
+
+    <!-- Jugador 2 -->
+    <div id="mi_perfil">
+        <img src="{% static '/img/user.png' %}" alt="Foto de {{ jugador2 }}">
+        <p>{{ jugador2 }} ( {{j2}} )</p>
+        <p>Puntos:{{puntos_jugador2}}</p>
+    </div>
+</div>
+

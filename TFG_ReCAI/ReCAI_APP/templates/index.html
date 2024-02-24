@@ -4,11 +4,7 @@
 {% block title %} INICIO {% endblock %} 
 {%block content %}
 <h1>Bienvenido a Reacción en Cadena</h1>
-{% if user.is_authenticated %}
-<form action="{% url 'logout' %}" method="post">
-    {% csrf_token %}
-    <button type="submit">Cerrar sesión</button>
-</form>
+{% if user.is_authenticated%}
 {% else %}
     <p><a href="{% url 'login'%}">Iniciar Sesión</a>  <a href="{% url 'registro' %}">Registrarse</a></p>
 {% endif %}

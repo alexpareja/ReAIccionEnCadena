@@ -4,6 +4,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 import openai
+import random
 from django.contrib.auth import update_session_auth_hash
 from .forms import OpcionForm
 from django import template
@@ -49,7 +50,21 @@ def game(request):
     jugador1 = request.session.get('jugador1', 'Nombre del jugador 1 no ingresado')
     jugador2 = request.session.get('jugador2', 'Nombre del jugador 2 no ingresado')
 
-    return render(request, 'game.html', {'j1': j1, 'j2' : j2, 'jugador1': jugador1, 'jugador2' :jugador2})
+    puntos_jugador1 = 0
+    puntos_jugador2 = 0
+
+    if request.session.get('turno_actual') == j1:
+        turno_actual = j2
+        request.session['turno_actual'] = turno_actual
+    elif request.session.get('turno_actual') == j2:
+        turno_actual = j1
+        request.session['turno_actual'] = turno_actual
+    else:
+        turno_actual = random.choice([j1,j2])
+        request.session['turno_actual'] = turno_actual
+    
+
+    return render(request, 'game.html', {'j1': j1, 'j2' : j2, 'jugador1': jugador1, 'jugador2' :jugador2, 'puntos_jugador1' :puntos_jugador1, 'puntos_jugador2': puntos_jugador2, 'turno_actual': turno_actual})
 
 def perfil_usuario(request):
     return render(request, 'perfil_usuario.html')

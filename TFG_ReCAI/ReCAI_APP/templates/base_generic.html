@@ -18,14 +18,18 @@
 
       {% if user.is_authenticated %}
         {% if request.path != '/accounts/logout/'  %}
-        <div id="mi_perfil">
+        <div id=mi_perfil class=base_perfil >
           <img src="{% static '/img/user.png' %}" alt="Foto de perfil">
           <p>Hola, {{user.get_username}} <a href="{% url 'usuario' %}">Ver mi perfil</a></p>
+          <form action="{% url 'logout' %}" method="post">
+            {% csrf_token %}
+            <button type="submit">Cerrar sesión</button>
+          </form>
         </div>
         {% endif %}
       {% else %}
         {% if request.path != '/accounts/login/'  %}
-        <div id="mi_perfil">
+        <div id="mi_perfil" class=base_perfil>
           <p><a href="{% url 'login'%}">Invitado</a> </a></p>
         </div>
         {% endif %}

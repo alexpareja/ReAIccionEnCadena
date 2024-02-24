@@ -5,7 +5,7 @@
 {% block title %} PARTIDA EN JUEGO {% endblock %} 
 {%block content %}
     <h1>PARTIDA EN JUEGO</h1>
-    <p>{{j1}}:{{jugador1}}------------{{j2}}:{{jugador2}}</p>
+    {% include 'base_players.html' %}
     <button type="button" onclick="generateWords()">Generar Palabras</button>
     <form id="wordForm">
         <p><span id="word1"></span></p>
