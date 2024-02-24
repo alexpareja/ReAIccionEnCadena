@@ -20,3 +20,7 @@ class OpcionForm(forms.Form):
         ('ia_vs_ia', 'IA vs IA'),
     ]
     opcion_elegida = forms.ChoiceField(choices=opciones, widget=forms.RadioSelect)
+
+class FormNombresJugadores(forms.Form):
+    jugador1 = forms.CharField(max_length=20)
+    jugador2 = forms.CharField(max_length=20)

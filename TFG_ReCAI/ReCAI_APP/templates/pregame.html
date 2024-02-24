@@ -7,13 +7,11 @@
     <h1>PARTIDA EN JUEGO</h1>
 
 
-    <form id="playerForm">
-        <label for="j1">{{j1}}:</label>
-        <input type="text" id="j1" value="{{user.get_username}}" required>
-        <label for="j2">{{j2}}:</label>
-        <input type="text" id="j2" required>
-
-        <p><a href="{% url 'game'%}">Jugar</a> 
+    <form id="playerForm" method="post" action="{% url 'pregame' %}">
+        {% csrf_token %}
+        {{ j1 }} : {{ form.jugador1 }}
+        {{ j2 }} : {{ form.jugador2 }}
+        <input type="submit" value="Jugar">
     </form>
 
 

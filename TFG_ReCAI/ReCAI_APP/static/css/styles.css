@@ -59,11 +59,11 @@ a {
 
 #back {
     position: fixed;
-    top: 10px;
+    bottom: 10px;
     left: 10px;
     background-color: #fff; /* Fondo blanco */
-    padding: 10px;
-    border-radius: 8px;
+    padding: 5px;
+    border-radius: 840px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Sombra suave */
     display: flex;
     align-items: center;
@@ -72,7 +72,7 @@ a {
 #back img {
     width: 30px; /* Ajusta según sea necesario */
     height: 30px; /* Ajusta según sea necesario */
-    border-radius: 50%;
+    border-radius: 100%;
     margin-right: 10px;
 }
 

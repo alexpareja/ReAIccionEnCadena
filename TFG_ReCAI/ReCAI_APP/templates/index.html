@@ -15,14 +15,12 @@
 
     <p>Elige un modo de juego:</p>
     
-    <form method="post" action="{% url 'pregame' %}">
+    <form method="post" action="{% url 'index' %}">
         {% csrf_token %}
         {% for radio in form.opcion_elegida %}
         {{ radio }}
         {% endfor %}
-        <button type="submit">Jugar</button>
+        <input type="submit" value="Jugar">
     </form>
-    
-
 
 {% endblock %}
