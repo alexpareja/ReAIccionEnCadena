@@ -41,10 +41,10 @@ def pregame(request):
             jugador2 = form.cleaned_data['jugador2']
             request.session['jugador1'] = jugador1
             request.session['jugador2'] = jugador2
-        return redirect(game)
+        return redirect(palabras_encadenadas)
     return render(request, 'pregame.html', {'form': form, 'j1':j1, 'j2':j2})
 
-def game(request):
+def palabras_encadenadas(request):
     j1 = request.session.get('j1', 'Tipo de j1 no ingresado')
     j2 = request.session.get('j2', 'Tipo de j2 no ingresado')
     jugador1 = request.session.get('jugador1', 'Nombre del jugador 1 no ingresado')
@@ -64,7 +64,7 @@ def game(request):
         request.session['turno_actual'] = turno_actual
     
 
-    return render(request, 'game.html', {'j1': j1, 'j2' : j2, 'jugador1': jugador1, 'jugador2' :jugador2, 'puntos_jugador1' :puntos_jugador1, 'puntos_jugador2': puntos_jugador2, 'turno_actual': turno_actual})
+    return render(request, 'palabras_encadenadas.html', {'j1': j1, 'j2' : j2, 'jugador1': jugador1, 'jugador2' :jugador2, 'puntos_jugador1' :puntos_jugador1, 'puntos_jugador2': puntos_jugador2, 'turno_actual': turno_actual})
 
 def perfil_usuario(request):
     return render(request, 'perfil_usuario.html')

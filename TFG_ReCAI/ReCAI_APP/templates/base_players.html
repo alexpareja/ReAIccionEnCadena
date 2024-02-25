@@ -3,19 +3,28 @@
 <h2>Turno del Jugador:</h2>
 <p>{{ turno_actual }}</p>
 
-<div>
+<div id="players">
     <!-- Jugador 1 -->
-    <div id="mi_perfil">
+    <div class="player">
         <img src="{% static '/img/user.png' %}" alt="Foto de {{ jugador1 }}">
         <p>{{ jugador1 }} ( {{j1}} )</p>
         <p>Puntos:{{puntos_jugador1}}</p>
     </div>
 
     <!-- Jugador 2 -->
-    <div id="mi_perfil">
+    <div class="player">
         <img src="{% static '/img/user.png' %}" alt="Foto de {{ jugador2 }}">
         <p>{{ jugador2 }} ( {{j2}} )</p>
         <p>Puntos:{{puntos_jugador2}}</p>
     </div>
 </div>
 
+<form>
+    {% csrf_token %}
+    <div id="campo_palabra">
+        <label for="inputPalabra">Meter palabra:</label>
+        <input type="text" id="inputPalabra" name="inputPalabra" placeholder="P" />
+    </div>
+    <!-- Agrega otros campos del formulario según sea necesario -->
+    <input type="submit" value="Enviar">
+</form>

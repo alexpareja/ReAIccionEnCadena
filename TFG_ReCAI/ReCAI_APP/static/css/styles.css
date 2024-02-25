@@ -91,7 +91,58 @@ a {
     font-weight: bold;
     margin-left: 5px;
 }
+/* base_players.html*/
 
+#players{
+    display: flex;
+    justify-content: space-around;
+}
+
+.player{
+    text-align: center;
+    margin: 10px;
+    background-color: #fff; /* Fondo blanco */
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Sombra suave */
+    width: -webkit-fill-available;
+}
+
+.player img {
+    width: 50px; /* Ajusta según sea necesario */
+    height: 50px; /* Ajusta según sea necesario */
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.player p {
+    margin: 0;
+    font-size: 14px; /* Ajusta según sea necesario */
+}
+
+.player a {
+    color: #007bff; /* Color del enlace */
+    text-decoration: none;
+    font-weight: bold;
+    margin-left: 5px;
+}
+
+/*game*/
+#game{
+    display: flex;
+    width: 100%;
+}
+
+#panel{
+    width: 50%; /* Ajusta el ancho según sea necesario */
+}
+
+#jugadores{
+    width: 50%; /* Ajusta el ancho según sea necesario */
+    text-align: center;
+    padding: 50px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Sombra suave */
+}
 
 /* usuario.html*/
 body {

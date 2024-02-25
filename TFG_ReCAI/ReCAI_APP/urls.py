@@ -6,7 +6,7 @@ from django.contrib.auth import views as auth_views
 urlpatterns = [
     path('', views.index, name='index'),
     path('registro/', views.registro, name='registro'),
-    path('game/', views.game, name='game'),
+    path('palabras_encadenadas/', views.palabras_encadenadas, name='palabras_encadenadas'),
     path('pregame/', views.pregame, name='pregame'),
     path('perfil_usuario/', views.perfil_usuario, name='usuario'),
     path('cambiar_contraseña/', views.cambiar_contraseña, name='cambiar_contraseña'),
