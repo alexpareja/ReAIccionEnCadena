@@ -42,6 +42,6 @@ class RondaFinal(models.Model):
     pista = models.CharField(max_length=20);
 
     def __str__(self):
-            return self.p2
+            return self.p1
 
 # Create your models here.

@@ -7,19 +7,16 @@
     <h1>PARTIDA EN JUEGO</h1>
 <div id="game">
     <div id=panel>
-        <button type="button" onclick="generateWords()">Generar Palabras</button>
-        <form id="wordForm">
-            <p><span id="word1"></span></p>
-            <p><span id="word2"></span></p>
-            <p><span id="letter"></span></p>
-            <label for="solution">Ingresa la palabra secreta:</label>
-            <input type="text" id="solution" required>
-            <p><span id="result"></span></p>
-    
-            <button type="button" onclick="checkSolution()">Comprobar Solución</button>
-    
-        </form>
-        <p id="result"></p>
+        <h1>Tema: {{ palabras.0.tema }}</h1>
+        {% for palabra in palabras %}
+            <li>{{ palabra.p1 }}</li>
+            <li>{{ palabra.p2 }}</li>
+            <li>{{ palabra.p3 }}</li>
+            <li>{{ palabra.p4 }}</li>
+            <li>{{ palabra.p5 }}</li>
+            <li>{{ palabra.p6 }}</li>
+        {% endfor %}
+
     </div>
     
     <div id = "jugadores">

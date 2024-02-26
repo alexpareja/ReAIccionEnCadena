@@ -7,6 +7,7 @@ import openai
 import random
 from django.contrib.auth import update_session_auth_hash
 from .forms import OpcionForm
+from .models import PalabrasEncadenadas
 from django import template
 #from ReCAI_APP import settings
 
@@ -48,7 +49,12 @@ def palabras_encadenadas(request):
     j1 = request.session.get('j1', 'Tipo de j1 no ingresado')
     j2 = request.session.get('j2', 'Tipo de j2 no ingresado')
     jugador1 = request.session.get('jugador1', 'Nombre del jugador 1 no ingresado')
-    jugador2 = request.session.get('jugador2', 'Nombre del jugador 2 no ingresado')
+    jugador2 = request.session.get('jugador2', 'Nombre del jugador 2 no ingresado') 
+    
+
+    palabras = list(PalabrasEncadenadas.objects.all().order_by('?')[:1])  
+
+
 
     puntos_jugador1 = 0
     puntos_jugador2 = 0
@@ -64,7 +70,10 @@ def palabras_encadenadas(request):
         request.session['turno_actual'] = turno_actual
     
 
-    return render(request, 'palabras_encadenadas.html', {'j1': j1, 'j2' : j2, 'jugador1': jugador1, 'jugador2' :jugador2, 'puntos_jugador1' :puntos_jugador1, 'puntos_jugador2': puntos_jugador2, 'turno_actual': turno_actual})
+    return render(request, 'palabras_encadenadas.html', {'j1': j1, 'j2' : j2, 'jugador1': jugador1, 
+                                                         'jugador2' :jugador2, 'puntos_jugador1' :puntos_jugador1, 
+                                                         'puntos_jugador2': puntos_jugador2, 'turno_actual': turno_actual, 
+                                                         'palabras': palabras})
 
 def perfil_usuario(request):
     return render(request, 'perfil_usuario.html')
@@ -105,7 +114,7 @@ def cambiar_contraseña(request):
         return JsonResponse({'error': 'Only POST requests are allowed.'})
     
 #def chatgpt_request(message):
-    openai.api_key = settings.OPENAI_API_KEY
+    openai.api_key = settings.OPENAI_API_KEYs
     model = "text-davinci-003"  # Puedes cambiar el modelo según tus preferencias
 
     response = openai.Completion.create(
