@@ -3,8 +3,16 @@
 
 {%block content %}
 <h2>Registro</h2>
-<form method="post" action="{% url 'registro' %}">
-  {% csrf_token %} {{ form.as_p }}
-  <button type="submit">Registrarse</button>
+<form method="post" action="{% url 'registro' %}" class="registro-form">
+  {% csrf_token %} 
+  <label for="{{ form.username.id_for_label }}" class="registro-label">Nombre de usuario:</label>
+    {{ form.username }}
+  <label for="{{ form.email.id_for_label }}" class="registro-label">Correo electrónico:</label>
+    {{ form.email }}
+  <label for="{{ form.password1.id_for_label }}" class="registro-label">Contraseña:</label>
+    {{ form.password1 }}
+  <label for="{{ form.password2.id_for_label }}" class="registro-label">Repetir contraseña:</label>
+    {{ form.password2 }}
+  <button type="submit" class="registro-submit">Registrarse</button>
 </form>
 {% endblock %}

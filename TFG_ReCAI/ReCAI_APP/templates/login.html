@@ -3,6 +3,7 @@
 
 
 {% block content %}
+<h2>Iniciar Sesión</h2>
 
   {% if form.errors %}
     <p>Su nombre de usuario y contraseña no coinciden. Inténtalo de nuevo.</p>
@@ -17,23 +18,15 @@
     {% endif %}
   {% endif %}
 
-  <form method="post" action="{% url 'login' %}">
+  <form method="post" action="{% url 'login' %}"  class="registro-form">
     {% csrf_token %}
-    <table>
-      <tr>
-        <td>{{ form.username.label_tag }}</td>
-        <td>{{ form.username }}</td>
-      </tr>
-      <tr>
-        <td>{{ form.password.label_tag }}</td>
-        <td>{{ form.password }}</td>
-      </tr>
-    </table>
-    <input type="submit" value="login">
+    <label for="{{ form.username.id_for_label }}" class="registro-label">Usuario:</label>
+    {{ form.username }}
+    <label for="{{ form.password.id_for_label }}" class="registro-label">Contraseña:</label>
+    {{ form.password }}
+    <input type="submit" value="Iniciar Sesión" class="registro-submit">
     <input type="hidden" name="next" value="{{ next }}">
   </form>
 
-  {# Asume que configura la vista de restablecimiento de contraseña en su URLconf #}
-  <p><a href="{% url 'password_reset' %}">¿Olvidó su contraseña?</a></p>
 
 {% endblock %}

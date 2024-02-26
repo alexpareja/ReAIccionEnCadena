@@ -1,11 +1,12 @@
 from django.shortcuts import render, redirect
-from .forms import RegistroFormulario, CambiarContraseñaFormulario, FormNombresJugadores
+from .forms import RegistroFormulario, LoginFormulario, CambiarContraseñaFormulario, FormNombresJugadores
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 import openai
 import random
-from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth import update_session_auth_hash, login
+from django.contrib.auth.models import User
 from .forms import OpcionForm
 from .models import PalabrasEncadenadas
 from django import template
@@ -82,12 +83,33 @@ def registro(request):
     if request.method == 'POST':
         form = RegistroFormulario(request.POST)
         if form.is_valid():
-            form.save()
-            return redirect('index')  # Redirige a la página de inicio o a donde prefieras
+            username = form.cleaned_data['username']
+            email = form.cleaned_data['email']
+
+            if User.objects.filter(username=username).exists():
+                form.add_error('username', 'Este nombre de usuario ya está en uso.')
+            elif User.objects.filter(email=email).exists():
+                form.add_error('email', 'Este correo electrónico ya está registrado.')
+            else:
+                user = form.save(commit=False)
+                user.save()
+                login(request, user)
+                return redirect('index')  # Redirige a la página de inicio o a donde prefieras
     else:
         form = RegistroFormulario()
 
     return render(request, 'registro.html', {'form': form})
+
+def login(request):
+    if request.method == 'POST':
+        form = LoginFormulario(request.POST)
+        if form.is_valid():
+                login(request, form)
+                return redirect('index')  # Redirige a la página de inicio o a donde prefieras
+    else:
+        form = LoginFormulario()
+
+    return render(request, 'login.html', {'form': form})
 
 @login_required
 def cambiar_contraseña(request):

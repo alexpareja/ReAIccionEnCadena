@@ -263,6 +263,51 @@ background-color: #0056b3;
     color: #333;
 }
 
+.registro-form {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.registro-label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+/* Estilos de campos de entrada */
+.registro-input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 16px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.registro-submit {
+    background-color: blue;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    
+}
+
+.registro-submit:hover {
+    background-color: #0056b3;
+}
+
+/* Estilos para mensajes de error */
+.registro-error {
+    color: #ff0000;
+    margin-top: 5px;
+}
+
 /* Ajustes de responsividad */
 @media (max-width: 768px) {
     .container {
@@ -280,4 +325,7 @@ background-color: #0056b3;
     .main-content, .sidebar {
         flex: none; /* Desactivar el crecimiento y la contracción */
     }
-}
+
+
+    }
+

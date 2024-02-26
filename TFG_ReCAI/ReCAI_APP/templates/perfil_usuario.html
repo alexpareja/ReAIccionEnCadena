@@ -35,7 +35,7 @@
         <!-- Puedes acceder a la información de la base de datos y mostrarla aquí -->
       </div>
 
-      <form action="{% url 'logout' %}" method="post">
+      <form action="{% url 'my_logout' %}" method="post">
         {% csrf_token %}
         <button type="submit" class="cerrar_sesion">Cerrar sesión</button>
       </form>
