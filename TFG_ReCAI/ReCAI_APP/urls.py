@@ -8,6 +8,7 @@ urlpatterns = [
     path('registro/', views.registro, name='registro'),
     path('login/', views.login, name='my_login'),
     path('palabras_encadenadas/', views.palabras_encadenadas, name='palabras_encadenadas'),
+    path('eslabon_central/', views.eslabon_central, name='eslabon_central'),
     path('pregame/', views.pregame, name='pregame'),
     path('perfil_usuario/', views.perfil_usuario, name='usuario'),
     path('cambiar_contraseña/', views.cambiar_contraseña, name='cambiar_contraseña'),
