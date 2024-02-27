@@ -1,10 +1,16 @@
 {% extends 'base_generic.html' %} 
-{% block title %} Cambiar Contraseña {% endblock %} ç
+{% block title %} Cambiar Contraseña {% endblock %}
 
-{%block content %}
+{% block content %}
 <h2>Cambiar Contraseña</h2>
-<form method="post" action="{% url 'cambiar_contraseña' %}">
-  {% csrf_token %} {{ form.as_p }}
-  <button type="submit">Cambiar Contraseña</button>
+<form method="post" action="{% url 'cambiar_contraseña' %}" class="registro-form">
+  {% csrf_token %} 
+  <label for="{{ form.old_password.id_for_label }}" class="registro-label">Contraseña Actual:</label>
+    {{ form.old_password }}
+  <label for="{{ form.new_password1.id_for_label }}" class="registro-label">Nueva Contraseña:</label>
+    {{ form.new_password1 }}
+  <label for="{{ form.new_password2.id_for_label }}" class="registro-label">Confirmar Nueva Contraseña:</label>
+    {{ form.new_password2 }}
+  <button type="submit" class="registro-submit">Cambiar Contraseña</button>
 </form>
 {% endblock %}
