@@ -308,6 +308,35 @@ background-color: #0056b3;
     margin-top: 5px;
 }
 
+#panel li.visible {
+    cursor: pointer;
+    margin-bottom: 5px;
+    background-color: #1289b1; /* Color azul para las barras */
+    color: white; /* Color del texto */
+    padding: 10px 20px;
+    border-radius: 10px; /* Bordes redondeados */
+    display: block;
+    transition: background-color 0.3s; /* Transición suave de colores */
+}
+
+#panel li.invisible {
+    cursor: pointer;
+    margin-bottom: 5px;
+    background-color: #21942b; /* Color azul para las barras */
+    padding: 10px 20px;
+    border-radius: 10px; /* Bordes redondeados */
+    display: block;
+    transition: background-color 0.3s; /* Transición suave de colores */
+}
+
+.palabraInvisible {
+    visibility: visible;
+}
+
+.palabraInvisible {
+    visibility: hidden;
+}
+
 /* Ajustes de responsividad */
 @media (max-width: 768px) {
     .container {
@@ -327,5 +356,5 @@ background-color: #0056b3;
     }
 
 
-    }
+}
 
