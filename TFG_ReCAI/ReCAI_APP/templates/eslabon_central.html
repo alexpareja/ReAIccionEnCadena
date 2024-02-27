@@ -23,4 +23,40 @@
         {% include 'base_players.html' %}
     </div>
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const invisibles = document.querySelectorAll('#panel .invisible');
+    
+        invisibles.forEach(item => {
+            // Inicializa un contador para cada elemento invisible para llevar la cuenta de las letras reveladas.
+            item.dataset.revealedCount = 0;
+
+            item.addEventListener('click', function() {
+                const maxReveal = this.textContent.length;
+                let revealedCount = parseInt(this.dataset.revealedCount);
+
+                // Solo actúa si todavía hay letras por revelar.
+                if (revealedCount < maxReveal) {
+                    const originalText = this.textContent;
+                    // Incrementa el contador de letras reveladas.
+                    revealedCount++;
+                    this.dataset.revealedCount = revealedCount;
+
+                    // Construye el nuevo contenido con una letra más revelada.
+                    const visibleText = originalText.substr(0, revealedCount);
+                    const hiddenText = originalText.substr(revealedCount);
+
+                    this.innerHTML = `<span class="revealed-text">${visibleText}</span>` + '<span style="visibility:hidden;">' + hiddenText + '</span>';
+
+                    // Marca el elemento como parcialmente revelado si aún no lo está.
+                    if (!this.classList.contains('partially-revealed')) {
+                        this.classList.add('partially-revealed');
+                    }
+                }
+            });
+        });
+    });
+</script>
+
+    
 {% endblock %}

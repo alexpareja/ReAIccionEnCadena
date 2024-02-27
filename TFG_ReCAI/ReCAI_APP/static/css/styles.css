@@ -329,13 +329,18 @@ background-color: #0056b3;
     transition: background-color 0.3s; /* Transición suave de colores */
 }
 
-.palabraInvisible {
+.palabraVisible {
     visibility: visible;
 }
 
 .palabraInvisible {
     visibility: hidden;
 }
+
+.revealed-text {
+    color: white; /* Establece el color del texto a blanco */
+}
+
 
 /* Ajustes de responsividad */
 @media (max-width: 768px) {
