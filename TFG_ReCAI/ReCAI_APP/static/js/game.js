@@ -1,17 +1,13 @@
-function generateWords() {
-    document.getElementById('word1').textContent = "Palabra 1: " + "Payaso";
-    document.getElementById('word2').textContent = "Palabra 2: " + "Camión";
-    document.getElementById('letter').textContent = "Letra: " + "B";
-}
+function comprobarPalabra(palabraSecreta) {
+    var palabraIntroducida = document.getElementById('inputPalabra').value;
 
-function checkSolution() {
-var solution = document.getElementById('solution').value.trim();
-
-if (solution.toLowerCase() === "Bombero".toLowerCase()) {
-    document.getElementById('result').textContent = "¡Correcto!";
-} else {
-    document.getElementById('result').textContent = "Incorrecto. Intenta de nuevo.";
-}
+    if (palabraIntroducida.toUpperCase() !== palabraSecreta.toUpperCase() ) {
+        alert('Solución incorrecta. Inténtalo de nuevo.');
+    }
+    else{
+        alert('¡Solución correcta!');
+        document.getElementById('gameForm').submit();
+    }
 }
 
 document.addEventListener('DOMContentLoaded', () => {

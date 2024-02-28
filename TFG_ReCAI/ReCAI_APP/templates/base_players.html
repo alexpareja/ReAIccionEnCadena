@@ -1,6 +1,6 @@
 {% load static %}
 
-<h2>Turno del Jugador:</h2>
+<h2 id="prueba">Turno del Jugador:</h2>
 <p>{{ turno_actual }}</p>
 
 <div id="players">
@@ -19,12 +19,14 @@
     </div>
 </div>
 
-<form method="post">
+<form method="post" id="gameForm">
     {% csrf_token %}
     <div id="campo_palabra">
         <label for="inputPalabra">Meter palabra:</label>
         <input type="text" id="inputPalabra" name="inputPalabra" placeholder="P" />
     </div>
+    
     <!-- Agrega otros campos del formulario según sea necesario -->
-    <input type="submit" value="Enviar">
+    <input type="submit" value="Enviar" onclick="comprobarPalabra('{{palabra_a_adivinar}}')">
 </form>
+

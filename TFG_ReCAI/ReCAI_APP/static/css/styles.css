@@ -135,6 +135,7 @@ a {
 
 #panel{
     width: 50%; /* Ajusta el ancho según sea necesario */
+    align-items: center;
 }
 
 #jugadores{
@@ -142,6 +143,31 @@ a {
     text-align: center;
     padding: 50px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Sombra suave */
+}
+
+
+
+/*Ultima cadena*/
+
+
+#ultimo_panel li {
+    list-style: none;
+    padding: 5px;
+    border: 1px solid #ccc; /* Borde para el recuadro */
+    box-sizing: border-box;
+    text-align: center;
+}
+
+#ultimo_panel li:nth-child(odd) {
+    font-size: 20px; /* Tamaño grande para li impares */
+    color: gray;    /* Color gris para li impares */
+    background-color: #f0f0f0; /* Fondo gris para el recuadro de li impares */
+}
+
+#ultimo_panel li:nth-child(even) {
+    font-size: 15px; /* Tamaño pequeño para li pares */
+    color: orange;   /* Color naranja para li pares */
+    background-color: #ffe5b4; /* Fondo naranja para el recuadro de li pares */
 }
 
 /* usuario.html*/

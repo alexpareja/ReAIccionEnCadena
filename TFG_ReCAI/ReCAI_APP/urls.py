@@ -10,6 +10,7 @@ urlpatterns = [
     path('palabras_encadenadas/', views.palabras_encadenadas, name='palabras_encadenadas'),
     path('centro_de_la_cadena/', views.centro_de_la_cadena, name='centro_de_la_cadena'),
     path('una_lleva_a_la_otra/', views.una_lleva_a_la_otra, name='una_lleva_a_la_otra'),
+    path('ultima_cadena/', views.ultima_cadena, name='ultima_cadena'),
     path('pregame/', views.pregame, name='pregame'),
     path('perfil_usuario/', views.perfil_usuario, name='usuario'),
     path('cambiar_contraseña/', views.cambiar_contraseña, name='cambiar_contraseña'),

@@ -1,0 +1,34 @@
+{% extends 'base_generic.html' %} 
+{% load static %}
+
+
+{% block title %} PARTIDA EN JUEGO {% endblock %} 
+{%block content %}
+    <h1>PARTIDA EN JUEGO</h1>
+<div id="game">
+    <div id = "panel">
+        <div id=ultimo_panel>
+                <li>{{ palabras.p1 }}</li>
+                <li id="palabra2">{{ palabras.p2 }}</li>
+                <li>{{ palabras.p3 }}</li>
+                <li id="palabra4">{{ palabras.p4 }}</li>
+                <li>{{ palabras.p5 }}</li>
+                <li id="palabra6">{{ palabras.p6 }}</li>
+                <li>{{ palabras.p7 }}</li>
+                <li id="palabra8">{{ palabras.p8 }}</li>
+                <li>{{ palabras.p9 }}</li>
+                <li id="palabra10">{{ palabras.p10}}</li>
+                <li>{{ palabras.p11}}</li>
+                <li id="palabra12">{{ palabras.p12}}</li>
+                <li>{{palabras.p13}}</li>
+        </div>
+    </div>
+
+    
+    <div id = "jugadores">
+        {% include 'base_players.html' %}
+    </div>
+
+</div>
+
+{% endblock %}
