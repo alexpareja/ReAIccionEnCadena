@@ -57,3 +57,6 @@ class OpcionForm(forms.Form):
 class FormNombresJugadores(forms.Form):
     jugador1 = forms.CharField(max_length=20)
     jugador2 = forms.CharField(max_length=20)
+
+class TurnFormulario(forms.Form):
+    respuesta = forms.CharField(max_length=20)

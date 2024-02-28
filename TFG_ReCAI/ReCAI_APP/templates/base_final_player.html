@@ -1,0 +1,24 @@
+{% load static %}
+
+<h2>Fase Final</h2>
+
+
+<div id="players">
+    <!-- Jugador 1 -->
+    <div class="player">
+        <img src="{% static '/img/user.png' %}" alt="Foto de {{ jugador1 }}">
+        <p>{{ jugador1 }} ( {{j1}} )</p>
+        <p>Puntos:{{puntos_jugador1}}</p>
+    </div>
+</div>
+
+<form method="post" id="gameForm">
+    {% csrf_token %}
+    <div id="campo_palabra">
+        <label for="respuesta">Meter palabra:</label>
+        <input type="text" id="inputPalabra" name="respuesta" placeholder='{{primera_letra}}' />
+    </div>
+    <!-- Agrega otros campos del formulario según sea necesario -->
+    <input type="submit" value="Enviar" onclick="comprobarPalabra('{{palabra_a_adivinar}}')">
+</form>
+

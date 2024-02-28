@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .forms import RegistroFormulario, LoginFormulario, CambiarContraseñaFormulario, FormNombresJugadores
+from .forms import RegistroFormulario, LoginFormulario, CambiarContraseñaFormulario, FormNombresJugadores, TurnFormulario
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
@@ -125,7 +125,6 @@ def una_lleva_a_la_otra(request):
                                                          'puntos_jugador2': puntos_jugador2, 'turno_actual': turno_actual, 
                                                          'palabras': palabras})
 
-
 def perfil_usuario(request):
     return render(request, 'perfil_usuario.html')
 
@@ -162,33 +161,37 @@ def my_login(request):
     return render(request, 'login.html', {'form': form})
 
 def ultima_cadena(request):
+  
     j1 = request.session.get('j1', 'Tipo de j1 no ingresado')
-    j2 = request.session.get('j2', 'Tipo de j2 no ingresado')
     jugador1 = request.session.get('jugador1', 'Nombre del jugador 1 no ingresado')
-    jugador2 = request.session.get('jugador2', 'Nombre del jugador 2 no ingresado') 
 
-    palabras = RondaFinal.objects.first() 
+    palabras = RondaFinal.objects.first()
+    n_palabra_adivinado = request.session.get('n_palabra_adivinado', 2)
+    primera_letra = request.session.get('primer_letra', getattr(palabras, 'p' + str(n_palabra_adivinado), None)[0])
+    puntos_jugador1 = request.session.get('puntos_jugador1', 0)
 
-    palabra_a_adivinar = str(palabras.p2)
+    if request.method == 'POST':
+        form = TurnFormulario(request.POST)
+        print(form.errors)
+        if form.is_valid():
+            respuesta = form.cleaned_data['respuesta']
+            nombre_campo = 'p' + str(n_palabra_adivinado)
+            palabra_a_adivinar = getattr(palabras, nombre_campo, None)
+            print(nombre_campo)
+            print(palabra_a_adivinar)
+            if respuesta.upper() == palabra_a_adivinar:
+                print("Acertamiento")
+                n_palabra_adivinado += 2
+                request.session['primera_letra'] = getattr(palabras, 'p' + str(n_palabra_adivinado), None)[0]
+                request.session["n_palabra_adivinado"] = n_palabra_adivinado
+                puntos_jugador1 += 5000 
+                request.session['puntos_jugador1'] = puntos_jugador1
 
-    puntos_jugador1 = 0
-    puntos_jugador2 = 0
-
-    if request.session.get('turno_actual') == j1:
-        turno_actual = j2
-        request.session['turno_actual'] = turno_actual
-    elif request.session.get('turno_actual') == j2:
-        turno_actual = j1
-        request.session['turno_actual'] = turno_actual
-    else:
-        turno_actual = random.choice([j1,j2])
-        request.session['turno_actual'] = turno_actual
-    
-    return render(request, 'ultima_cadena.html', {'j1': j1, 'j2' : j2, 'jugador1': jugador1, 
-                                                         'jugador2' :jugador2, 'puntos_jugador1' :puntos_jugador1, 
-                                                         'puntos_jugador2': puntos_jugador2, 'turno_actual': turno_actual, 
-                                                         'palabras': palabras,
-                                                         'palabra_a_adivinar': palabra_a_adivinar})
+    return render(request, 'ultima_cadena.html', {'j1': j1, 'jugador1': jugador1, 
+                                                'puntos_jugador1' :puntos_jugador1, 'palabras': palabras,
+                                                'n_palabra_adivinado': n_palabra_adivinado,
+                                                'primera_letra': primera_letra
+                                                })
 
 
 @login_required

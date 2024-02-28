@@ -1,14 +1,4 @@
-function comprobarPalabra(palabraSecreta) {
-    var palabraIntroducida = document.getElementById('inputPalabra').value;
 
-    if (palabraIntroducida.toUpperCase() !== palabraSecreta.toUpperCase() ) {
-        alert('Solución incorrecta. Inténtalo de nuevo.');
-    }
-    else{
-        alert('¡Solución correcta!');
-        document.getElementById('gameForm').submit();
-    }
-}
 
 document.addEventListener('DOMContentLoaded', () => {
     const grupos = document.querySelectorAll('#panel');
