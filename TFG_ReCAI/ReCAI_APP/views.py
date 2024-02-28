@@ -150,7 +150,7 @@ def registro(request):
 
     return render(request, 'registro.html', {'form': form})
 
-def login(request):
+def my_login(request):
     if request.method == 'POST':
         form = LoginFormulario(request.POST)
         if form.is_valid():
