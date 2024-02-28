@@ -4,7 +4,6 @@
 {% block title %} PARTIDA EN JUEGO {% endblock %} 
 
 {% block content %}
-</script>
 <h1>PARTIDA EN JUEGO</h1>
 <div id="game">
     <div id="panel">
@@ -23,6 +22,8 @@
         {% include 'base_players.html' %}
     </div>
 </div>
+
+<!-- 
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         const invisibles = document.querySelectorAll('#panel .invisible');
@@ -32,7 +33,6 @@
             item.dataset.revealedCount = 0;
 
             item.addEventListener('click', function() {
-                // Comprueba si se está revelando otra palabra y si es el mismo elemento
                 if (revealingElement && revealingElement !== this) return; // Ignora el clic si no es el elemento en revelación
 
                 const maxReveal = this.textContent.length;
@@ -53,36 +53,61 @@
                         this.classList.add('partially-revealed');
                     }
 
-                    // Restablece revealingElement para permitir nuevas revelaciones si se ha revelado completamente
+                    // Cuando se haya revelado completamente, cambia la clase del elemento
                     if (revealedCount === maxReveal) {
-                        revealingElement = null; // Permite comenzar a revelar otra palabra
+                        revealingElement = null; // Resetea el elemento en revelación
+                        this.classList.remove('invisible', 'partially-revealed'); // Remueve clases que indiquen estado previo
+                        this.classList.add('visible'); // Añade la clase 'visible' para indicar que está completamente revelado
                     }
                 }
             });
         });
-    });
+});
+
 </script>
+-->
 
 
-<!-- 
 <script>
     document.addEventListener('DOMContentLoaded', () => {
-        const invisibles = document.querySelectorAll('#panel .invisible');
+        const grupos = document.querySelectorAll('#panel');
     
-        invisibles.forEach(item => {
-            item.addEventListener('click', function() {
-                // Solo actúa si el texto aún no ha sido revelado parcialmente.
-                if (!this.classList.contains('partially-revealed')) {
-                    const originalText = this.textContent;
-                    // Aquí simplemente queremos mostrar la primera letra
-                    // y mantener el resto como está, sin reemplazarlo con asteriscos.
-                    this.innerHTML = `<span class="first-letter">${originalText[0]}</span>` + '<span style="visibility:hidden;">' + originalText.slice(1) + '</span>';
-                    this.classList.add('partially-revealed'); // Marca el elemento como modificado.
-                }
+        grupos.forEach(grupo => {
+            const invisibles = grupo.querySelectorAll('.invisible');
+            const elementosPermitidos = [];
+            // Añade el primer elemento invisible al array si existe
+            if (invisibles.length > 0) {
+                elementosPermitidos.push(invisibles[0]);
+            }
+            // Añade el último elemento invisible al array si este es diferente al primero y existe
+            if (invisibles.length > 1) {
+                elementosPermitidos.push(invisibles[invisibles.length - 1]);
+            }
+    
+            invisibles.forEach(item => {
+                item.addEventListener('click', function() {
+                    // Verifica si el elemento está permitido y no está bloqueado.
+                    if (!elementosPermitidos.includes(this) || this.classList.contains('blocked')) {
+                        // Si no está permitido o está bloqueado, no hacer nada.
+                        return;
+                    }
+    
+                    // Verifica si el texto aún no ha sido revelado parcialmente.
+                    if (!this.classList.contains('partially-revealed')) {
+                        const originalText = this.textContent;
+                        this.innerHTML = `<span class="revealed-text">${originalText[0]}</span>` + '<span style="visibility:hidden;">' + originalText.slice(1) + '</span>';
+                        this.classList.add('partially-revealed'); // Marca el elemento como modificado.
+                    }
+    
+                    // Añade la clase 'blocked' a todos los otros elementos para prevenir más interacciones.
+                    invisibles.forEach(otherItem => {
+                        otherItem.classList.add('blocked');
+                    });
+                });
             });
         });
     });
-</script>
--->
+    </script>
+    
     
 {% endblock %}
