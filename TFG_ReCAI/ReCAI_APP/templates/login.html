@@ -24,6 +24,7 @@
     {{ form.username }}
     <label for="{{ form.password.id_for_label }}" class="registro-label">Contraseña:</label>
     {{ form.password }}
+    <p>¿No tienes cuenta?<a href="{% url 'registro' %}"> Regístrate aquí</a></p>
     <input type="submit" value="Iniciar Sesión" class="registro-submit">
     <input type="hidden" name="next" value="{{ next }}">
   </form>

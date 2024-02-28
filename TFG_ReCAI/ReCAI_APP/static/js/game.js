@@ -42,6 +42,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     const originalText = this.textContent;
                     this.innerHTML = `<span class="revealed-text">${originalText[0]}</span>` + '<span style="visibility:hidden;">' + originalText.slice(1) + '</span>';
                     this.classList.add('partially-revealed'); // Marca el elemento como modificado.
+
+                    // Guarda el texto original del elemento seleccionado en localStorage.
+                    localStorage.setItem('palabraSeleccionada', originalText);
                 }
 
                 // Añade la clase 'blocked' a todos los otros elementos para prevenir más interacciones.
