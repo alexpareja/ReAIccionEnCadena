@@ -158,17 +158,22 @@ a {
     text-align: center;
 }
 
+#ultimo_panel .palabraactual{
+    background-color: yellow;   
+}
+
 #ultimo_panel li:nth-child(odd) {
     font-size: 20px; /* Tamaño grande para li impares */
     color: gray;    /* Color gris para li impares */
     background-color: #f0f0f0; /* Fondo gris para el recuadro de li impares */
 }
 
-#ultimo_panel li:nth-child(even) {
+#ultimo_panel li:nth-child(even):not(.palabraactual) {
     font-size: 15px; /* Tamaño pequeño para li pares */
     color: orange;   /* Color naranja para li pares */
     background-color: #ffe5b4; /* Fondo naranja para el recuadro de li pares */
 }
+
 
 /* usuario.html*/
 body {

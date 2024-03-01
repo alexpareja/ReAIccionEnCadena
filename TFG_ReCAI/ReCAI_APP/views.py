@@ -166,9 +166,33 @@ def ultima_cadena(request):
     jugador1 = request.session.get('jugador1', 'Nombre del jugador 1 no ingresado')
 
     palabras = RondaFinal.objects.first()
+    letras_mostradas = 1
+
     n_palabra_adivinado = request.session.get('n_palabra_adivinado', 2)
-    primera_letra = request.session.get('primer_letra', getattr(palabras, 'p' + str(n_palabra_adivinado), None)[0])
-    puntos_jugador1 = request.session.get('puntos_jugador1', 0)
+    primera_letra = request.session.get('primera_letra', getattr(palabras, 'p' + str(n_palabra_adivinado), None)[0])
+    puntos_jugador1 = request.session.get('puntos_jugador1', 80000)
+    comodines = request.session.get('comodines', 2)
+
+    palabras_modificadas = []
+
+    for i in range(1, 13):  # Assuming there are 15 fields in RondaFinal
+        nombre_campo = 'p' + str(i)
+        palabra = getattr(palabras, nombre_campo, '')
+        palabra_modificada = ''
+        if i % 2 == 0:
+            if i == n_palabra_adivinado:
+                palabra_modificada = primera_letra
+            elif i > n_palabra_adivinado:
+                palabra_modificada = '' 
+            else:
+                palabra_modificada = palabra
+            palabras_modificadas.insert(i,palabra_modificada)
+
+
+    request.session['palabrasModificadas'] = palabras_modificadas
+    print(palabras_modificadas)
+    print(n_palabra_adivinado)
+
 
     if request.method == 'POST':
         form = TurnFormulario(request.POST)
@@ -177,20 +201,46 @@ def ultima_cadena(request):
             respuesta = form.cleaned_data['respuesta']
             nombre_campo = 'p' + str(n_palabra_adivinado)
             palabra_a_adivinar = getattr(palabras, nombre_campo, None)
-            print(nombre_campo)
-            print(palabra_a_adivinar)
+
             if respuesta.upper() == palabra_a_adivinar:
-                print("Acertamiento")
+                print("Acertaste!! La solución era " + palabra_a_adivinar)
+                palabras_modificadas[int(n_palabra_adivinado/2)] = palabra_a_adivinar
+                request.session['palabrasModificadas'] = palabras_modificadas
+
                 n_palabra_adivinado += 2
-                request.session['primera_letra'] = getattr(palabras, 'p' + str(n_palabra_adivinado), None)[0]
+                primera_letra = getattr(palabras, 'p' + str(n_palabra_adivinado), None)[0]
+                request.session['primera_letra'] = primera_letra
                 request.session["n_palabra_adivinado"] = n_palabra_adivinado
-                puntos_jugador1 += 5000 
-                request.session['puntos_jugador1'] = puntos_jugador1
+                letras_mostradas = 1
+
+            else:
+                letras_mostradas += 1
+                if letras_mostradas == 3:
+                    n_palabra_adivinado += 2
+                    primera_letra = getattr(palabras, 'p' + str(n_palabra_adivinado), None)[0]
+                    request.session['primera_letra'] = primera_letra
+                    request.session["n_palabra_adivinado"] = n_palabra_adivinado
+                    letras_mostradas = 1
+                else:
+                    primera_letra += getattr(palabras, 'p' + str(n_palabra_adivinado), None)[letras_mostradas] 
+                    request.session['primera_letra'] = primera_letra
+
+                if (comodines > 0):
+                    comodines -= 1
+                    request.session['comodines'] = comodines
+                else:
+                    puntos_jugador1 =  puntos_jugador1/2
+                    request.session['puntos_jugador1'] = puntos_jugador1
+
+    idPalabra = "p" + str(n_palabra_adivinado)
 
     return render(request, 'ultima_cadena.html', {'j1': j1, 'jugador1': jugador1, 
-                                                'puntos_jugador1' :puntos_jugador1, 'palabras': palabras,
+                                                'puntos_jugador1' :puntos_jugador1, 'palabras_modificadas': palabras_modificadas,
+                                                'palabras': palabras,
                                                 'n_palabra_adivinado': n_palabra_adivinado,
-                                                'primera_letra': primera_letra
+                                                'primera_letra': primera_letra,
+                                                'comodines': comodines,
+                                                'idPalabra': idPalabra
                                                 })
 
 
