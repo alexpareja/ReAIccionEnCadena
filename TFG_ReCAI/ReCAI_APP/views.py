@@ -161,12 +161,13 @@ def my_login(request):
     return render(request, 'login.html', {'form': form})
 
 def ultima_cadena(request):
+    finRonda = False
   
     j1 = request.session.get('j1', 'Tipo de j1 no ingresado')
     jugador1 = request.session.get('jugador1', 'Nombre del jugador 1 no ingresado')
 
     palabras = RondaFinal.objects.first()
-    letras_mostradas = 1
+    letras_mostradas = request.session.get('letras_mostradas', 1)
 
     n_palabra_adivinado = request.session.get('n_palabra_adivinado', 2)
     primera_letra = request.session.get('primera_letra', getattr(palabras, 'p' + str(n_palabra_adivinado), None)[0])
@@ -188,15 +189,10 @@ def ultima_cadena(request):
                 palabra_modificada = palabra
             palabras_modificadas.insert(i,palabra_modificada)
 
-
     request.session['palabrasModificadas'] = palabras_modificadas
-    print(palabras_modificadas)
-    print(n_palabra_adivinado)
-
 
     if request.method == 'POST':
         form = TurnFormulario(request.POST)
-        print(form.errors)
         if form.is_valid():
             respuesta = form.cleaned_data['respuesta']
             nombre_campo = 'p' + str(n_palabra_adivinado)
@@ -204,26 +200,42 @@ def ultima_cadena(request):
 
             if respuesta.upper() == palabra_a_adivinar:
                 print("Acertaste!! La solución era " + palabra_a_adivinar)
-                palabras_modificadas[int(n_palabra_adivinado/2)] = palabra_a_adivinar
-                request.session['palabrasModificadas'] = palabras_modificadas
-
+                if (n_palabra_adivinado == 12):
+                    redirect('index')
+                palabras_modificadas[int(n_palabra_adivinado/2)-1] = palabra_a_adivinar
                 n_palabra_adivinado += 2
+                palabras_modificadas[int(n_palabra_adivinado/2)-1] = getattr(palabras, 'p' + str(n_palabra_adivinado), '')[0]
+                request.session['palabrasModificadas'] = palabras_modificadas
                 primera_letra = getattr(palabras, 'p' + str(n_palabra_adivinado), None)[0]
                 request.session['primera_letra'] = primera_letra
                 request.session["n_palabra_adivinado"] = n_palabra_adivinado
                 letras_mostradas = 1
+                request.session['letras_mostradas'] = letras_mostradas
 
             else:
                 letras_mostradas += 1
-                if letras_mostradas == 3:
+                request.session['letras_mostradas'] = letras_mostradas
+
+                if letras_mostradas > 3:
+                    palabras_modificadas[int(n_palabra_adivinado/2)-1] = palabra_a_adivinar
+                    request.session['palabrasModificadas'] = palabras_modificadas
+                    if (n_palabra_adivinado > 12):
+                        redirect('index')
                     n_palabra_adivinado += 2
+                    palabras_modificadas[int(n_palabra_adivinado/2)-1] = getattr(palabras, 'p' + str(n_palabra_adivinado), '')[0]
+                    request.session['palabrasModificadas'] = palabras_modificadas
                     primera_letra = getattr(palabras, 'p' + str(n_palabra_adivinado), None)[0]
                     request.session['primera_letra'] = primera_letra
                     request.session["n_palabra_adivinado"] = n_palabra_adivinado
                     letras_mostradas = 1
+                    request.session['letras_mostradas'] = letras_mostradas
                 else:
-                    primera_letra += getattr(palabras, 'p' + str(n_palabra_adivinado), None)[letras_mostradas] 
+                    primera_letra += getattr(palabras, 'p' + str(n_palabra_adivinado), None)[letras_mostradas-1] 
                     request.session['primera_letra'] = primera_letra
+                    palabras_modificadas[int(n_palabra_adivinado/2)-1] = primera_letra
+                    request.session['palabrasModificadas'] = palabras_modificadas
+
+
 
                 if (comodines > 0):
                     comodines -= 1
@@ -233,7 +245,9 @@ def ultima_cadena(request):
                     request.session['puntos_jugador1'] = puntos_jugador1
 
     idPalabra = "p" + str(n_palabra_adivinado)
-
+    
+    if(finRonda == True):
+        return redirect('index')
     return render(request, 'ultima_cadena.html', {'j1': j1, 'jugador1': jugador1, 
                                                 'puntos_jugador1' :puntos_jugador1, 'palabras_modificadas': palabras_modificadas,
                                                 'palabras': palabras,
