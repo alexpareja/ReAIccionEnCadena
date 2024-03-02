@@ -101,29 +101,102 @@ def centro_de_la_cadena(request):
                                                          'palabras': palabras})
 
 def una_lleva_a_la_otra(request):
+    # Datos de los jugadores
     j1 = request.session.get('j1', 'Tipo de j1 no ingresado')
-    j2 = request.session.get('j2', 'Tipo de j2 no ingresado')
     jugador1 = request.session.get('jugador1', 'Nombre del jugador 1 no ingresado')
-    jugador2 = request.session.get('jugador2', 'Nombre del jugador 2 no ingresado') 
-    
-    palabras = list(EslabonCentral.objects.all().order_by('?')[:1])  
+    j2 = request.session.get('j2', 'Tipo de j2 no ingresado')
+    jugador2 = request.session.get('jugador2', 'Nombre del jugador 2 no ingresado')
 
-    puntos_jugador1 = 0
-    puntos_jugador2 = 0
+    # Obteniendo las palabras de la ronda
+    palabras = EslabonCentral.objects.first()
+    letras_mostradas = request.session.get('letras_mostradas', 1)
 
-    if request.session.get('turno_actual') == j1:
-        turno_actual = j2
+    # Estado actual del juego
+    turno_actual = request.session.get('turno_actual', j1)
+    n_palabra_adivinado = request.session.get('n_palabra_adivinadoRonda3', 2)
+    primera_letra = request.session.get('primera_letraRonda3', getattr(palabras, 'p' + str(n_palabra_adivinado), '')[0])
+    puntos_jugador1 = request.session.get('puntos_jugador1', 0)
+    puntos_jugador2 = request.session.get('puntos_jugador2', 0)
+
+    palabras_modificadas = []
+
+    for i in range(1, 7): 
+        nombre_campo = 'p' + str(i)
+        palabra = getattr(palabras, nombre_campo, '')
+        palabra_modificada = ''
+        if i != 1 and i != 7:
+            if i == n_palabra_adivinado:
+                palabra_modificada = primera_letra
+            elif i > n_palabra_adivinado:
+                palabra_modificada = '' 
+            else:
+                palabra_modificada = palabra
+            palabras_modificadas.insert(i,palabra_modificada)
+
+    if request.method == 'POST':
+        respuesta = request.POST.get('respuesta', '').upper()
+        nombre_campo = 'p' + str(n_palabra_adivinado)
+        palabra_a_adivinar = getattr(palabras, nombre_campo, '').upper()
+
+        if respuesta == palabra_a_adivinar:
+        # Asignar puntos al jugador correcto
+            if turno_actual == j1:
+                puntos_jugador1 += 10000
+            else:
+                puntos_jugador2 += 10000
+
+            palabras_modificadas[int(n_palabra_adivinado)-2] = palabra_a_adivinar
+            n_palabra_adivinado += 1
+            if n_palabra_adivinado > 6:
+                return redirect('ultima_cadena')
+            palabras_modificadas[int(n_palabra_adivinado)-2] = getattr(palabras, 'p' + str(n_palabra_adivinado), '')[0]
+            primera_letra = getattr(palabras, 'p' + str(n_palabra_adivinado), None)[0]
+            letras_mostradas = 1  
+        else:
+            turno_actual = j2 if turno_actual == j1 else j1
+            letras_mostradas += 1
+
+            palabra_actual = getattr(palabras, 'p' + str(n_palabra_adivinado), None)
+            if palabra_actual is not None:
+                # Si ya se deben mostrar todas las letras de la palabra
+                if len(palabra_actual) <= letras_mostradas:
+                    # Lógica cuando se han revelado todas las letras
+                    if turno_actual == j1:
+                        puntos_jugador1 += 10000
+                    else:
+                        puntos_jugador2 += 10000
+                        palabras_modificadas[int(n_palabra_adivinado)-2] = palabra_actual
+
+                    if n_palabra_adivinado > 6:
+                        return redirect('ultima_cadena')
+
+                    n_palabra_adivinado += 1
+                    nueva_palabra = getattr(palabras, 'p' + str(n_palabra_adivinado), '')
+                    palabras_modificadas[int(n_palabra_adivinado)-2] = nueva_palabra[0] if nueva_palabra else ''
+                    primera_letra = nueva_palabra[0] if nueva_palabra else ''
+                    letras_mostradas = 1
+                else:
+                    # Actualizar primera_letra para mostrar las letras acumuladas hasta ahora
+                    primera_letra = palabra_actual[:letras_mostradas]
+                    palabras_modificadas[int(n_palabra_adivinado)-2] = primera_letra
+                    
         request.session['turno_actual'] = turno_actual
-    elif request.session.get('turno_actual') == j2:
-        turno_actual = j1
-        request.session['turno_actual'] = turno_actual
-    else:
-        turno_actual = random.choice([j1,j2])
-        request.session['turno_actual'] = turno_actual
-    return render(request, 'una_lleva_a_la_otra.html', {'j1': j1, 'j2' : j2, 'jugador1': jugador1, 
-                                                         'jugador2' :jugador2, 'puntos_jugador1' :puntos_jugador1, 
-                                                         'puntos_jugador2': puntos_jugador2, 'turno_actual': turno_actual, 
-                                                         'palabras': palabras})
+        request.session['n_palabra_adivinadoRonda3'] = n_palabra_adivinado
+        request.session['letras_mostradasRonda3'] = letras_mostradas
+        request.session['primera_letraRonda3'] = primera_letra
+        request.session['puntos_jugador1'] = puntos_jugador1
+        request.session['puntos_jugador2'] = puntos_jugador2
+
+    # Renderizar la plantilla con el contexto actualizado
+    return render(request, 'una_lleva_a_la_otra.html', {
+        'j1': j1, 'jugador1': jugador1, 'puntos_jugador1': puntos_jugador1,
+        'j2': j2, 'jugador2': jugador2, 'puntos_jugador2': puntos_jugador2,
+        'palabras_modificadas': palabras_modificadas, 'palabras': palabras,
+        'n_palabra_adivinado': n_palabra_adivinado, 'turno_actual': turno_actual,
+        'letras_mostradas': letras_mostradas,
+        'idPalabra': "p" + str(n_palabra_adivinado)
+    })
+
 
 def perfil_usuario(request):
     return render(request, 'perfil_usuario.html')

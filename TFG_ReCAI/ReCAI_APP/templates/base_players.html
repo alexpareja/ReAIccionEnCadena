@@ -22,10 +22,9 @@
 <form method="post" id="gameForm">
     {% csrf_token %}
     <div id="campo_palabra">
-        <label for="inputPalabra">Meter palabra:</label>
-        <input type="text" id="inputPalabra" name="inputPalabra" placeholder="P" />
+        <label for="respuesta">Meter palabra:</label>
+        <input type="text" id="inputPalabra" name="respuesta" placeholder='{{primera_letra}}' />
     </div>
-    
     <!-- Agrega otros campos del formulario según sea necesario -->
     <input type="submit" value="Enviar" onclick="comprobarPalabra('{{palabra_a_adivinar}}')">
 </form>
