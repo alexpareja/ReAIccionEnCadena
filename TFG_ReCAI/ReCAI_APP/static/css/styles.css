@@ -146,7 +146,37 @@ a {
 }
 
 
+/*Una lleva a la otra*/
 
+#panel {
+    padding: 20px; /* Add padding around the container */
+    border-radius: 20px; /* Rounded corners */
+    width: 300px; /* Set a fixed width */
+    margin: auto; /* Center the panel */
+  }
+  
+  #una_otra {
+    list-style: none; /* Remove default list styling */
+    padding: 0; /* Remove default padding */
+  }
+  
+  #una_otra li {
+    background-color: #19b112;
+    color: white; /* White text color */
+    margin-bottom: 10px; /* Space between items */
+    padding: 10px 20px; /* Padding inside each item */
+    border-radius: 10px; /* Rounded corners for each item */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add shadow to each item */
+    font-weight: bold; /* Make the text bold */
+    text-transform: uppercase; /* Optional: transform text to uppercase */
+  }
+  
+  #una_otra li:first-child, #una_otra li:last-child {
+    background-color: #1c7dcb ; /* Blue background for the first and last items */
+  }
+  
+
+  
 /*Ultima cadena*/
 
 
@@ -173,7 +203,6 @@ a {
     color: orange;   /* Color naranja para li pares */
     background-color: #ffe5b4; /* Fondo naranja para el recuadro de li pares */
 }
-
 
 /* usuario.html*/
 body {
