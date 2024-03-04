@@ -109,7 +109,7 @@ def una_lleva_a_la_otra(request):
 
     # Obteniendo las palabras de la ronda
     palabras = EslabonCentral.objects.first()
-    letras_mostradas = request.session.get('letras_mostradas', 1)
+    letras_mostradas = request.session.get('letras_mostradasRonda3', 1)
 
     # Estado actual del juego
     turno_actual = request.session.get('turno_actual', j1)
@@ -171,7 +171,7 @@ def una_lleva_a_la_otra(request):
                 letras_mostradas = 1 
             else:
                 # Actualizar primera_letra para mostrar las letras acumuladas hasta ahora
-                primera_letra = palabra_a_adivinar[:letras_mostradas]
+                primera_letra += getattr(palabras, 'p' + str(n_palabra_adivinado), None)[letras_mostradas-1] 
                 palabras_modificadas[int(n_palabra_adivinado)-2] = primera_letra
                     
         request.session['turno_actual'] = turno_actual
