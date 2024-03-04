@@ -1,27 +1,29 @@
 {% extends 'base_generic.html' %} 
 {% load static %}
 
-{% block title %} PARTIDA EN JUEGO {% endblock %} 
 
-{% block content %}
+{% block title %} CENTRO DE LA CADENA {% endblock %} 
+{%block content %}
 <h1>CENTRO DE LA CADENA</h1>
 <div id="game">
-    <div id="panel">
-        {% for palabra in palabras %}
-        <li class="visible"><span class="palabraVisible">{{ palabra.p1 }}</span></li>
-        <li class="invisible"><span class="palabraInvisible">{{ palabra.p2 }}</span></li>
-        <li class="invisible"><span class="palabraInvisible">{{ palabra.p3 }}</span></li>
-        <li class="visible"><span class="palabraVisible"></span>{{ palabra.p4 }}</span></li>
-        <li class="invisible"><span class="palabraInvisible">{{ palabra.p5 }}</span></li>
-        <li class="invisible"><span class="palabraInvisible">{{ palabra.p6 }}</span></li>
-        <li class="visible"><span class="palabraVisible"></span>{{ palabra.p7 }}</span></li>
-        {% endfor %}
+    <div id = "panel">
+        <div id=centro_cadena>
+                <li>{{ palabras.p1 }}</li>
+                <li id="p2">{{ palabras_modificadas.0 }}</li>
+                <li id="p3">{{ palabras_modificadas.1 }}</li>
+                <li>{{ palabras.p4 }}</li>
+                <li id="p5">{{ palabras_modificadas.2 }}</li>
+                <li id="p6">{{ palabras_modificadas.3 }}</li>
+                <li>{{palabras.p7}}</li>
+        </div>
     </div>
-    
-    <div id="jugadores">
+
+    <input type="hidden" id="idPalabra" value="{{idPalabra}}"> 
+       
+    <div id = "jugadores">
         {% include 'base_players.html' %}
     </div>
+
 </div>
+
 {% endblock %}
-
-
