@@ -116,15 +116,22 @@ def centro_de_la_cadena(request):
         if respuesta == palabra_a_adivinar:
         # Asignar puntos al jugador correcto
             if turno_actual == j1:
-                puntos_jugador1 += 10000
+                puntos_jugador1 += 5000
             else:
-                puntos_jugador2 += 10000
-
-            palabras_modificadas[int(n_palabra_adivinado)-2] = palabra_a_adivinar
+                puntos_jugador2 += 5000
+            if n_palabra_adivinado > 4:
+                palabras_modificadas[int(n_palabra_adivinado)-3] = palabra_a_adivinar
+            else:
+                palabras_modificadas[int(n_palabra_adivinado)-2] = palabra_a_adivinar
             n_palabra_adivinado += 1
+            if n_palabra_adivinado == 4:
+                n_palabra_adivinado += 1
             if n_palabra_adivinado > 6:
                 return redirect('una_lleva_a_la_otra')
-            palabras_modificadas[int(n_palabra_adivinado)-2] = getattr(palabras, 'p' + str(n_palabra_adivinado), '')[0]
+            if n_palabra_adivinado > 4:
+                palabras_modificadas[int(n_palabra_adivinado)-3] = getattr(palabras, 'p' + str(n_palabra_adivinado), '')[0]
+            else:
+                palabras_modificadas[int(n_palabra_adivinado)-2] = getattr(palabras, 'p' + str(n_palabra_adivinado), '')[0]
             primera_letra = getattr(palabras, 'p' + str(n_palabra_adivinado), None)[0]
             letras_mostradas = 1  
         else:
@@ -133,22 +140,32 @@ def centro_de_la_cadena(request):
             if len(palabra_a_adivinar) <= letras_mostradas:
                 # Lógica cuando se han revelado todas las letras
                 if turno_actual == j1:
-                    puntos_jugador1 += 10000
+                    puntos_jugador1 += 5000
                 else:
-                    puntos_jugador2 += 10000
-
-                palabras_modificadas[int(n_palabra_adivinado)-2] = palabra_a_adivinar
+                    puntos_jugador2 += 5000
+                if n_palabra_adivinado > 4:
+                    palabras_modificadas[int(n_palabra_adivinado)-3] = palabra_a_adivinar
+                else:
+                    palabras_modificadas[int(n_palabra_adivinado)-2] = palabra_a_adivinar
                 n_palabra_adivinado += 1
+                if n_palabra_adivinado == 4: 
+                    n_palabra_adivinado += 1
                 if n_palabra_adivinado > 6:
                     return redirect('una_lleva_a_la_otra')
-                palabras_modificadas[int(n_palabra_adivinado)-2] = getattr(palabras, 'p' + str(n_palabra_adivinado), '')[0]
+                if n_palabra_adivinado > 4:
+                    palabras_modificadas[int(n_palabra_adivinado)-3] = getattr(palabras, 'p' + str(n_palabra_adivinado), '')[0]
+                else:
+                    palabras_modificadas[int(n_palabra_adivinado)-2] = getattr(palabras, 'p' + str(n_palabra_adivinado), '')[0]
                 primera_letra = getattr(palabras, 'p' + str(n_palabra_adivinado), None)[0]
-                letras_mostradas = 1 
+                letras_mostradas = 1  
             else:
                 # Actualizar primera_letra para mostrar las letras acumuladas hasta ahora
                 primera_letra += getattr(palabras, 'p' + str(n_palabra_adivinado), None)[letras_mostradas-1] 
-                palabras_modificadas[int(n_palabra_adivinado)-2] = primera_letra
-                    
+                if n_palabra_adivinado > 4:
+                    palabras_modificadas[int(n_palabra_adivinado)-3] = primera_letra
+                else:
+                    palabras_modificadas[int(n_palabra_adivinado)-2] = primera_letra
+         
         request.session['turno_actual'] = turno_actual
         request.session['n_palabra_adivinadoRonda2'] = n_palabra_adivinado
         request.session['letras_mostradasRonda2'] = letras_mostradas
