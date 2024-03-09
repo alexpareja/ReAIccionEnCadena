@@ -2,23 +2,28 @@
 {% load static %}
 
 
-{% block title %} PARTIDA EN JUEGO {% endblock %} 
+{% block title %} PALABRAS ENCADENADAS{% endblock %} 
 {%block content %}
-    <h1>PARTIDA EN JUEGO</h1>
+<h1>PALABRAS ENCADENADAS</h1>
 <div id="game">
-    <div id=panel>
-        <h1>Tema: {{ palabras.0.tema }}</h1>
-        {% for palabra in palabras %}
-            <li>{{ palabra.p1 }}</li>
-            <li>{{ palabra.p2 }}</li>
-            <li>{{ palabra.p3 }}</li>
-            <li>{{ palabra.p4 }}</li>
-            <li>{{ palabra.p5 }}</li>
-            <li>{{ palabra.p6 }}</li>
-        {% endfor %}
-
+    <div id = "panel">
+        <div id=encadenadas>
+                {{n_palabra_adivinado}}
+                {{letras_mostradas}}
+                {{primera_letra}}
+                {{pr}}
+                <h3>{{ palabras.tema }}</h3>
+                <li id="p1">{{ palabras_modificadas.0 }}</li>
+                <li id="p2">{{ palabras_modificadas.1 }}</li>
+                <li id="p3">{{ palabras_modificadas.2 }}</li>
+                <li id="p4">{{ palabras_modificadas.3 }}</li>
+                <li id="p5">{{ palabras_modificadas.4 }}</li>
+                <li id="p6">{{ palabras_modificadas.5 }}</li>
+        </div>
     </div>
-    
+
+    <input type="hidden" id="idPalabra" value="{{idPalabra}}"> 
+       
     <div id = "jugadores">
         {% include 'base_players.html' %}
     </div>
