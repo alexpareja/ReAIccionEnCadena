@@ -167,6 +167,17 @@ def palabras_encadenadas(request):
         'idPalabra': "p" + str(n_palabra_adivinado)
     })
 
+def marcador_ronda(request):
+
+    j1 = request.session.get('j1', 'Tipo de j1 no ingresado')
+    j2 = request.session.get('j2', 'Tipo de j2 no ingresado')
+    jugador1 = request.session.get('jugador1', 'Nombre del jugador 1 no ingresado')
+    jugador2 = request.session.get('jugador2', 'Nombre del jugador 2 no ingresado')
+    puntos_jugador1 = request.session.get('puntos_jugador1', 0)
+    puntos_jugador2 = request.session.get('puntos_jugador2', 0) 
+
+    return render(request, 'marcador_ronda.html', {'j1': j1, 'j2' : j2, 'jugador1': jugador1, 'jugador2' :jugador2,
+        'puntos_jugador1' :puntos_jugador1, 'puntos_jugador2': puntos_jugador2})
 
 def centro_de_la_cadena(request):
     # Datos de los jugadores

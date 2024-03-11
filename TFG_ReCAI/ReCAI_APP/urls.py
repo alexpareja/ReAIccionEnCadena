@@ -13,6 +13,7 @@ urlpatterns = [
     path('una_lleva_a_la_otra/', views.una_lleva_a_la_otra, name='una_lleva_a_la_otra'),
     path('ultima_cadena/', views.ultima_cadena, name='ultima_cadena'),
     path('pregame/', views.pregame, name='pregame'),
+    path('marcador_ronda', views.marcador_ronda, name='marcador_ronda'),
     path('perfil_usuario/', views.perfil_usuario, name='usuario'),
     path('cambiar_contraseña/', views.cambiar_contraseña, name='cambiar_contraseña'),
     path('logout/', auth_views.LogoutView.as_view(template_name= 'logout.html'), name='my_logout'),
