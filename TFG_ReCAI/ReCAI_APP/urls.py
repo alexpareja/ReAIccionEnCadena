@@ -7,6 +7,7 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('registro/', views.registro, name='registro'),
     path('login/', views.my_login, name='my_login'),
+    path('instrucciones/palabras_encadenadas/', views.instrucciones_palabras_encadenadas, name='instrucciones_palabras_encadenadas'),
     path('palabras_encadenadas/', views.palabras_encadenadas, name='palabras_encadenadas'),
     path('centro_de_la_cadena/', views.centro_de_la_cadena, name='centro_de_la_cadena'),
     path('una_lleva_a_la_otra/', views.una_lleva_a_la_otra, name='una_lleva_a_la_otra'),

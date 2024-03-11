@@ -4,12 +4,14 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 import openai
+from django.templatetags.static import static
 import random
 from django.contrib.auth import update_session_auth_hash, login
 from django.contrib.auth.models import User
 from .forms import OpcionForm
 from .models import PalabrasEncadenadas, EslabonCentral, RondaFinal
 from django import template
+from django.urls import reverse
 #from ReCAI_APP import settings
 
 def index(request):
@@ -43,8 +45,31 @@ def pregame(request):
             jugador2 = form.cleaned_data['jugador2']
             request.session['jugador1'] = jugador1
             request.session['jugador2'] = jugador2
-        return redirect(palabras_encadenadas)
+        return redirect(instrucciones_palabras_encadenadas)
     return render(request, 'pregame.html', {'form': form, 'j1':j1, 'j2':j2})
+
+
+def instrucciones_palabras_encadenadas(request):
+    imagen_url = static('img/palabras_encadenadas.png')
+    texto_instrucciones = """
+    En este juego, los jugadores deben adivinar 6 palabras, relacionadas todas ellas con un mismo tema, indicado al incio de la cadena
+
+    Todas las palabras comienzan con la letra final de la palabra anterior.
+
+    Las palabras se adivinarán por turnos, en caso de acertar la palabra, el jugador obtendrá 2000 puntos y pasará a adivinar la siguiente palabra. En el caso contrario, el turno pasará al otro jugador y se mostrará una letra más de la palabra.
+
+    Si ninguno de los jugadores logra adivinar la palabra, se mostrará la palabra completa y se pasará a la siguiente. 
+
+    Comienza el jugador 2 a adivinar la primera palabra.
+
+    """
+    contexto = {
+        'tituloDelJuego': 'Palabras Encadenadas',
+        'instrucciones': texto_instrucciones,
+        'imagenDelJuego': imagen_url,
+        'urlDelJuego': reverse('palabras_encadenadas'),
+    }
+    return render(request, 'base_instrucciones.html', contexto)
 
 
 def palabras_encadenadas(request):

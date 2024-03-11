@@ -1,0 +1,71 @@
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f7f7f7; /* O el color que prefieras para el fondo */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container {
+    width: 80%; 
+    max-width: 1200px; 
+    height: 80%;
+    max-height: 650px;
+    background-color: #fff; /* Fondo del panel */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra suave para el panel */
+    display: flex;
+    align-items: center;
+    justify-content: space-around; /* Espaciado entre columnas */
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.left-column, .right-column {
+    flex-basis: 50%; 
+}
+
+.left-column {
+    padding-right: 20px; /* Espaciado entre columnas */
+    margin-left: 20px;
+}
+
+.right-column {
+    text-align: right; /* Centrado del contenido de la columna derecha */
+    margin-right: 20px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.game-image {
+    max-width: 83%;
+    height: auto;
+}
+
+.start-btn {
+    padding: 10px 20px;
+    background-color: #1c7dcb;;
+    color: white;
+    border: none;
+    cursor: pointer;
+    margin-top: 20px;
+    width: auto; /* O define un ancho específico */
+}
+
+.start-btn:hover {
+    background-color: #0056b3;
+}
+
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column
+    }
+    .left-column, .right-column {
+        flex-basis: auto; /* Ambas columnas ocupan el ancho completo */
+    }
+    .right-column {
+        margin-top: 20px;
+    }
+}    
