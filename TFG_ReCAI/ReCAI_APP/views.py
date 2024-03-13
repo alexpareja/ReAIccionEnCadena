@@ -73,6 +73,7 @@ def instrucciones_palabras_encadenadas(request):
 
 
 def palabras_encadenadas(request):
+    fin=0
     j1 = request.session.get('j1', 'Tipo de j1 no ingresado')
     j2 = request.session.get('j2', 'Tipo de j2 no ingresado')
     jugador1 = request.session.get('jugador1', 'Nombre del jugador 1 no ingresado')
@@ -112,14 +113,24 @@ def palabras_encadenadas(request):
         if respuesta == palabra_a_adivinar:
         # Asignar puntos al jugador correcto
             if turno_actual == j1:
-                puntos_jugador1 += 1000
+                puntos_jugador1 += 10000
             else:
-                puntos_jugador2 += 1000
+                puntos_jugador2 += 10000
 
             palabras_modificadas[int(n_palabra_adivinado)-1] = palabra_a_adivinar
             n_palabra_adivinado += 1
             if n_palabra_adivinado > 6:
-                return redirect('una_lleva_a_la_otra')
+                    fin=1
+                    request.session['puntos_jugador1'] = puntos_jugador1
+                    request.session['puntos_jugador2'] = puntos_jugador2
+                    return render(request, 'palabras_encadenadas.html', {
+        'j1': j1, 'j2' : j2, 'jugador1': jugador1, 'jugador2' :jugador2,
+        'puntos_jugador1' :puntos_jugador1, 'puntos_jugador2': puntos_jugador2,
+        'turno_actual': turno_actual, 'palabras': palabras, 'palabras_modificadas': palabras_modificadas,
+        'n_palabra_adivinado': n_palabra_adivinado, 'turno_actual': turno_actual,
+        'letras_mostradas': letras_mostradas, 'primera_letra': primera_letra, 'fin' : fin,
+        'idPalabra': "p" + str(n_palabra_adivinado)
+    })
             
             palabra_adivinada = getattr(palabras, 'p' + str(n_palabra_adivinado), '')
             letras_faltantes = len(palabra_adivinada) - letras_mostradas
@@ -132,14 +143,25 @@ def palabras_encadenadas(request):
             if len(palabra_a_adivinar) <= letras_mostradas:
                 # Lógica cuando se han revelado todas las letras
                 if turno_actual == j1:
-                    puntos_jugador1 += 1000
+                    puntos_jugador1 += 10000
                 else:
-                    puntos_jugador2 += 1000
+                    puntos_jugador2 += 10000
 
                 palabras_modificadas[int(n_palabra_adivinado)-1] = palabra_a_adivinar
                 n_palabra_adivinado += 1
                 if n_palabra_adivinado > 6:
-                    return redirect('una_lleva_a_la_otra')
+                    fin=1
+                    request.session['puntos_jugador1'] = puntos_jugador1
+                    request.session['puntos_jugador2'] = puntos_jugador2
+                    return render(request, 'palabras_encadenadas.html', {
+        'j1': j1, 'j2' : j2, 'jugador1': jugador1, 'jugador2' :jugador2,
+        'puntos_jugador1' :puntos_jugador1, 'puntos_jugador2': puntos_jugador2,
+        'turno_actual': turno_actual, 'palabras': palabras, 'palabras_modificadas': palabras_modificadas,
+        'n_palabra_adivinado': n_palabra_adivinado, 'turno_actual': turno_actual,
+        'letras_mostradas': letras_mostradas, 'primera_letra': primera_letra, 'fin' : fin,
+        'idPalabra': "p" + str(n_palabra_adivinado)
+    })
+
                 palabras_modificadas[int(n_palabra_adivinado)-1] = getattr(palabras, 'p' + str(n_palabra_adivinado), '')[0]
                 primera_letra = getattr(palabras, 'p' + str(n_palabra_adivinado), None)[0]
                 letras_mostradas = 1 
@@ -157,13 +179,14 @@ def palabras_encadenadas(request):
     request.session['pl'] = primera_letra
     request.session['puntos_jugador1'] = puntos_jugador1
     request.session['puntos_jugador2'] = puntos_jugador2
+    request.session['ronda'] = 'Ronda 1: Palabras encadenadas'
 
     return render(request, 'palabras_encadenadas.html', {
         'j1': j1, 'j2' : j2, 'jugador1': jugador1, 'jugador2' :jugador2,
         'puntos_jugador1' :puntos_jugador1, 'puntos_jugador2': puntos_jugador2,
         'turno_actual': turno_actual, 'palabras': palabras, 'palabras_modificadas': palabras_modificadas,
         'n_palabra_adivinado': n_palabra_adivinado, 'turno_actual': turno_actual,
-        'letras_mostradas': letras_mostradas, 'primera_letra': primera_letra, 
+        'letras_mostradas': letras_mostradas, 'primera_letra': primera_letra, 'fin' : fin,
         'idPalabra': "p" + str(n_palabra_adivinado)
     })
 
@@ -174,13 +197,29 @@ def marcador_ronda(request):
     jugador1 = request.session.get('jugador1', 'Nombre del jugador 1 no ingresado')
     jugador2 = request.session.get('jugador2', 'Nombre del jugador 2 no ingresado')
     puntos_jugador1 = request.session.get('puntos_jugador1', 0)
-    puntos_jugador2 = request.session.get('puntos_jugador2', 0) 
+    puntos_jugador2 = request.session.get('puntos_jugador2', 0)
+    ronda = request.session.get('ronda', 'Juego no empezado') 
+
+
+    if ronda == 'Ronda 1: Palabras encadenadas':
+        urlDelJuego = reverse('centro_de_la_cadena')
+    elif ronda == "Ronda 2: Centro de la cadena":
+        urlDelJuego = reverse('una_lleva_a_la_otra')
+    elif ronda == 'Ronda 3: Una lleva a la otra':
+        urlDelJuego = reverse('ultima_cadena')
+    else:
+        urlDelJuego = reverse('index')
+
+
+
+
 
     return render(request, 'marcador_ronda.html', {'j1': j1, 'j2' : j2, 'jugador1': jugador1, 'jugador2' :jugador2,
-        'puntos_jugador1' :puntos_jugador1, 'puntos_jugador2': puntos_jugador2})
+        'puntos_jugador1' :puntos_jugador1, 'puntos_jugador2': puntos_jugador2, 'ronda': ronda, 'urlDelJuego': urlDelJuego})
 
 def centro_de_la_cadena(request):
     # Datos de los jugadores
+    fin=0
     j1 = request.session.get('j1', 'Tipo de j1 no ingresado')
     jugador1 = request.session.get('jugador1', 'Nombre del jugador 1 no ingresado')
     j2 = request.session.get('j2', 'Tipo de j2 no ingresado')
@@ -196,6 +235,7 @@ def centro_de_la_cadena(request):
     primera_letra = request.session.get('primera_letraRonda2', getattr(palabras, 'p' + str(n_palabra_adivinado), '')[0])
     puntos_jugador1 = request.session.get('puntos_jugador1', 0)
     puntos_jugador2 = request.session.get('puntos_jugador2', 0)
+  
 
     palabras_modificadas = []
 
@@ -231,7 +271,18 @@ def centro_de_la_cadena(request):
             if n_palabra_adivinado == 4:
                 n_palabra_adivinado += 1
             if n_palabra_adivinado > 6:
-                return redirect('una_lleva_a_la_otra')
+                fin=1
+                request.session['puntos_jugador1'] = puntos_jugador1
+                request.session['puntos_jugador2'] = puntos_jugador2
+                return render(request, 'centro_de_la_cadena.html', {
+        'j1': j1, 'jugador1': jugador1, 'puntos_jugador1': puntos_jugador1,
+        'j2': j2, 'jugador2': jugador2, 'puntos_jugador2': puntos_jugador2,
+        'palabras_modificadas': palabras_modificadas, 'palabras': palabras,
+        'n_palabra_adivinado': n_palabra_adivinado, 'turno_actual': turno_actual,
+        'letras_mostradas': letras_mostradas,
+        'primera_letra': primera_letra, 'fin':fin,
+        'idPalabra': "p" + str(n_palabra_adivinado)
+    })
             if n_palabra_adivinado > 4:
                 palabras_modificadas[int(n_palabra_adivinado)-3] = getattr(palabras, 'p' + str(n_palabra_adivinado), '')[0]
             else:
@@ -255,7 +306,18 @@ def centro_de_la_cadena(request):
                 if n_palabra_adivinado == 4: 
                     n_palabra_adivinado += 1
                 if n_palabra_adivinado > 6:
-                    return redirect('una_lleva_a_la_otra')
+                    fin=1
+                    request.session['puntos_jugador1'] = puntos_jugador1
+                    request.session['puntos_jugador2'] = puntos_jugador2
+                    return render(request, 'centro_de_la_cadena.html', {
+        'j1': j1, 'jugador1': jugador1, 'puntos_jugador1': puntos_jugador1,
+        'j2': j2, 'jugador2': jugador2, 'puntos_jugador2': puntos_jugador2,
+        'palabras_modificadas': palabras_modificadas, 'palabras': palabras,
+        'n_palabra_adivinado': n_palabra_adivinado, 'turno_actual': turno_actual,
+        'letras_mostradas': letras_mostradas,
+        'primera_letra': primera_letra, 'fin':fin,
+        'idPalabra': "p" + str(n_palabra_adivinado)
+                        })
                 if n_palabra_adivinado > 4:
                     palabras_modificadas[int(n_palabra_adivinado)-3] = getattr(palabras, 'p' + str(n_palabra_adivinado), '')[0]
                 else:
@@ -276,6 +338,10 @@ def centro_de_la_cadena(request):
         request.session['primera_letraRonda2'] = primera_letra
         request.session['puntos_jugador1'] = puntos_jugador1
         request.session['puntos_jugador2'] = puntos_jugador2
+        request.session['ronda'] = "Ronda 2: Centro de la cadena"
+
+
+    
 
     # Renderizar la plantilla con el contexto actualizado
     return render(request, 'centro_de_la_cadena.html', {
@@ -284,12 +350,13 @@ def centro_de_la_cadena(request):
         'palabras_modificadas': palabras_modificadas, 'palabras': palabras,
         'n_palabra_adivinado': n_palabra_adivinado, 'turno_actual': turno_actual,
         'letras_mostradas': letras_mostradas,
-        'primera_letra': primera_letra,
+        'primera_letra': primera_letra, 'fin':fin,
         'idPalabra': "p" + str(n_palabra_adivinado)
     })
 
 def una_lleva_a_la_otra(request):
     # Datos de los jugadores
+    fin=0
     j1 = request.session.get('j1', 'Tipo de j1 no ingresado')
     jugador1 = request.session.get('jugador1', 'Nombre del jugador 1 no ingresado')
     j2 = request.session.get('j2', 'Tipo de j2 no ingresado')
@@ -336,7 +403,18 @@ def una_lleva_a_la_otra(request):
             palabras_modificadas[int(n_palabra_adivinado)-2] = palabra_a_adivinar
             n_palabra_adivinado += 1
             if n_palabra_adivinado > 6:
-                return redirect('ultima_cadena')
+                fin=1
+                request.session['puntos_jugador1'] = puntos_jugador1
+                request.session['puntos_jugador2'] = puntos_jugador2
+                return render(request, 'una_lleva_a_la_otra.html', {
+        'j1': j1, 'jugador1': jugador1, 'puntos_jugador1': puntos_jugador1,
+        'j2': j2, 'jugador2': jugador2, 'puntos_jugador2': puntos_jugador2,
+        'palabras_modificadas': palabras_modificadas, 'palabras': palabras,
+        'n_palabra_adivinado': n_palabra_adivinado, 'turno_actual': turno_actual,
+        'letras_mostradas': letras_mostradas,
+        'primera_letra': primera_letra, 'fin': fin, 
+        'idPalabra': "p" + str(n_palabra_adivinado)
+    })
             palabras_modificadas[int(n_palabra_adivinado)-2] = getattr(palabras, 'p' + str(n_palabra_adivinado), '')[0]
             primera_letra = getattr(palabras, 'p' + str(n_palabra_adivinado), None)[0]
             letras_mostradas = 1  
@@ -353,7 +431,18 @@ def una_lleva_a_la_otra(request):
                 palabras_modificadas[int(n_palabra_adivinado)-2] = palabra_a_adivinar
                 n_palabra_adivinado += 1
                 if n_palabra_adivinado > 6:
-                    return redirect('ultima_cadena')
+                    fin=1
+                    request.session['puntos_jugador1'] = puntos_jugador1
+                    request.session['puntos_jugador2'] = puntos_jugador2
+                    return render(request, 'una_lleva_a_la_otra.html', {
+        'j1': j1, 'jugador1': jugador1, 'puntos_jugador1': puntos_jugador1,
+        'j2': j2, 'jugador2': jugador2, 'puntos_jugador2': puntos_jugador2,
+        'palabras_modificadas': palabras_modificadas, 'palabras': palabras,
+        'n_palabra_adivinado': n_palabra_adivinado, 'turno_actual': turno_actual,
+        'letras_mostradas': letras_mostradas,
+        'primera_letra': primera_letra, 'fin': fin, 
+        'idPalabra': "p" + str(n_palabra_adivinado)
+    })
                 palabras_modificadas[int(n_palabra_adivinado)-2] = getattr(palabras, 'p' + str(n_palabra_adivinado), '')[0]
                 primera_letra = getattr(palabras, 'p' + str(n_palabra_adivinado), None)[0]
                 letras_mostradas = 1 
@@ -368,6 +457,7 @@ def una_lleva_a_la_otra(request):
         request.session['primera_letraRonda3'] = primera_letra
         request.session['puntos_jugador1'] = puntos_jugador1
         request.session['puntos_jugador2'] = puntos_jugador2
+        request.session['ronda'] = "Ronda 3: Una lleva a la otra"
 
     # Renderizar la plantilla con el contexto actualizado
     return render(request, 'una_lleva_a_la_otra.html', {
@@ -376,7 +466,7 @@ def una_lleva_a_la_otra(request):
         'palabras_modificadas': palabras_modificadas, 'palabras': palabras,
         'n_palabra_adivinado': n_palabra_adivinado, 'turno_actual': turno_actual,
         'letras_mostradas': letras_mostradas,
-        'primera_letra': primera_letra,
+        'primera_letra': primera_letra, 'fin': fin, 
         'idPalabra': "p" + str(n_palabra_adivinado)
     })
 
