@@ -17,17 +17,17 @@
     {%if juego_acabado %}
     <p>Juego finalizado</p>
     <a href="{% url 'fin_juego'%}">Siguiente</a>
-    {% endif %}
-
-    {% if fin %}
-    <p>Ronda finalizada</p>
-    <a href="{% url 'ultima_palabra'%}">Siguiente</a>
     {%else%}
-    <div id="campo_palabra">
-        <label for="respuesta">Meter palabra:</label>
-        <input type="text" id="inputPalabra" name="respuesta" placeholder='{{primera_letra}}' />
-    </div>
-    <input type="submit" value="Enviar" onclick="comprobarPalabra('{{palabra_a_adivinar}}')">
+        {% if fin %}
+        <p>Ronda finalizada</p>
+        <a href="{% url 'ultima_palabra'%}">Siguiente</a>
+        {%else%}
+        <div id="campo_palabra">
+            <label for="respuesta">Meter palabra:</label>
+            <input type="text" id="inputPalabra" name="respuesta" placeholder='{{primera_letra}}' />
+        </div>
+        <input type="submit" value="Enviar" onclick="comprobarPalabra('{{palabra_a_adivinar}}')">
+        {%endif%}
     {% endif %}
 </form>
 
