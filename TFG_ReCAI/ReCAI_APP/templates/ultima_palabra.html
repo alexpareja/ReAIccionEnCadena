@@ -1,0 +1,30 @@
+{% extends 'base_generic.html' %} 
+{% load static %}
+
+
+{% block title %} PARTIDA EN JUEGO {% endblock %} 
+{%block content %}
+    <h1>PARTIDA EN JUEGO</h1>
+<div id="game">
+    <div id = "panel">
+        <div id=ultimo_panel>
+                <li>{{ palabra_inicial }}</li>
+                <li id="p2">{{ solucion_mostrada }}</li>
+                <li id="p3">{{ pista_mostrada }}</li>
+        </div>
+        <form method="post" id="clueForm">
+            {% csrf_token %}
+            <input type="hidden" id="pista" value="yes"> 
+            <input type="submit" value="Solicitar pista">
+        </form>
+    </div>
+
+    <input type="hidden" id="idPalabra" value="{{idPalabra}}"> 
+       
+    <div id = "jugadores">
+        {% include 'base_final_player.html' %}
+    </div>
+
+</div>
+
+{% endblock %}
