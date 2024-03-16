@@ -52,7 +52,7 @@ def pregame(request):
 def instrucciones_palabras_encadenadas(request):
     imagen_url = static('img/palabras_encadenadas.png')
     texto_instrucciones = """
-    En este juego, los jugadores deben adivinar 6 palabras, relacionadas todas ellas con un mismo tema, indicado al incio de la cadena
+    En esta ronda, los jugadores deben adivinar 6 palabras, relacionadas todas ellas con un mismo tema, indicado al incio de la cadena.
 
     Todas las palabras comienzan con la letra final de la palabra anterior.
 
@@ -64,13 +64,90 @@ def instrucciones_palabras_encadenadas(request):
 
     """
     contexto = {
-        'tituloDelJuego': 'Palabras Encadenadas',
+        'tituloDelJuego': 'Palabras encadenadas',
         'instrucciones': texto_instrucciones,
         'imagenDelJuego': imagen_url,
         'urlDelJuego': reverse('palabras_encadenadas'),
     }
     return render(request, 'base_instrucciones.html', contexto)
 
+def instrucciones_centro_de_la_cadena(request):
+    imagen_url = static('img/centro_de_la_cadena.png')
+    texto_instrucciones = """
+    En esta ronda, los jugadores deben adivinar 4 palabras.
+
+    En el panel del juego, se mostrarán desde el inicio tres palabras: la primera, la última y la palabra intermedia de la cadena.
+
+    Cada palabra a adivinar guarda relación con la palabra anterior y la palabra siguiente.
+
+    En caso de acertar el jugador obtendrá 5000 puntos y pasará a adivinar la siguiente palabra. En el caso contrario, el turno pasará al otro jugador y se mostrará una letra más de la palabra.
+
+    Comienza el jugador con menos puntos acumulados a adivinar la primera palabra.
+
+    """
+    contexto = {
+        'tituloDelJuego': 'Centro de la cadena',
+        'instrucciones': texto_instrucciones,
+        'imagenDelJuego': imagen_url,
+        'urlDelJuego': reverse('centro_de_la_cadena'),
+    }
+    return render(request, 'base_instrucciones.html', contexto)
+
+def instrucciones_una_lleva_a_la_otra(request):
+    imagen_url = static('img/una_lleva_a_la_otra.png')
+    texto_instrucciones = """
+    En esta ronda, los jugadores deben adivinar 5 palabras.
+
+    En el panel del juego, se mostrarán desde el inicio dos palabras de la cadena: la primera, la última.
+
+    Al igual que en la ronda anterior, cada palabra a adivinar guarda relación con la palabra anterior y la palabra siguiente.
+
+    En caso de acertar el jugador obtendrá 10000 puntos y pasará a adivinar la siguiente palabra. En el caso contrario, el turno pasará al otro jugador y se mostrará una letra más de la palabra.
+
+    Comienza el jugador con menos puntos acumulados a adivinar la primera palabra.
+
+    """
+    contexto = {
+        'tituloDelJuego': 'Una lleva a la otra',
+        'instrucciones': texto_instrucciones,
+        'imagenDelJuego': imagen_url,
+        'urlDelJuego': reverse('una_lleva_a_la_otra'),
+    }
+    return render(request, 'base_instrucciones.html', contexto)
+
+def instrucciones_ultima_cadena(request):
+    imagen_url = static('img/ultima_cadena.png')
+    texto_instrucciones = """
+    A partir de esta ronda, solo jugará el jugador con más puntos acumulados.
+
+    El jugador deberá adivinar 6 palabras, las cuales tienen relación con las palabras que se encuentran arriba y abajo de ella.
+
+    El jugador tendrá dos oportunidades para acertar la palabra. Sin embargo, cada fallo le costará la mitad de sus puntos.
+
+    También contará con dos comodines, que le permitirán ver una letra más de la palabra.
+
+    """
+    contexto = {
+        'tituloDelJuego': 'Última cadena',
+        'instrucciones': texto_instrucciones,
+        'imagenDelJuego': imagen_url,
+        'urlDelJuego': reverse('ultima_cadena'),
+    }
+    return render(request, 'base_instrucciones.html', contexto)
+
+def instrucciones_ultima_palabra(request):
+    imagen_url = static('img/ultima_palabra.png')
+    texto_instrucciones = """
+    
+
+    """
+    contexto = {
+        'tituloDelJuego': 'Última palabra',
+        'instrucciones': texto_instrucciones,
+        'imagenDelJuego': imagen_url,
+        'urlDelJuego': reverse('ultima_palabra'),
+    }
+    return render(request, 'base_instrucciones.html', contexto)
 
 def palabras_encadenadas(request):
     fin=0
@@ -202,11 +279,11 @@ def marcador_ronda(request):
 
 
     if ronda == 'Ronda 1: Palabras encadenadas':
-        urlDelJuego = reverse('centro_de_la_cadena')
+        urlDelJuego = reverse('instrucciones_centro_de_la_cadena')
     elif ronda == "Ronda 2: Centro de la cadena":
-        urlDelJuego = reverse('una_lleva_a_la_otra')
+        urlDelJuego = reverse('instrucciones_una_lleva_a_la_otra')
     elif ronda == 'Ronda 3: Una lleva a la otra':
-        urlDelJuego = reverse('ultima_cadena')
+        urlDelJuego = reverse('instrucciones_ultima_cadena')
     else:
         urlDelJuego = reverse('index')
 
