@@ -3,6 +3,7 @@ from .forms import RegistroFormulario, LoginFormulario, CambiarContraseñaFormul
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
+from django.conf import settings
 import openai
 from django.templatetags.static import static
 import random
@@ -12,7 +13,9 @@ from .forms import OpcionForm
 from .models import PalabrasEncadenadas, EslabonCentral, RondaFinal
 from django import template
 from django.urls import reverse
-#from ReCAI_APP import settings
+
+openai.api_key = settings.OPENAI_API_KEY
+
 
 def index(request):
     form = OpcionForm(request.POST or None)
@@ -47,7 +50,6 @@ def pregame(request):
             request.session['jugador2'] = jugador2
         return redirect(instrucciones_palabras_encadenadas)
     return render(request, 'pregame.html', {'form': form, 'j1':j1, 'j2':j2})
-
 
 def instrucciones_palabras_encadenadas(request):
     imagen_url = static('img/palabras_encadenadas.png')
@@ -150,6 +152,42 @@ def instrucciones_ultima_palabra(request):
     return render(request, 'base_instrucciones.html', contexto)
 
 def palabras_encadenadas(request):
+    palabras_cargadas = request.session.get('palabras_cargadas', False)
+
+    prompt = """Genera una lista con 6 palabras que cumplan obligatoriamente los siguientes requisitos: 
+                1. Tienen que estar todas relacionadas con el mismo tema 
+                2. Las palabras tienen que estar encadenadas, es decir, todas, exceptuando la primera, tienen que empezar por la última letra de la palabra estrictamente anterior. Por ejemplo: si la primera palabra es rollitos, la segunda palabra deberá OBLIGATORIAMENTE empezar por la letra S (ya que es la última letra de rollitos)
+                3. No vale poner palabras de más de una palabra como "nueva york" o "nueva zelanda", es decir que no vale poner espacios, "nueva" sería una palabra y "york" otra
+                4. La misma palabra no puede estar dos veces, es decir no se puede repetir
+
+                Todos estos requisitos se deben cumplir al pie de la letra, en caso de que uno no se cumpla se deberá buscar otra palabra u otro tema.
+
+                Opcionalmente, sería preferible que no todas las palabras empezaran por la misma letra
+
+                Proporciono este ejemplo para que lo entiendas mejor:
+                tema: China
+                rollitos
+                shanghai
+                imprenta
+                acupuntura
+                arrozales
+                sopa
+                """
+
+    if palabras_cargadas == False:
+        #prompt
+        #response = openai.chat.completions.create(
+        #            model="gpt-3.5-turbo",
+        #            messages=[
+        #                    {"role": "user", "content": f"{prompt}"},
+        #               ]
+        #           )
+        #meter las palabras
+        #print(response.choices[0].message.content)
+        palabras_cargadas = True
+        request.session['palabras_cargadas'] = palabras_cargadas
+
+
     fin=0
     j1 = request.session.get('j1', 'Tipo de j1 no ingresado')
     j2 = request.session.get('j2', 'Tipo de j2 no ingresado')
