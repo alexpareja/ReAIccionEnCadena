@@ -727,8 +727,9 @@ def ultima_palabra(request):
     solucion_mostrada = getattr(palabras, 'final', None)[0] + getattr(palabras, 'final', None)[1] + '________' + getattr(palabras, 'final', None)[len(solucion)-1]
     request.session['solucion_mostrada'] = solucion_mostrada
     pista = getattr(palabras, 'pista', None)
-    pista_mostrada = '?'
-    request.session['solucion_mostrada'] = pista_mostrada
+    pista_mostrada = request.session.get('pista_mostrada', '?')
+    request.session['pista_mostrada'] = pista_mostrada
+
 
 
     if request.method == 'POST':
@@ -744,7 +745,6 @@ def ultima_palabra(request):
                 request.session['puntos_jugador1'] = puntos_jugador1
                 solucion_mostrada = solucion
             request.session['solucion_mostrada'] = solucion_mostrada
-            pista_mostrada = request.session['pista_mostrada']
             juego_acabado = 1
         else:
             pista_mostrada = pista
