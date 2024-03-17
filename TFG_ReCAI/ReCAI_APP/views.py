@@ -287,10 +287,6 @@ def marcador_ronda(request):
     else:
         urlDelJuego = reverse('index')
 
-
-
-
-
     return render(request, 'marcador_ronda.html', {'j1': j1, 'j2' : j2, 'jugador1': jugador1, 'jugador2' :jugador2,
         'puntos_jugador1' :puntos_jugador1, 'puntos_jugador2': puntos_jugador2, 'ronda': ronda, 'urlDelJuego': urlDelJuego})
 
@@ -547,7 +543,6 @@ def una_lleva_a_la_otra(request):
         'idPalabra': "p" + str(n_palabra_adivinado)
     })
 
-
 def perfil_usuario(request):
     return render(request, 'perfil_usuario.html')
 
@@ -595,6 +590,8 @@ def ultima_cadena(request):
     primera_letra = request.session.get('primera_letra', getattr(palabras, 'p' + str(n_palabra_adivinado), None)[0])
     puntos_jugador1 = request.session.get('puntos_jugador1', 80000)
     comodines = request.session.get('comodines', 2)
+    request.session['comodines'] = comodines
+
     idPalabra = "p" + str(n_palabra_adivinado)
 
 
@@ -774,12 +771,48 @@ def fin_juego(request):
     j1 = request.session.get('j1', 'Tipo de j1 no ingresado')
     jugador1 = request.session.get('jugador1', 'Nombre del jugador 1 no ingresado')
     puntos_jugador1 = request.session.get('puntos_jugador1', 0)
-    ronda = request.session.get('ronda', 'Juego no empezado') 
-    
+
+    del request.session['npa']
+    del request.session['lm']
+    del request.session['pl']
+
+
+    del request.session['primera_letraRonda2']
+    del request.session['letras_mostradasRonda2']
+    del request.session['n_palabra_adivinadoRonda2']
+
+    del request.session['primera_letraRonda3']
+    del request.session['letras_mostradasRonda3']
+    del request.session['n_palabra_adivinadoRonda3']
+
+    del request.session['ronda']
+    del request.session['turno_actual']
+
+        
+    del request.session['letras_mostradas']
+    del request.session['primera_letra']
+    del request.session['n_palabra_adivinado']
+    del request.session['palabrasModificadas']
+    del request.session['comodines']
+
+    del request.session['palabra_inicial']
+    del request.session['solucion_mostrada']
+    del request.session['pista_mostrada']
+
+    #guardar puntos en bbdd
+
+    del request.session['j1']
+    del request.session['j2']
+    del request.session['jugador1']
+    del request.session['jugador2']
+    del request.session['puntos_jugador1']
+    del request.session['puntos_jugador2']
+
+
 
 
     return render(request, 'fin_juego.html', {'j1': j1, 'jugador1': jugador1,
-        'puntos_jugador1' :puntos_jugador1, 'ronda': ronda})
+        'puntos_jugador1' :puntos_jugador1})
 
 
 @login_required
