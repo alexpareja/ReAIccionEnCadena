@@ -5,6 +5,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
 import openai
+import json
 from django.templatetags.static import static
 import random
 from django.contrib.auth import update_session_auth_hash, login
@@ -153,7 +154,6 @@ def instrucciones_ultima_palabra(request):
 
 def palabras_encadenadas(request):
     palabras_cargadas = request.session.get('palabras_cargadas', False)
-
     prompt = """Genera una lista con 6 palabras que cumplan obligatoriamente los siguientes requisitos: 
                 1. Tienen que estar todas relacionadas con el mismo tema 
                 2. Las palabras tienen que estar encadenadas, es decir, todas, exceptuando la primera, tienen que empezar por la última letra de la palabra estrictamente anterior. Por ejemplo: si la primera palabra es rollitos, la segunda palabra deberá OBLIGATORIAMENTE empezar por la letra S (ya que es la última letra de rollitos)
@@ -163,30 +163,33 @@ def palabras_encadenadas(request):
                 Todos estos requisitos se deben cumplir al pie de la letra, en caso de que uno no se cumpla se deberá buscar otra palabra u otro tema.
 
                 Opcionalmente, sería preferible que no todas las palabras empezaran por la misma letra
-
-                Proporciono este ejemplo para que lo entiendas mejor:
-                tema: China
-                rollitos
-                shanghai
-                imprenta
-                acupuntura
-                arrozales
-                sopa
+                Proporciono este ejemplo con el formato deseado para que lo entiendas mejor:
+                {
+                "tema": "China",
+                "p1": "rollitos",
+                "p2": "shanghai",
+                "p3": "imprenta",
+                "p4": "acupuntura",
+                "p5": "arrozales",
+                "p6": "sopa"
+                }
                 """
-
-    if palabras_cargadas == False:
-        #prompt
-        #response = openai.chat.completions.create(
-        #            model="gpt-3.5-turbo",
-        #            messages=[
-        #                    {"role": "user", "content": f"{prompt}"},
-        #               ]
-        #           )
-        #meter las palabras
-        #print(response.choices[0].message.content)
-        palabras_cargadas = True
-        request.session['palabras_cargadas'] = palabras_cargadas
-
+    #if palabras_cargadas == False:
+    #    JsonPalabras = llamadaAPIChatGPT(prompt)
+    #    data = json.loads(JsonPalabras)
+    #    palabras = PalabrasEncadenadas(
+    #        tema=data["tema"],
+    #        p1=data["p1"],
+    #        p2=data["p2"],
+    #        p3=data["p3"],
+    #        p4=data["p4"],
+    #        p5=data["p5"],
+    #        p6=data["p6"])
+    #Guardar en la bbdd
+    #    palabras.save()
+    #    request.session['datajson'] = data
+    #    palabras_cargadas = True
+    #    request.session['palabras_cargadas'] = palabras_cargadas
 
     fin=0
     j1 = request.session.get('j1', 'Tipo de j1 no ingresado')
@@ -866,25 +869,11 @@ def cambiar_contraseña(request):
     return render(request, 'cambiar_contraseña.html', {'form': form})
 
 
-
-
-#@csrf_exempt
-#def chatgpt_api(request):
-    if request.method == 'POST':
-        message = request.POST.get('message', '')
-        response = chatgpt_request(message)
-        return JsonResponse({'response': response})
-    else:
-        return JsonResponse({'error': 'Only POST requests are allowed.'})
-    
-#def chatgpt_request(message):
-    openai.api_key = settings.OPENAI_API_KEYs
-    model = "text-davinci-003"  # Puedes cambiar el modelo según tus preferencias
-
-    response = openai.Completion.create(
-        engine=model,
-        prompt=message,
-        max_tokens=150
-    )
-
-    return response.choices[0].text.strip()
+def llamadaAPIChatGPT(prompt):
+    response = openai.chat.completions.create(
+                model="gpt-3.5-turbo",
+                messages=[
+                        {"role": "user", "content": prompt},
+                    ]
+                )
+    return response.choices[0].message.content
