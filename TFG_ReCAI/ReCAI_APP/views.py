@@ -4,6 +4,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
+from .static import prompts
 import openai
 import json
 from django.templatetags.static import static
@@ -153,30 +154,12 @@ def instrucciones_ultima_palabra(request):
     return render(request, 'base_instrucciones.html', contexto)
 
 def palabras_encadenadas(request):
-    palabras_cargadas = request.session.get('palabras_cargadas', False)
-    prompt = """Genera una lista con 6 palabras que cumplan obligatoriamente los siguientes requisitos: 
-                1. Tienen que estar todas relacionadas con el mismo tema 
-                2. Las palabras tienen que estar encadenadas, es decir, todas, exceptuando la primera, tienen que empezar por la última letra de la palabra estrictamente anterior. Por ejemplo: si la primera palabra es rollitos, la segunda palabra deberá OBLIGATORIAMENTE empezar por la letra S (ya que es la última letra de rollitos)
-                3. No vale poner palabras de más de una palabra como "nueva york" o "nueva zelanda", es decir que no vale poner espacios, "nueva" sería una palabra y "york" otra
-                4. La misma palabra no puede estar dos veces, es decir no se puede repetir
-
-                Todos estos requisitos se deben cumplir al pie de la letra, en caso de que uno no se cumpla se deberá buscar otra palabra u otro tema.
-
-                Opcionalmente, sería preferible que no todas las palabras empezaran por la misma letra
-                Proporciono este ejemplo con el formato deseado para que lo entiendas mejor:
-                {
-                "tema": "China",
-                "p1": "rollitos",
-                "p2": "shanghai",
-                "p3": "imprenta",
-                "p4": "acupuntura",
-                "p5": "arrozales",
-                "p6": "sopa"
-                }
-                """
-    #if palabras_cargadas == False:
+    #palabras_cargadasR1 = request.session.get('palabras_cargadasR1', False)
+    #prompt = prompts.PROMPT_RONDA1
+    #if palabras_cargadasR1 == False:
     #    JsonPalabras = llamadaAPIChatGPT(prompt)
     #    data = json.loads(JsonPalabras)
+    #    request.session['datajson'] = data
     #    palabras = PalabrasEncadenadas(
     #        tema=data["tema"],
     #        p1=data["p1"],
@@ -185,11 +168,9 @@ def palabras_encadenadas(request):
     #        p4=data["p4"],
     #        p5=data["p5"],
     #        p6=data["p6"])
-    #Guardar en la bbdd
     #    palabras.save()
-    #    request.session['datajson'] = data
-    #    palabras_cargadas = True
-    #    request.session['palabras_cargadas'] = palabras_cargadas
+    #    palabras_cargadasR1 = True
+    #    request.session['palabras_cargadasR1'] = palabras_cargadasR1
 
     fin=0
     j1 = request.session.get('j1', 'Tipo de j1 no ingresado')
@@ -332,6 +313,24 @@ def marcador_ronda(request):
         'puntos_jugador1' :puntos_jugador1, 'puntos_jugador2': puntos_jugador2, 'ronda': ronda, 'urlDelJuego': urlDelJuego})
 
 def centro_de_la_cadena(request):
+    #palabras_cargadasR2 = request.session.get('palabras_cargadasR2', False)
+    #prompt = prompts.PROMPT_RONDA2y3
+    #if palabras_cargadasR2 == False:
+    #    JsonPalabras = llamadaAPIChatGPT(prompt)
+    #    data = json.loads(JsonPalabras)
+    #    request.session['datajson'] = data
+    #    palabras = PalabrasEncadenadas(
+    #        p1=data["p1"],
+    #        p2=data["p2"],
+    #        p3=data["p3"],
+    #        p4=data["p4"],
+    #        p5=data["p5"],
+    #        p6=data["p6"],
+    #        p7=data["p7"])
+    #    palabras.save()
+    #    palabras_cargadasR2 = True
+    #    request.session['palabras_cargadasR2'] = palabras_cargadasR2
+
     # Datos de los jugadores
     fin=0
     j1 = request.session.get('j1', 'Tipo de j1 no ingresado')
@@ -469,6 +468,24 @@ def centro_de_la_cadena(request):
     })
 
 def una_lleva_a_la_otra(request):
+    #palabras_cargadasR3 = request.session.get('palabras_cargadasR3', False)
+    #prompt = prompts.PROMPT_RONDA2y3
+    #if palabras_cargadasR3 == False:
+    #    JsonPalabras = llamadaAPIChatGPT(prompt)
+    #    data = json.loads(JsonPalabras)
+    #    request.session['datajson'] = data
+    #    palabras = PalabrasEncadenadas(
+    #        p1=data["p1"],
+    #        p2=data["p2"],
+    #        p3=data["p3"],
+    #        p4=data["p4"],
+    #        p5=data["p5"],
+    #        p6=data["p6"],
+    #        p7=data["p7"])
+    #    palabras.save()
+    #    palabras_cargadasR3 = True
+    #    request.session['palabras_cargadasR3'] = palabras_cargadasR3
+
     # Datos de los jugadores
     fin=0
     j1 = request.session.get('j1', 'Tipo de j1 no ingresado')
@@ -620,11 +637,37 @@ def my_login(request):
     return render(request, 'login.html', {'form': form})
 
 def ultima_cadena(request):
+    #palabras_cargadasR4 = request.session.get('palabras_cargadasR4', False)
+    #prompt = prompts.PROMPT_RONDA4
+    #if palabras_cargadasR4 == False:
+    #    JsonPalabras = llamadaAPIChatGPT(prompt)
+    #    data = json.loads(JsonPalabras)
+    #    request.session['datajson'] = data
+    #    palabras = PalabrasEncadenadas(
+    #        p1=data["p1"],
+    #        p2=data["p2"],
+    #        p3=data["p3"],
+    #        p4=data["p4"],
+    #        p5=data["p5"],
+    #        p6=data["p6"],
+    #        p7=data["p7"],
+    #        p8=data["p8"],
+    #        p9=data["p9"],
+    #        p10=data["p10"],
+    #        p11=data["p11"],
+    #        p12=data["p12"],
+    #        p13=data["p13"],
+    #        final=data["final"],
+    #        pista=data["pista"])
+    #    palabras.save()
+    #    palabras_cargadasR4 = True
+    #    request.session['palabras_cargadasR4'] = palabras_cargadasR4
+
     j1 = request.session.get('j1', 'Tipo de j1 no ingresado')
     jugador1 = request.session.get('jugador1', 'Nombre del jugador 1 no ingresado')
     fin = 0
 
-    palabras = RondaFinal.objects.first()
+    palabras = RondaFinal.objects.last()
     letras_mostradas = request.session.get('letras_mostradas', 1)
 
     n_palabra_adivinado = request.session.get('n_palabra_adivinado', 2)
@@ -755,7 +798,7 @@ def ultima_palabra(request):
     jugador1 = request.session.get('jugador1', 'Nombre del jugador 1 no ingresado')
     puntos_jugador1 = request.session.get('puntos_jugador1', 80000)
 
-    palabras = RondaFinal.objects.first()
+    palabras = RondaFinal.objects.last()
 
     n_palabra_adivinado = request.session.get('n_palabra_adivinado', 2)
 
