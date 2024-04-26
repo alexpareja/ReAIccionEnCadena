@@ -183,6 +183,7 @@ def palabras_encadenadas(request):
     letras_mostradas = request.session.get('lm', 1)
 
     # Estado actual del juego
+
     turno_actual = request.session.get('turno_actual', j1)
     n_palabra_adivinado = request.session.get('npa', 1)
     primera_letra = request.session.get('pl', getattr(palabras, 'p' + str(n_palabra_adivinado), '')[0])
@@ -203,75 +204,45 @@ def palabras_encadenadas(request):
         else:
             palabra_modificada = palabra
         palabras_modificadas.insert((i-1),palabra_modificada)
-    
-    if request.method == 'POST':
-        respuesta = request.POST.get('respuesta', '').upper()
-        nombre_campo = 'p' + str(n_palabra_adivinado)
-        palabra_a_adivinar = getattr(palabras, nombre_campo, '').upper()
-
-        if respuesta == palabra_a_adivinar:
-        # Asignar puntos al jugador correcto
-            if turno_actual == j1:
-                puntos_jugador1 += 10000
-            else:
-                puntos_jugador2 += 10000
-
-            palabras_modificadas[int(n_palabra_adivinado)-1] = palabra_a_adivinar
-            n_palabra_adivinado += 1
-            if n_palabra_adivinado > 6:
-                    fin=1
-                    request.session['puntos_jugador1'] = puntos_jugador1
-                    request.session['puntos_jugador2'] = puntos_jugador2
-                    return render(request, 'palabras_encadenadas.html', {
-        'j1': j1, 'j2' : j2, 'jugador1': jugador1, 'jugador2' :jugador2,
-        'puntos_jugador1' :puntos_jugador1, 'puntos_jugador2': puntos_jugador2,
-        'turno_actual': turno_actual, 'palabras': palabras, 'palabras_modificadas': palabras_modificadas,
-        'n_palabra_adivinado': n_palabra_adivinado, 'turno_actual': turno_actual,
-        'letras_mostradas': letras_mostradas, 'primera_letra': primera_letra, 'fin' : fin,
-        'idPalabra': "p" + str(n_palabra_adivinado)
-    })
+        
+    nombre_campo = 'p' + str(n_palabra_adivinado)
+    palabra_a_adivinar = getattr(palabras, nombre_campo, '').upper()
+    respuestaJugadorIA = ''
+    html = 'palabras_encadenadas.html'
+    print(turno_actual)
+    if turno_actual == "IA":
+        if n_palabra_adivinado > 1:
+            palabra1 = getattr(palabras, 'p' + str(n_palabra_adivinado-1), '')
             
-            palabra_adivinada = getattr(palabras, 'p' + str(n_palabra_adivinado), '')
-            letras_faltantes = len(palabra_adivinada) - letras_mostradas
-            palabras_modificadas[int(n_palabra_adivinado)-1] = getattr(palabras, 'p' + str(n_palabra_adivinado), '')[0] +'_ ' * letras_faltantes + f" ({len(palabra_adivinada)})"
-            primera_letra = getattr(palabras, 'p' + str(n_palabra_adivinado), None)[0] 
-            letras_mostradas = 1 
         else:
-            turno_actual = j2 if turno_actual == j1 else j1
-            letras_mostradas += 1
-            if len(palabra_a_adivinar) <= letras_mostradas:
-                # Lógica cuando se han revelado todas las letras
-                if turno_actual == j1:
-                    puntos_jugador1 += 10000
-                else:
-                    puntos_jugador2 += 10000
-
-                palabras_modificadas[int(n_palabra_adivinado)-1] = palabra_a_adivinar
-                n_palabra_adivinado += 1
-                if n_palabra_adivinado > 6:
-                    fin=1
-                    request.session['puntos_jugador1'] = puntos_jugador1
-                    request.session['puntos_jugador2'] = puntos_jugador2
-                    return render(request, 'palabras_encadenadas.html', {
-        'j1': j1, 'j2' : j2, 'jugador1': jugador1, 'jugador2' :jugador2,
-        'puntos_jugador1' :puntos_jugador1, 'puntos_jugador2': puntos_jugador2,
-        'turno_actual': turno_actual, 'palabras': palabras, 'palabras_modificadas': palabras_modificadas,
-        'n_palabra_adivinado': n_palabra_adivinado, 'turno_actual': turno_actual,
-        'letras_mostradas': letras_mostradas, 'primera_letra': primera_letra, 'fin' : fin,
-        'idPalabra': "p" + str(n_palabra_adivinado)
-    })
-
-                palabras_modificadas[int(n_palabra_adivinado)-1] = getattr(palabras, 'p' + str(n_palabra_adivinado), '')[0]
-                primera_letra = getattr(palabras, 'p' + str(n_palabra_adivinado), None)[0]
-                letras_mostradas = 1 
-            else:
-
-                palabra_adivinada = getattr(palabras, 'p' + str(n_palabra_adivinado), '')
-                letras_faltantes = len(palabra_adivinada) - letras_mostradas
-                primera_letra += palabra_adivinada[letras_mostradas-1] 
-                palabras_modificadas[int(n_palabra_adivinado)-1] = primera_letra +'_ ' * letras_faltantes + f" ({len(palabra_adivinada)})"
-                    
-
+            palabra1 = '-'
+        tema = getattr(palabras, 'tema', '')
+        prompt = prompts.PROMPT_RONDA1_IA_PLAYER.format(palabra1, tema, primera_letra)
+        print(prompt)
+        respuesta = llamadaAPIChatGPT(prompt).upper()
+        respuestaJugadorIA = 'Mi respuesta es ' + respuesta
+        (request, html, j1, j2, jugador1, jugador2,
+        puntos_jugador1, puntos_jugador2, turno_actual, palabras, 
+        palabras_modificadas, n_palabra_adivinado, letras_mostradas,
+        primera_letra, fin, respuesta, palabra_a_adivinar, respuestaJugadorIA) = jugarTurno(
+        request, html, j1, j2, jugador1, jugador2,
+        puntos_jugador1, puntos_jugador2, turno_actual, palabras,
+        palabras_modificadas, n_palabra_adivinado, letras_mostradas,
+        primera_letra, fin, respuesta, palabra_a_adivinar, respuestaJugadorIA)
+    else:
+        if request.method == 'POST':
+            respuesta = request.POST.get('respuesta', '').upper()
+            print(palabra_a_adivinar)
+            (request, html, j1, j2, jugador1, jugador2,
+            puntos_jugador1, puntos_jugador2, turno_actual, palabras, 
+            palabras_modificadas, n_palabra_adivinado, letras_mostradas,
+            primera_letra, fin, respuesta, palabra_a_adivinar, respuestaJugadorIA) = jugarTurno(
+            request, html, j1, j2, jugador1, jugador2,
+            puntos_jugador1, puntos_jugador2, turno_actual, palabras,
+            palabras_modificadas, n_palabra_adivinado, letras_mostradas,
+            primera_letra, fin, respuesta, palabra_a_adivinar, respuestaJugadorIA
+            )
+            
     request.session['turno_actual'] = turno_actual
     request.session['npa'] = n_palabra_adivinado
     request.session['lm'] = letras_mostradas
@@ -286,7 +257,7 @@ def palabras_encadenadas(request):
         'turno_actual': turno_actual, 'palabras': palabras, 'palabras_modificadas': palabras_modificadas,
         'n_palabra_adivinado': n_palabra_adivinado, 'turno_actual': turno_actual,
         'letras_mostradas': letras_mostradas, 'primera_letra': primera_letra, 'fin' : fin,
-        'idPalabra': "p" + str(n_palabra_adivinado)
+        'idPalabra': "p" + str(n_palabra_adivinado), 'respuestaIA': respuestaJugadorIA
     })
 
 def marcador_ronda(request):
@@ -920,3 +891,86 @@ def llamadaAPIChatGPT(prompt):
                     ]
                 )
     return response.choices[0].message.content
+
+def jugarTurno(request, html, j1, j2, jugador1, jugador2,
+                puntos_jugador1, puntos_jugador2, turno_actual, palabras, 
+                palabras_modificadas, n_palabra_adivinado, letras_mostradas,
+                primera_letra, fin, respuesta, palabra_a_adivinar, respuestaIA):
+    if respuesta == palabra_a_adivinar:
+    # Asignar puntos al jugador correcto
+        print(puntos_jugador1)
+        if turno_actual == j1:
+            puntos_jugador1 += 10000
+        else:
+            puntos_jugador2 += 10000
+        print(puntos_jugador1)
+
+        palabras_modificadas[int(n_palabra_adivinado)-1] = palabra_a_adivinar
+        n_palabra_adivinado += 1
+        if n_palabra_adivinado > 6:
+                fin=1
+                request.session['puntos_jugador1'] = puntos_jugador1
+                request.session['puntos_jugador2'] = puntos_jugador2
+                #return render(request, html, {
+                #    'j1': j1, 'j2' : j2, 'jugador1': jugador1, 'jugador2' :jugador2,
+                #    'puntos_jugador1' :puntos_jugador1, 'puntos_jugador2': puntos_jugador2,
+                #    'turno_actual': turno_actual, 'palabras': palabras, 'palabras_modificadas': palabras_modificadas,
+                #    'n_palabra_adivinado': n_palabra_adivinado, 'turno_actual': turno_actual,
+                #    'letras_mostradas': letras_mostradas, 'primera_letra': primera_letra, 'fin' : fin,
+                #    'idPalabra': "p" + str(n_palabra_adivinado),'respuestaIA': respuestaIA
+                #}) 
+                return (request, html, j1, j2, jugador1, jugador2,
+                puntos_jugador1, puntos_jugador2, turno_actual, palabras, 
+                palabras_modificadas, n_palabra_adivinado, letras_mostradas,
+                primera_letra, fin, respuesta, palabra_a_adivinar, respuestaIA)
+        
+        palabra_adivinada = getattr(palabras, 'p' + str(n_palabra_adivinado), '')
+        letras_faltantes = len(palabra_adivinada) - letras_mostradas
+        palabras_modificadas[int(n_palabra_adivinado)-1] = getattr(palabras, 'p' + str(n_palabra_adivinado), '')[0] +'_ ' * letras_faltantes + f" ({len(palabra_adivinada)})"
+        primera_letra = getattr(palabras, 'p' + str(n_palabra_adivinado), None)[0] 
+        letras_mostradas = 1 
+    else:
+        if turno_actual == j2:
+            turno_actual = j1
+        else:
+            turno_actual = j2
+
+        letras_mostradas += 1
+        if len(palabra_a_adivinar) <= letras_mostradas:
+            # Lógica cuando se han revelado todas las letras
+            if turno_actual == j1:
+                puntos_jugador1 += 10000
+            else:
+                puntos_jugador2 += 10000
+
+            palabras_modificadas[int(n_palabra_adivinado)-1] = palabra_a_adivinar
+            n_palabra_adivinado += 1
+            if n_palabra_adivinado > 6:
+                fin=1
+                request.session['puntos_jugador1'] = puntos_jugador1
+                request.session['puntos_jugador2'] = puntos_jugador2
+                #return render(request, html, {
+                #   'j1': j1, 'j2' : j2, 'jugador1': jugador1, 'jugador2' :jugador2,
+                #   'puntos_jugador1' :puntos_jugador1, 'puntos_jugador2': puntos_jugador2,
+                #   'turno_actual': turno_actual, 'palabras': palabras, 'palabras_modificadas': palabras_modificadas,
+                #   'n_palabra_adivinado': n_palabra_adivinado, 'turno_actual': turno_actual,
+                #   'letras_mostradas': letras_mostradas, 'primera_letra': primera_letra, 'fin' : fin,
+                #   'idPalabra': "p" + str(n_palabra_adivinado), 'respuestaIA': respuestaIA
+                #})
+                return (request, html, j1, j2, jugador1, jugador2,
+                puntos_jugador1, puntos_jugador2, turno_actual, palabras, 
+                palabras_modificadas, n_palabra_adivinado, letras_mostradas,
+                primera_letra, fin, respuesta, palabra_a_adivinar, respuestaIA)
+            
+            palabras_modificadas[int(n_palabra_adivinado)-1] = getattr(palabras, 'p' + str(n_palabra_adivinado), '')[0]
+            primera_letra = getattr(palabras, 'p' + str(n_palabra_adivinado), None)[0]
+            letras_mostradas = 1 
+        else:
+            palabra_adivinada = getattr(palabras, 'p' + str(n_palabra_adivinado), '')
+            letras_faltantes = len(palabra_adivinada) - letras_mostradas
+            primera_letra += palabra_adivinada[letras_mostradas-1] 
+            palabras_modificadas[int(n_palabra_adivinado)-1] = primera_letra +'_ ' * letras_faltantes + f" ({len(palabra_adivinada)})"
+    return (request, html, j1, j2, jugador1, jugador2,
+            puntos_jugador1, puntos_jugador2, turno_actual, palabras, 
+            palabras_modificadas, n_palabra_adivinado, letras_mostradas,
+            primera_letra, fin, respuesta, palabra_a_adivinar, respuestaIA)
