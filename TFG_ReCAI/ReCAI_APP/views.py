@@ -189,7 +189,7 @@ def palabras_encadenadas(request):
     primera_letra = request.session.get('pl', getattr(palabras, 'p' + str(n_palabra_adivinado), '')[0])
     puntos_jugador1 = request.session.get('puntos_jugador1', 0)
     puntos_jugador2 = request.session.get('puntos_jugador2', 0)
-
+    IA_jugando = 0
     palabras_modificadas = []
 
     for i in range(1, 7): 
@@ -249,13 +249,17 @@ def palabras_encadenadas(request):
     request.session['puntos_jugador2'] = puntos_jugador2
     request.session['ronda'] = 'Ronda 1: Palabras encadenadas'
 
+    if (turno_actual == "IA") | (turno_actual == 'IA 1') | (turno_actual == 'IA 2'):
+        IA_jugando = 1
+
     return render(request, 'palabras_encadenadas.html', {
         'j1': j1, 'j2' : j2, 'jugador1': jugador1, 'jugador2' :jugador2,
         'puntos_jugador1' :puntos_jugador1, 'puntos_jugador2': puntos_jugador2,
         'turno_actual': turno_actual, 'palabras': palabras, 'palabras_modificadas': palabras_modificadas,
         'n_palabra_adivinado': n_palabra_adivinado, 'turno_actual': turno_actual,
         'letras_mostradas': letras_mostradas, 'primera_letra': primera_letra, 'fin' : fin,
-        'idPalabra': "p" + str(n_palabra_adivinado), 'respuestaIA': respuestaJugadorIA
+        'idPalabra': "p" + str(n_palabra_adivinado), 'respuestaIA': respuestaJugadorIA,
+        'IA_jugando': IA_jugando
     })
 
 def marcador_ronda(request):
