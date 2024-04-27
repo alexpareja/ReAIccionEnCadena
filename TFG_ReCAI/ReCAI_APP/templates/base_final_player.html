@@ -6,9 +6,9 @@
 <div id="players">
     <!-- Jugador 1 -->
     <div class="player">
-        <img src="{% static '/img/user.png' %}" alt="Foto de {{ jugador1 }}">
-        <p>{{ jugador1 }} ( {{j1}} )</p>
-        <p>Puntos:{{puntos_jugador1}}</p>
+        <img src="{% static '/img/user.png' %}" alt="Foto de {{ jugadorFinal }}">
+        <p>{{ jugadorFinal }} ( {{jFinal}} )</p>
+        <p>Puntos:{{puntos_jugadorFinal}}</p>
     </div>
 </div>
 
@@ -20,6 +20,7 @@
     {%else%}
         {% if fin %}
         <p>Ronda finalizada</p>
+        
         <a href="{% url 'ultima_palabra'%}">Siguiente</a>
         {%else%}
         <div id="campo_palabra">
