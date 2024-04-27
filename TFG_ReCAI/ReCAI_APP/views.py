@@ -209,8 +209,7 @@ def palabras_encadenadas(request):
     palabra_a_adivinar = getattr(palabras, nombre_campo, '').upper()
     respuestaJugadorIA = ''
     html = 'palabras_encadenadas.html'
-    print(turno_actual)
-    if turno_actual == "IA":
+    if (turno_actual == "IA") | (turno_actual == 'IA 1') | (turno_actual == 'IA 2'):
         if n_palabra_adivinado > 1:
             palabra1 = getattr(palabras, 'p' + str(n_palabra_adivinado-1), '')
             
@@ -218,17 +217,16 @@ def palabras_encadenadas(request):
             palabra1 = '-'
         tema = getattr(palabras, 'tema', '')
         prompt = prompts.PROMPT_RONDA1_IA_PLAYER.format(palabra1, tema, primera_letra)
-        print(prompt)
         respuesta = llamadaAPIChatGPT(prompt).upper()
         respuestaJugadorIA = 'Mi respuesta es ' + respuesta
         (request, html, j1, j2, jugador1, jugador2,
         puntos_jugador1, puntos_jugador2, turno_actual, palabras, 
         palabras_modificadas, n_palabra_adivinado, letras_mostradas,
-        primera_letra, fin, respuesta, palabra_a_adivinar, respuestaJugadorIA) = jugarTurnoPrimeraRonda(
+        primera_letra, fin, respuesta, palabra_a_adivinar) = jugarTurnoPrimeraRonda(
         request, html, j1, j2, jugador1, jugador2,
         puntos_jugador1, puntos_jugador2, turno_actual, palabras,
         palabras_modificadas, n_palabra_adivinado, letras_mostradas,
-        primera_letra, fin, respuesta, palabra_a_adivinar, respuestaJugadorIA)
+        primera_letra, fin, respuesta, palabra_a_adivinar)
     else:
         if request.method == 'POST':
             respuesta = request.POST.get('respuesta', '').upper()
@@ -236,11 +234,11 @@ def palabras_encadenadas(request):
             (request, html, j1, j2, jugador1, jugador2,
             puntos_jugador1, puntos_jugador2, turno_actual, palabras, 
             palabras_modificadas, n_palabra_adivinado, letras_mostradas,
-            primera_letra, fin, respuesta, palabra_a_adivinar, respuestaJugadorIA) = jugarTurnoPrimeraRonda(
+            primera_letra, fin, respuesta, palabra_a_adivinar) = jugarTurnoPrimeraRonda(
             request, html, j1, j2, jugador1, jugador2,
             puntos_jugador1, puntos_jugador2, turno_actual, palabras,
             palabras_modificadas, n_palabra_adivinado, letras_mostradas,
-            primera_letra, fin, respuesta, palabra_a_adivinar, respuestaJugadorIA
+            primera_letra, fin, respuesta, palabra_a_adivinar
             )
             
     request.session['turno_actual'] = turno_actual
@@ -681,28 +679,44 @@ def ultima_cadena(request):
         return render(request, 'ultima_cadena.html', {'jFinal': jFinal, 'jugadorFinal': jugadorFinal, 
                     'puntos_jugadorFinal' :puntos_jugadorFinal, 'palabras_modificadas': palabras_modificadas,
                     'palabras': palabras,'n_palabra_adivinado': n_palabra_adivinado,'primera_letra': primera_letra,
-                    'comodines': comodines,'idPalabra': idPalabra,'fin': fin
+                    'comodines': comodines,'idPalabra': idPalabra,'fin': fin, 'respuesta_jugadorIA' :respuestaIA
                     })
     
+    if (jFinal == "IA") | (jFinal == 'IA 1') | (jFinal == 'IA 2'):
+        palabra1 = getattr(palabras, 'p' + str(n_palabra_adivinado-1), '')
+        palabra2 = getattr(palabras, 'p' + str(n_palabra_adivinado+1), '')
+        prompt = prompts.PROMPT_RONDAFINAL_IA_PLAYER.format(palabra1, palabra2, primera_letra)
+        respuesta = llamadaAPIChatGPT(prompt).upper()
+        respuestaIA = 'Mi respuesta es ' + respuesta
+        (request, jFinal, jugadorFinal,
+        puntos_jugadorFinal, palabras, palabras_modificadas, 
+        n_palabra_adivinado, letras_mostradas,
+        primera_letra, fin, respuesta, palabra_a_adivinar, respuestaIA
+        ,comodines, idPalabra, juego_acabado) = jugarTurnoUltimaCadena(
+                                                        request, jFinal, jugadorFinal,
+                                                        puntos_jugadorFinal, palabras, palabras_modificadas, 
+                                                        n_palabra_adivinado, letras_mostradas,
+                                                        primera_letra, fin, respuesta, palabra_a_adivinar, respuestaIA
+                                                        ,comodines, idPalabra, juego_acabado)
+    else:
 
-    if request.method == 'POST':
-        print(n_palabra_adivinado)
-        form = TurnFormulario(request.POST)
-        if form.is_valid():
-            respuesta = form.cleaned_data['respuesta'].upper()
-            nombre_campo = 'p' + str(n_palabra_adivinado)
-            palabra_a_adivinar = getattr(palabras, nombre_campo, None)
-            print(palabra_a_adivinar + '   ' + respuesta)
-            (request, jFinal, jugadorFinal,
-            puntos_jugadorFinal, palabras, palabras_modificadas, 
-            n_palabra_adivinado, letras_mostradas,
-            primera_letra, fin, respuesta, palabra_a_adivinar, respuestaIA
-            ,comodines, idPalabra, juego_acabado) = jugarTurnoUltimaCadena(
-                                                            request, jFinal, jugadorFinal,
-                                                            puntos_jugadorFinal, palabras, palabras_modificadas, 
-                                                            n_palabra_adivinado, letras_mostradas,
-                                                            primera_letra, fin, respuesta, palabra_a_adivinar, respuestaIA
-                                                            ,comodines, idPalabra, juego_acabado)
+        if request.method == 'POST':
+            print(n_palabra_adivinado)
+            form = TurnFormulario(request.POST)
+            if form.is_valid():
+                respuesta = form.cleaned_data['respuesta'].upper()
+                nombre_campo = 'p' + str(n_palabra_adivinado)
+                palabra_a_adivinar = getattr(palabras, nombre_campo, None)
+                (request, jFinal, jugadorFinal,
+                puntos_jugadorFinal, palabras, palabras_modificadas, 
+                n_palabra_adivinado, letras_mostradas,
+                primera_letra, fin, respuesta, palabra_a_adivinar, respuestaIA
+                ,comodines, idPalabra, juego_acabado) = jugarTurnoUltimaCadena(
+                                                                request, jFinal, jugadorFinal,
+                                                                puntos_jugadorFinal, palabras, palabras_modificadas, 
+                                                                n_palabra_adivinado, letras_mostradas,
+                                                                primera_letra, fin, respuesta, palabra_a_adivinar, respuestaIA
+                                                                ,comodines, idPalabra, juego_acabado)
 
 
     idPalabra = "p" + str(n_palabra_adivinado)
@@ -710,7 +724,7 @@ def ultima_cadena(request):
                     'puntos_jugadorFinal' :puntos_jugadorFinal, 'palabras_modificadas': palabras_modificadas,
                     'palabras': palabras, 'n_palabra_adivinado': n_palabra_adivinado,
                     'primera_letra': primera_letra,'comodines': comodines, 'idPalabra': idPalabra,
-                    'fin': fin, 'juego_acabado' : juego_acabado
+                    'fin': fin, 'juego_acabado' : juego_acabado, 'respuesta_jugadorIA' :respuestaIA
                     })
 
 def ultima_palabra(request):
@@ -836,7 +850,7 @@ def llamadaAPIChatGPT(prompt):
 def jugarTurnoPrimeraRonda(request, html, j1, j2, jugador1, jugador2,
                             puntos_jugador1, puntos_jugador2, turno_actual, palabras, 
                             palabras_modificadas, n_palabra_adivinado, letras_mostradas,
-                            primera_letra, fin, respuesta, palabra_a_adivinar, respuestaIA):
+                            primera_letra, fin, respuesta, palabra_a_adivinar):
     if respuesta == palabra_a_adivinar:
     # Asignar puntos al jugador correcto
         if turno_actual == j1:
@@ -853,7 +867,7 @@ def jugarTurnoPrimeraRonda(request, html, j1, j2, jugador1, jugador2,
                 return (request, html, j1, j2, jugador1, jugador2,
                 puntos_jugador1, puntos_jugador2, turno_actual, palabras, 
                 palabras_modificadas, n_palabra_adivinado, letras_mostradas,
-                primera_letra, fin, respuesta, palabra_a_adivinar, respuestaIA)
+                primera_letra, fin, respuesta, palabra_a_adivinar)
         
         palabra_adivinada = getattr(palabras, 'p' + str(n_palabra_adivinado), '')
         letras_faltantes = len(palabra_adivinada) - letras_mostradas
@@ -883,7 +897,7 @@ def jugarTurnoPrimeraRonda(request, html, j1, j2, jugador1, jugador2,
                 return (request, html, j1, j2, jugador1, jugador2,
                 puntos_jugador1, puntos_jugador2, turno_actual, palabras, 
                 palabras_modificadas, n_palabra_adivinado, letras_mostradas,
-                primera_letra, fin, respuesta, palabra_a_adivinar, respuestaIA)
+                primera_letra, fin, respuesta, palabra_a_adivinar)
             
             palabras_modificadas[int(n_palabra_adivinado)-1] = getattr(palabras, 'p' + str(n_palabra_adivinado), '')[0]
             primera_letra = getattr(palabras, 'p' + str(n_palabra_adivinado), None)[0]
@@ -896,7 +910,7 @@ def jugarTurnoPrimeraRonda(request, html, j1, j2, jugador1, jugador2,
     return (request, html, j1, j2, jugador1, jugador2,
             puntos_jugador1, puntos_jugador2, turno_actual, palabras, 
             palabras_modificadas, n_palabra_adivinado, letras_mostradas,
-            primera_letra, fin, respuesta, palabra_a_adivinar, respuestaIA)
+            primera_letra, fin, respuesta, palabra_a_adivinar)
 
 
 def jugarTurnoUltimaCadena(request, jFinal, jugadorFinal,
