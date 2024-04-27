@@ -631,19 +631,27 @@ def ultima_cadena(request):
     #    palabras.save()
     #    palabras_cargadasR4 = True
     #    request.session['palabras_cargadasR4'] = palabras_cargadasR4
-
-    if (request.session.get('puntos_jugador1', 0) >= request.session.get('puntos_jugador2', 0)):
-        jFinal = request.session.get('j1', 'Tipo de j1 no ingresado')
-        jugadorFinal = request.session.get('jugador1', 'Nombre del jugador 1 no ingresado')
-        puntos_jugadorFinal = request.session.get('puntos_jugador1', 0)
-    else:
-        jFinal = request.session.get('j2', 'Tipo de j2 no ingresado')
-        jugadorFinal = request.session.get('jugador2', 'Nombre del jugador 2 no ingresado')
-        puntos_jugadorFinal = request.session.get('puntos_jugador2', 0)
-
-    request.session['jFinal'] = jFinal
-    request.session['jugadorFinal'] = jugadorFinal
-    request.session['puntos_jugadorFinal'] = puntos_jugadorFinal
+    if (request.session.get('j1') != None) | (request.session.get('j2') != None):
+        if (request.session.get('puntos_jugador1', 0) >= request.session.get('puntos_jugador2', 0)):
+            jFinal = request.session.get('j1', 'Tipo de j1 no ingresado')
+            jugadorFinal = request.session.get('jugador1', 'Nombre del jugador 1 no ingresado')
+            puntos_jugadorFinal = request.session.get('puntos_jugador1', 0)
+        else:
+            jFinal = request.session.get('j2', 'Tipo de j2 no ingresado')
+            jugadorFinal = request.session.get('jugador2', 'Nombre del jugador 2 no ingresado')
+            puntos_jugadorFinal = request.session.get('puntos_jugador2', 0)
+        del request.session['j1']
+        del request.session['j2']
+        del request.session['jugador1']
+        del request.session['jugador2']
+        del request.session['puntos_jugador1']
+        del request.session['puntos_jugador2'] 
+        request.session['jFinal'] = jFinal
+        request.session['jugadorFinal'] = jugadorFinal
+        request.session['puntos_jugadorFinal'] = puntos_jugadorFinal
+    jFinal = request.session.get('jFinal', 'Tipo de j1 no ingresado')
+    jugadorFinal = request.session.get('jugadorFinal', 'Nombre del jugador 1 no ingresado')
+    puntos_jugadorFinal = request.session.get('puntos_jugadorFinal', 0)
 
     fin = 0
     palabras = RondaFinal.objects.last()
@@ -691,15 +699,14 @@ def ultima_cadena(request):
         (request, jFinal, jugadorFinal,
         puntos_jugadorFinal, palabras, palabras_modificadas, 
         n_palabra_adivinado, letras_mostradas,
-        primera_letra, fin, respuesta, palabra_a_adivinar, respuestaIA
+        primera_letra, fin, respuesta, palabra_a_adivinar
         ,comodines, idPalabra, juego_acabado) = jugarTurnoUltimaCadena(
                                                         request, jFinal, jugadorFinal,
                                                         puntos_jugadorFinal, palabras, palabras_modificadas, 
                                                         n_palabra_adivinado, letras_mostradas,
-                                                        primera_letra, fin, respuesta, palabra_a_adivinar, respuestaIA
+                                                        primera_letra, fin, respuesta, palabra_a_adivinar
                                                         ,comodines, idPalabra, juego_acabado)
     else:
-
         if request.method == 'POST':
             print(n_palabra_adivinado)
             form = TurnFormulario(request.POST)
@@ -710,12 +717,12 @@ def ultima_cadena(request):
                 (request, jFinal, jugadorFinal,
                 puntos_jugadorFinal, palabras, palabras_modificadas, 
                 n_palabra_adivinado, letras_mostradas,
-                primera_letra, fin, respuesta, palabra_a_adivinar, respuestaIA
+                primera_letra, fin, respuesta, palabra_a_adivinar
                 ,comodines, idPalabra, juego_acabado) = jugarTurnoUltimaCadena(
                                                                 request, jFinal, jugadorFinal,
                                                                 puntos_jugadorFinal, palabras, palabras_modificadas, 
                                                                 n_palabra_adivinado, letras_mostradas,
-                                                                primera_letra, fin, respuesta, palabra_a_adivinar, respuestaIA
+                                                                primera_letra, fin, respuesta, palabra_a_adivinar
                                                                 ,comodines, idPalabra, juego_acabado)
 
 
@@ -745,26 +752,15 @@ def ultima_palabra(request):
     pista = getattr(palabras, 'pista', None)
     pista_mostrada = request.session.get('pista_mostrada', '?')
     request.session['pista_mostrada'] = pista_mostrada
+    respuesta = ''
 
     if request.method == 'POST':
         form = TurnFormulario(request.POST)
-        if form.is_valid():
-            respuesta = form.cleaned_data['respuesta']
-            if respuesta.upper() == solucion.upper():
-                print("Ganas")
-                solucion_mostrada = solucion
-
-            else:
-                puntos_jugadorFinal = 0
-                request.session['puntos_jugadorFinal'] = puntos_jugadorFinal
-                solucion_mostrada = solucion
-            request.session['solucion_mostrada'] = solucion_mostrada
-            juego_acabado = 1
-        else:
-            pista_mostrada = pista
-            request.session['pista_mostrada'] = pista_mostrada
-            puntos_jugadorFinal = puntos_jugadorFinal / 2
-            request.session['puntos_jugadorFinal'] = puntos_jugadorFinal
+        (request, puntos_jugadorFinal, respuesta,
+        form, solucion, solucion_mostrada, pista, juego_acabado,
+        pista_mostrada) = jugarTurnoUltimaPalabra(request, puntos_jugadorFinal, respuesta,
+        form, solucion, solucion_mostrada, pista, juego_acabado,
+        pista_mostrada)
     idPalabra = "p" + str(n_palabra_adivinado)
     return render(request, 'ultima_palabra.html', {'jFinal': jFinal, 'jugadorFinal': jugadorFinal, 
                                                 'puntos_jugadorFinal' :puntos_jugadorFinal,
@@ -813,12 +809,9 @@ def fin_juego(request):
 
     #guardar puntos en bbdd
 
-    del request.session['j1']
-    del request.session['j2']
-    del request.session['jugador1']
-    del request.session['jugador2']
-    del request.session['puntos_jugador1']
-    del request.session['puntos_jugador2']
+    del request.session['jFinal']
+    del request.session['jugadorFinal']
+    del request.session['puntos_jugadorFinal']
 
 
     return render(request, 'fin_juego.html', {'jFinal': jFinal, 'jugadorFinal': jugadorFinal,
@@ -912,11 +905,10 @@ def jugarTurnoPrimeraRonda(request, html, j1, j2, jugador1, jugador2,
             palabras_modificadas, n_palabra_adivinado, letras_mostradas,
             primera_letra, fin, respuesta, palabra_a_adivinar)
 
-
 def jugarTurnoUltimaCadena(request, jFinal, jugadorFinal,
                             puntos_jugadorFinal, palabras, palabras_modificadas, 
                             n_palabra_adivinado, letras_mostradas,
-                            primera_letra, fin, respuesta, palabra_a_adivinar, respuestaIA
+                            primera_letra, fin, respuesta, palabra_a_adivinar
                             ,comodines, idPalabra, juego_acabado):
     if respuesta == palabra_a_adivinar:
         palabras_modificadas[int(n_palabra_adivinado/2)-1] = palabra_a_adivinar
@@ -926,7 +918,7 @@ def jugarTurnoUltimaCadena(request, jFinal, jugadorFinal,
             return (request, jFinal, jugadorFinal,
                         puntos_jugadorFinal, palabras, palabras_modificadas, 
                         n_palabra_adivinado, letras_mostradas,
-                        primera_letra, fin, respuesta, palabra_a_adivinar, respuestaIA
+                        primera_letra, fin, respuesta, palabra_a_adivinar
                         ,comodines, idPalabra, juego_acabado)
         n_palabra_adivinado += 2
         palabras_modificadas[int(n_palabra_adivinado/2)-1] = getattr(palabras, 'p' + str(n_palabra_adivinado), '')[0]
@@ -950,7 +942,7 @@ def jugarTurnoUltimaCadena(request, jFinal, jugadorFinal,
                 return (request, jFinal, jugadorFinal,
                         puntos_jugadorFinal, palabras, palabras_modificadas, 
                         n_palabra_adivinado, letras_mostradas,
-                        primera_letra, fin, respuesta, palabra_a_adivinar, respuestaIA
+                        primera_letra, fin, respuesta, palabra_a_adivinar
                         ,comodines, idPalabra, juego_acabado)
             n_palabra_adivinado += 2
             palabras_modificadas[int(n_palabra_adivinado/2)-1] = getattr(palabras, 'p' + str(n_palabra_adivinado), '')[0]
@@ -976,5 +968,29 @@ def jugarTurnoUltimaCadena(request, jFinal, jugadorFinal,
     return (request, jFinal, jugadorFinal,
         puntos_jugadorFinal, palabras, palabras_modificadas, 
         n_palabra_adivinado, letras_mostradas,
-        primera_letra, fin, respuesta, palabra_a_adivinar, respuestaIA
+        primera_letra, fin, respuesta, palabra_a_adivinar
         ,comodines, idPalabra, juego_acabado)
+
+def jugarTurnoUltimaPalabra(request, puntos_jugadorFinal, respuesta,
+                            form, solucion, solucion_mostrada, pista, juego_acabado,
+                            pista_mostrada):
+    if form.is_valid():
+        respuesta = form.cleaned_data['respuesta']
+        if respuesta.upper() == solucion.upper():
+            print("Ganas")
+            solucion_mostrada = solucion
+
+        else:
+            puntos_jugadorFinal = 0
+            request.session['puntos_jugadorFinal'] = puntos_jugadorFinal
+            solucion_mostrada = solucion
+        request.session['solucion_mostrada'] = solucion_mostrada
+        juego_acabado = 1
+    else:
+        pista_mostrada = pista
+        request.session['pista_mostrada'] = pista_mostrada
+        puntos_jugadorFinal = puntos_jugadorFinal / 2
+        request.session['puntos_jugadorFinal'] = puntos_jugadorFinal
+    return (request, puntos_jugadorFinal, respuesta,
+            form, solucion, solucion_mostrada, pista, juego_acabado,
+            pista_mostrada)
