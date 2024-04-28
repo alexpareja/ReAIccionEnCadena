@@ -865,12 +865,11 @@ def jugarTurnoPrimeraRonda(request, html, j1, j2, jugador1, jugador2,
                 puntos_jugador1, puntos_jugador2, turno_actual, palabras, 
                 palabras_modificadas, n_palabra_adivinado, letras_mostradas,
                 primera_letra, fin, respuesta, palabra_a_adivinar)
-        
+        letras_mostradas = 1 
         palabra_adivinada = getattr(palabras, 'p' + str(n_palabra_adivinado), '')
         letras_faltantes = len(palabra_adivinada) - letras_mostradas
         palabras_modificadas[int(n_palabra_adivinado)-1] = getattr(palabras, 'p' + str(n_palabra_adivinado), '')[0] +'_ ' * letras_faltantes + f" ({len(palabra_adivinada)})"
         primera_letra = getattr(palabras, 'p' + str(n_palabra_adivinado), None)[0] 
-        letras_mostradas = 1 
     else:
         if turno_actual == j2:
             turno_actual = j1
