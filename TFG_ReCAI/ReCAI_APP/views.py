@@ -207,18 +207,22 @@ def palabras_encadenadas(request):
         
     nombre_campo = 'p' + str(n_palabra_adivinado)
     palabra_a_adivinar = getattr(palabras, nombre_campo, '').upper()
-    respuestaJugadorIA = ''
+    respuestaJugadorIA1 = ''
+    respuestaJugadorIA2 = ''
+
     html = 'palabras_encadenadas.html'
     if (turno_actual == "IA") | (turno_actual == 'IA 1') | (turno_actual == 'IA 2'):
         if n_palabra_adivinado > 1:
             palabra1 = getattr(palabras, 'p' + str(n_palabra_adivinado-1), '')
-            
         else:
             palabra1 = '-'
         tema = getattr(palabras, 'tema', '')
         prompt = prompts.PROMPT_RONDA1_IA_PLAYER.format(palabra1, tema, primera_letra)
         respuesta = llamadaAPIChatGPT(prompt).upper()
-        respuestaJugadorIA = 'Mi respuesta es ' + respuesta
+        if (turno_actual == "IA") | (turno_actual == 'IA 2'):
+            respuestaJugadorIA2 = 'Mi respuesta es ' + respuesta
+        else:
+            respuestaJugadorIA1 = 'Mi respuesta es ' + respuesta
         (request, html, j1, j2, jugador1, jugador2,
         puntos_jugador1, puntos_jugador2, turno_actual, palabras, 
         palabras_modificadas, n_palabra_adivinado, letras_mostradas,
@@ -258,8 +262,8 @@ def palabras_encadenadas(request):
         'turno_actual': turno_actual, 'palabras': palabras, 'palabras_modificadas': palabras_modificadas,
         'n_palabra_adivinado': n_palabra_adivinado, 'turno_actual': turno_actual,
         'letras_mostradas': letras_mostradas, 'primera_letra': primera_letra, 'fin' : fin,
-        'idPalabra': "p" + str(n_palabra_adivinado), 'respuestaIA': respuestaJugadorIA,
-        'IA_jugando': IA_jugando
+        'idPalabra': "p" + str(n_palabra_adivinado), 'respuestaIA1': respuestaJugadorIA1,
+        'IA_jugando': IA_jugando, 'respuestaIA2': respuestaJugadorIA2
     })
 
 def marcador_ronda(request):
@@ -747,7 +751,7 @@ def ultima_palabra(request):
     palabras = RondaFinal.objects.last()
 
     n_palabra_adivinado = request.session.get('n_palabra_adivinado', 2)
-
+    pistaMostrada = request.session.get('pistaMostrada', 1)
     palabra_inicial = getattr(palabras, 'p13', None)
     request.session['palabra_inicial'] = palabra_inicial
     solucion = getattr(palabras, 'final', None)
@@ -756,15 +760,45 @@ def ultima_palabra(request):
     pista = getattr(palabras, 'pista', None)
     pista_mostrada = request.session.get('pista_mostrada', '?')
     request.session['pista_mostrada'] = pista_mostrada
-    respuesta = ''
+    respuestaIA = ''
 
-    if request.method == 'POST':
-        form = TurnFormulario(request.POST)
-        (request, puntos_jugadorFinal, respuesta,
-        form, solucion, solucion_mostrada, pista, juego_acabado,
-        pista_mostrada) = jugarTurnoUltimaPalabra(request, puntos_jugadorFinal, respuesta,
-        form, solucion, solucion_mostrada, pista, juego_acabado,
-        pista_mostrada)
+    if (jFinal == "IA") | (jFinal == 'IA 1') | (jFinal == 'IA 2'):
+        if pistaMostrada == 0:
+            prompt = prompts.PROMPT_PALABRAFINAL_IA_PLAYER.format(palabra_inicial, solucion_mostrada)
+            jsonRespuesta = llamadaAPIChatGPT(prompt).upper()
+            data = json.loads(jsonRespuesta)
+            if data["pista"] == 'SI':
+                (request, pistaMostrada, pista_mostrada, pista, 
+                puntos_jugadorFinal) = jugarTurnoUltimaPalabraMostrarPista(request, pistaMostrada, 
+                pista_mostrada, pista, puntos_jugadorFinal)
+            else:
+                respuesta = data["respuesta"]
+                respuestaIA = 'Mi respuesta es ' + respuesta
+                (request, puntos_jugadorFinal, respuesta,
+                solucion, solucion_mostrada, juego_acabado) = jugarTurnoUltimaPalabra(request,
+                puntos_jugadorFinal, respuesta,
+                solucion, solucion_mostrada, juego_acabado)
+        else:
+            prompt = prompts.PROMPT_PALABRAFINALCONPISTA_IA_PLAYER.format(palabra_inicial, pista_mostrada, solucion_mostrada)
+            respuesta = llamadaAPIChatGPT(prompt).upper()
+            respuestaIA = 'Mi respuesta es ' + respuesta
+            (request, puntos_jugadorFinal, respuesta,
+            solucion, solucion_mostrada, juego_acabado) = jugarTurnoUltimaPalabra(request,
+            puntos_jugadorFinal, respuesta,
+            solucion, solucion_mostrada, juego_acabado)
+    else:
+        if request.method == 'POST':
+            solicitaPista = request.POST.get('pista', '')
+            if solicitaPista == 'yes':
+                (request, pistaMostrada, pista_mostrada, pista, 
+                puntos_jugadorFinal) = jugarTurnoUltimaPalabraMostrarPista(request, pistaMostrada, 
+                pista_mostrada, pista, puntos_jugadorFinal)
+            else:
+                respuesta = request.POST.get('respuesta', '')
+                (request, puntos_jugadorFinal, respuesta,
+                solucion, solucion_mostrada, juego_acabado) = jugarTurnoUltimaPalabra(request,
+                puntos_jugadorFinal, respuesta,
+                solucion, solucion_mostrada, juego_acabado)
     idPalabra = "p" + str(n_palabra_adivinado)
     return render(request, 'ultima_palabra.html', {'jFinal': jFinal, 'jugadorFinal': jugadorFinal, 
                                                 'puntos_jugadorFinal' :puntos_jugadorFinal,
@@ -775,7 +809,9 @@ def ultima_palabra(request):
                                                 'pista': pista,
                                                 'pista_mostrada': pista_mostrada,
                                                 'fin': 0,
-                                                'juego_acabado' : juego_acabado
+                                                'juego_acabado' : juego_acabado,
+                                                'pistaMostrada': pistaMostrada,
+                                                'respuestaIA': respuestaIA
                                                 })
 
 def fin_juego(request):
@@ -975,25 +1011,22 @@ def jugarTurnoUltimaCadena(request, jFinal, jugadorFinal,
         ,comodines, idPalabra, juego_acabado)
 
 def jugarTurnoUltimaPalabra(request, puntos_jugadorFinal, respuesta,
-                            form, solucion, solucion_mostrada, pista, juego_acabado,
-                            pista_mostrada):
-    if form.is_valid():
-        respuesta = form.cleaned_data['respuesta']
-        if respuesta.upper() == solucion.upper():
-            print("Ganas")
-            solucion_mostrada = solucion
-
-        else:
-            puntos_jugadorFinal = 0
-            request.session['puntos_jugadorFinal'] = puntos_jugadorFinal
-            solucion_mostrada = solucion
-        request.session['solucion_mostrada'] = solucion_mostrada
-        juego_acabado = 1
-    else:
-        pista_mostrada = pista
-        request.session['pista_mostrada'] = pista_mostrada
-        puntos_jugadorFinal = puntos_jugadorFinal / 2
+                            solucion, solucion_mostrada, juego_acabado,
+                            ):
+    if respuesta.upper() != solucion.upper():
+        puntos_jugadorFinal = 0
         request.session['puntos_jugadorFinal'] = puntos_jugadorFinal
+    solucion_mostrada = solucion
+    request.session['solucion_mostrada'] = solucion_mostrada
+    juego_acabado = 1
     return (request, puntos_jugadorFinal, respuesta,
-            form, solucion, solucion_mostrada, pista, juego_acabado,
-            pista_mostrada)
+            solucion, solucion_mostrada, juego_acabado)
+
+def jugarTurnoUltimaPalabraMostrarPista(request, pistaMostrada, pista_mostrada, pista, puntos_jugadorFinal):
+    pistaMostrada = 0
+    request.session['pistaMostrada'] = pistaMostrada
+    pista_mostrada = pista
+    request.session['pista_mostrada'] = pista_mostrada
+    puntos_jugadorFinal = puntos_jugadorFinal / 2
+    request.session['puntos_jugadorFinal'] = puntos_jugadorFinal
+    return(request, pistaMostrada, pista_mostrada, pista, puntos_jugadorFinal)

@@ -22,5 +22,15 @@ PROMPT_RONDA1_IA_PLAYER = """
 
 #PROMPT_RONDA4 = 
 
+#PROMPT_RONDAFINAL_IA_PLAYER =
 
+#Este decide si quiere la pista o no y lo devuelve en un json
+#                {
+#                "quiero_pista": "SI",
+#                "respuesta": ""
+#                }
+#PROMPT_PALABRAFINAL_IA_PLAYER =
+
+#Este recibe la pista tambien y solo devuelve la palabra
+#PROMPT_PALABRAFINALCONPISTA_IA_PLAYER =
 

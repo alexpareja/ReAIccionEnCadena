@@ -9,6 +9,7 @@
         <img src="{% static '/img/user.png' %}" alt="Foto de {{ jugadorFinal }}">
         <p>{{ jugadorFinal }} ( {{jFinal}} )</p>
         <p>Puntos:{{puntos_jugadorFinal}}</p>
+        <p>{{respuestaIA}}</p>
     </div>
 </div>
 
@@ -26,8 +27,9 @@
         <div id="campo_palabra">
             <label for="respuesta">Meter palabra:</label>
             <input type="text" id="inputPalabra" name="respuesta" placeholder='{{primera_letra}}' />
+            <input type="hidden" name="pista" value="no"> 
         </div>
-        <input type="submit" value="Enviar" onclick="comprobarPalabra('{{palabra_a_adivinar}}')">
+        <input type="submit" value="Enviar">
         {%endif%}
     {% endif %}
 </form>
