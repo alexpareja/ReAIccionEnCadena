@@ -9,13 +9,18 @@
     <div id = "panel">
         <div id=centro_cadena>
                 <li>{{ palabras.p1 }}</li>
-                <li id="p2">{{ palabras_modificadas.0 }}</li>
-                <li id="p3">{{ palabras_modificadas.1 }}</li>
+                <li id="p2" onclick="seleccionarPalabra(this)">{{ palabras_modificadas.0 }}</li>
+                <li id="p3" onclick="seleccionarPalabra(this)">{{ palabras_modificadas.1 }}</li>
                 <li>{{ palabras.p4 }}</li>
-                <li id="p5">{{ palabras_modificadas.2 }}</li>
-                <li id="p6">{{ palabras_modificadas.3 }}</li>
+                <li id="p5" onclick="seleccionarPalabra(this)">{{ palabras_modificadas.2 }}</li>
+                <li id="p6" onclick="seleccionarPalabra(this)">{{ palabras_modificadas.3 }}</li>
                 <li>{{palabras.p7}}</li>
         </div>
+        <form method=post id="formSeleccionarPalabra">
+            {% csrf_token %}
+            <input type="hidden" id="isSeleccionada" name="isSeleccionada" value="{{isSeleccionada}}">
+            <input type="hidden" id="palabra_elegida" name="palabra_elegida" value="{{palabra_elegida}}">
+        </form>
     </div>
 
     <input type="hidden" id="idPalabra" value="{{idPalabra}}"> 

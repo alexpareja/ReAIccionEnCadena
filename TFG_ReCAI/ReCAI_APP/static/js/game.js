@@ -90,3 +90,13 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 });
 */
+
+function seleccionarPalabra(elemento) {
+    var isSeleccionada = document.getElementById('isSeleccionada');
+    var idP =  document.getElementById('palabra_elegida');
+    let form = document.getElementById('formSeleccionarPalabra');
+    if (isSeleccionada.value == 1){
+        idP.value = elemento.id;
+        form.submit()
+    }
+}
