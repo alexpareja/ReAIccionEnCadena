@@ -32,7 +32,7 @@
     <a href="{% url 'marcador_ronda'%}" onclick="borrarEstilos()">Siguiente</a>
     {%else%}
         {% if IA_jugando %}
-            <button href ="{% url 'palabras_encadenadas'%}">Pulse aqui para que juegue la IA</button>
+            <button href ="{% url 'palabras_encadenadas'%}" onclick="obtenerIdsActivos()">Pulse aqui para que juegue la IA</button>
         {%else%}
             {%if isSeleccionada %}
                 <a>Elige la palabra que quieres adivinar (por arriba o por abajo)</a>

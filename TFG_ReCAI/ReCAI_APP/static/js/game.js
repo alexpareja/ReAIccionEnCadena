@@ -144,3 +144,29 @@ document.addEventListener('DOMContentLoaded', function() {
 function borrarEstilos(){
     localStorage.clear();
 }
+
+/*function obtenerIdsActivos() {
+    var ids = [];
+    var elementosActivos = document.querySelectorAll('li.activo');
+    
+    elementosActivos.forEach(function(elemento) {
+        ids.push(elemento.id);
+    });
+    
+    // Envía los IDs al backend (en este caso, a la URL '/ruta/de/tu/vista/')
+    fetch('/centro_de_la_cadena/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': '{{ csrf_token }}' // Asegúrate de incluir el token CSRF si estás utilizando Django forms
+        },
+        body: JSON.stringify({ ids: ids })
+    })
+    .then(response => {
+        // Maneja la respuesta del servidor si es necesario
+        console.log('IDs enviados al backend');
+    })
+    .catch(error => {
+        console.error('Error al enviar los IDs al backend:', error);
+    });
+}*/
