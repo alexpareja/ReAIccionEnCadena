@@ -9,7 +9,7 @@
         <img src="{% static '/img/user.png' %}" alt="Foto de {{ jugadorFinal }}">
         <p>{{ jugadorFinal }} ( {{jFinal}} )</p>
         <p>Puntos:{{puntos_jugadorFinal}}</p>
-        <p>{{respuestaIA}}</p>
+        <p>{{respuesta_jugadorIA}}</p>
     </div>
 </div>
 
@@ -21,15 +21,18 @@
     {%else%}
         {% if fin %}
         <p>Ronda finalizada</p>
-        
         <a href="{% url 'ultima_palabra'%}">Siguiente</a>
         {%else%}
-        <div id="campo_palabra">
-            <label for="respuesta">Meter palabra:</label>
-            <input type="text" id="inputPalabra" name="respuesta" placeholder='{{primera_letra}}' />
-            <input type="hidden" name="pista" value="no"> 
-        </div>
-        <input type="submit" value="Enviar">
+            {% if IA_jugando %}
+                <button href ="{% url 'palabras_encadenadas'%}" onclick="obtenerIdsActivos()">Pulse aqui para que juegue la IA</button>
+            {%else%}
+            <div id="campo_palabra">
+                <label for="respuesta">Meter palabra:</label>
+                <input type="text" id="inputPalabra" name="respuesta" placeholder='{{primera_letra}}' />
+                <input type="hidden" name="pista" value="no"> 
+            </div>
+            <input type="submit" value="Enviar">
+            {% endif %}
         {%endif%}
     {% endif %}
 </form>

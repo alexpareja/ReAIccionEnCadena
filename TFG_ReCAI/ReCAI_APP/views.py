@@ -641,6 +641,7 @@ def ultima_cadena(request):
     idPalabra = "p" + str(n_palabra_adivinado)
     juego_acabado = 0
     palabras_modificadas = []
+    IA_jugando = 0
 
     for i in range(1, 14):  # Assuming there are 15 fields in RondaFinal
         nombre_campo = 'p' + str(i)
@@ -670,8 +671,11 @@ def ultima_cadena(request):
         palabra1 = getattr(palabras, 'p' + str(n_palabra_adivinado-1), '')
         palabra2 = getattr(palabras, 'p' + str(n_palabra_adivinado+1), '')
         prompt = prompts.PROMPT_RONDAFINAL_IA_PLAYER.format(palabra1, palabra2, primera_letra)
+        print(prompt)
         respuesta = llamadaAPIChatGPT(prompt).upper()
         respuestaIA = 'Mi respuesta es ' + respuesta
+        nombre_campo = 'p' + str(n_palabra_adivinado)
+        palabra_a_adivinar = getattr(palabras, nombre_campo, None)
         (request, jFinal, jugadorFinal,
         puntos_jugadorFinal, palabras, palabras_modificadas, 
         n_palabra_adivinado, letras_mostradas,
@@ -700,7 +704,8 @@ def ultima_cadena(request):
                                                                 n_palabra_adivinado, letras_mostradas,
                                                                 primera_letra, fin, respuesta, palabra_a_adivinar
                                                                 ,comodines, idPalabra, juego_acabado)
-
+    if (jFinal == "IA") | (jFinal == 'IA 1') | (jFinal == 'IA 2'):
+        IA_jugando = 1
 
     idPalabra = "p" + str(n_palabra_adivinado)
     return render(request, 'ultima_cadena.html', {'jFinal': jFinal, 'jugadorFinal': jugadorFinal, 
@@ -708,6 +713,7 @@ def ultima_cadena(request):
                     'palabras': palabras, 'n_palabra_adivinado': n_palabra_adivinado,
                     'primera_letra': primera_letra,'comodines': comodines, 'idPalabra': idPalabra,
                     'fin': fin, 'juego_acabado' : juego_acabado, 'respuesta_jugadorIA' :respuestaIA
+                    ,'IA_jugando':IA_jugando
                     })
 
 def ultima_palabra(request):
@@ -717,7 +723,7 @@ def ultima_palabra(request):
     puntos_jugadorFinal = request.session.get('puntos_jugadorFinal', 80000)
 
     palabras = RondaFinal.objects.last()
-
+    IA_jugando = 0
     n_palabra_adivinado = request.session.get('n_palabra_adivinado', 2)
     pistaMostrada = request.session.get('pistaMostrada', 1)
     palabra_inicial = getattr(palabras, 'p13', None)
@@ -768,6 +774,9 @@ def ultima_palabra(request):
                 puntos_jugadorFinal, respuesta,
                 solucion, solucion_mostrada, juego_acabado)
     idPalabra = "p" + str(n_palabra_adivinado)
+
+    if (jFinal == "IA") | (jFinal == 'IA 1') | (jFinal == 'IA 2'):
+        IA_jugando = 1
     return render(request, 'ultima_palabra.html', {'jFinal': jFinal, 'jugadorFinal': jugadorFinal, 
                                                 'puntos_jugadorFinal' :puntos_jugadorFinal,
                                                 'idPalabra': idPalabra,
@@ -779,7 +788,8 @@ def ultima_palabra(request):
                                                 'fin': 0,
                                                 'juego_acabado' : juego_acabado,
                                                 'pistaMostrada': pistaMostrada,
-                                                'respuestaIA': respuestaIA
+                                                'respuesta_jugadorIA': respuestaIA,
+                                                'IA_jugando' :IA_jugando
                                                 })
 
 def fin_juego(request):
