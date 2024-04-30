@@ -95,8 +95,52 @@ function seleccionarPalabra(elemento) {
     var isSeleccionada = document.getElementById('isSeleccionada');
     var idP =  document.getElementById('palabra_elegida');
     let form = document.getElementById('formSeleccionarPalabra');
-    if (isSeleccionada.value == 1){
+    if (isSeleccionada.value == 1 && elemento.classList.contains("activo")){
         idP.value = elemento.id;
         form.submit()
     }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+
+    var elementos = document.querySelectorAll('#panel li');
+    elementos.forEach(function(elemento) {
+        var estiloGuardado = localStorage.getItem(elemento.id);
+        if (estiloGuardado) {
+            elemento.classList = estiloGuardado;
+        }
+    });
+
+    var actualizarActivos= document.getElementById('actualizarActivos')
+    var idP =  document.getElementById('palabra_elegida');
+    var liPalabraElegida =  document.getElementById(idP.value);
+    if (actualizarActivos) {
+        liPalabraElegida.classList.remove('activo');
+        liPalabraElegida.classList.add('resuelto');
+        localStorage.setItem(liPalabraElegida.id, liPalabraElegida.classList)
+        var liAnterior = document.getElementById('p'+ String(parseInt(liPalabraElegida.id[1])-1));
+        var liPosterior = document.getElementById('p'+ String(parseInt(liPalabraElegida.id[1])+1));
+        console.log(liAnterior);
+        console.log(liPosterior);
+
+        if (liAnterior != null){
+            if(!liAnterior.classList.contains('resuelto')){
+                liAnterior.classList.add('activo');
+                localStorage.setItem(liAnterior.id, liAnterior.classList)
+            }
+        }
+        if (liPosterior != null){
+            if(!liPosterior.classList.contains('resuelto')){
+                liPosterior.classList.add('activo');
+                localStorage.setItem(liPosterior.id, liPosterior.classList)
+
+            }
+        }
+
+        actualizarActivos = false;
+    }
+});
+
+function borrarEstilos(){
+    localStorage.clear();
 }

@@ -216,6 +216,13 @@ a {
     background-color: #1c7dcb ; /* Blue background for the first and last items */
   }
 
+  #centro_cadena .activo{
+    background-color: orange;
+  }
+
+  #una_otra .activo{
+    background-color: orange;
+  }
 
 
 

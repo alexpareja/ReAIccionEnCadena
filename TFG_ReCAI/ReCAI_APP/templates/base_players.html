@@ -29,7 +29,7 @@
 
     {% if fin %}
     <p>Ronda finalizada</p>
-    <a href="{% url 'marcador_ronda'%}">Siguiente</a>
+    <a href="{% url 'marcador_ronda'%}" onclick="borrarEstilos()">Siguiente</a>
     {%else%}
         {% if IA_jugando %}
             <button href ="{% url 'palabras_encadenadas'%}">Pulse aqui para que juegue la IA</button>
