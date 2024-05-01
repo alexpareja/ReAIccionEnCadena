@@ -228,25 +228,34 @@ a {
 
 
 #ultimo_panel li {
-    list-style: none;
-    padding: 5px;
-    border: 1px solid #ccc; /* Borde para el recuadro */
-    box-sizing: border-box;
+    list-style: none; /* Remove default list styling */
+    background-color: #19b112;
+    color: white; 
+    margin-bottom: 5px; 
+    border-radius: 15px 0 15px 0; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+    font-weight: bold; 
+    text-transform: uppercase; 
+    font-size: 20px;
+    width: 250px; 
+    margin-left: auto; 
+    margin-right: auto; 
     text-align: center;
+
 }
 
 #ultimo_panel .palabraactual{
-    background-color: yellow;   
+    background-color: #19b112;
 }
 
 #ultimo_panel li:nth-child(odd) {
     font-size: 20px; /* Tamaño grande para li impares */
-    color: gray;    /* Color gris para li impares */
-    background-color: #f0f0f0; /* Fondo gris para el recuadro de li impares */
+    color: white;    /* Color gris para li impares */
+    background-color: #0061ff; /* Fondo gris para el recuadro de li impares */
 }
 
 #ultimo_panel li:nth-child(even):not(.palabraactual) {
-    font-size: 15px; /* Tamaño pequeño para li pares */
+    font-size: 20px; /* Tamaño pequeño para li pares */
     color: #f90 ;   /* Color naranja para li pares */
     background-color: #ffe5b4; /* Fondo naranja para el recuadro de li pares */
 }
