@@ -38,9 +38,9 @@ class CambiarContraseñaFormulario(PasswordChangeForm):
     def __init__(self, *args, **kwargs):
         super(CambiarContraseñaFormulario, self).__init__(*args, **kwargs)
         # Agregar clases de estilo a los campos
-        self.fields['old_password'].widget.attrs['class'] = 'cambio-input'
-        self.fields['new_password1'].widget.attrs['class'] = 'cambio-input'
-        self.fields['new_password2'].widget.attrs['class'] = 'cambio-input'
+        self.fields['old_password'].widget.attrs['class'] = 'registro-input'
+        self.fields['new_password1'].widget.attrs['class'] = 'registro-input'
+        self.fields['new_password2'].widget.attrs['class'] = 'registro-input'
         
     class Meta:
         model = User

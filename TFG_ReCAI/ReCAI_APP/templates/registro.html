@@ -2,7 +2,9 @@
 {% block title %} REGISTRATE {% endblock %} ç
 
 {%block content %}
-<h2>Registro</h2>
+<div class="banner">
+  <span class="text-juego">Registro</span>
+</div>
 <form method="post" action="{% url 'registro' %}" class="registro-form">
   {% csrf_token %} 
   <label for="{{ form.username.id_for_label }}" class="registro-label">Nombre de usuario:</label>
@@ -13,6 +15,6 @@
     {{ form.password1 }}
   <label for="{{ form.password2.id_for_label }}" class="registro-label">Repetir contraseña:</label>
     {{ form.password2 }}
-  <button type="submit" class="registro-submit">Registrarse</button>
+  <button type="submit" class="play-button">Registrarse</button>
 </form>
 {% endblock %}

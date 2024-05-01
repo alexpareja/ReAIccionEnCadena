@@ -338,14 +338,14 @@ font-size: large;
 }
 
 a {
-color: #0061ff;
+color: #f06;
 text-decoration: none;
 transition: color 0.3s ease;
 font-size: large;
 }
 
 a:hover {
-color: #0061ff;
+color: #f90;
 }
 
 .cerrar_sesion {
@@ -374,39 +374,26 @@ background-color: #0061ff
     max-width: 400px;
     margin: 0 auto;
     padding: 20px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: #f9fafb6e;
+    border-radius: 0 30px 0 30px; 
 }
 
 .registro-label {
-    display: block;
     font-weight: bold;
-    margin-bottom: 8px;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    color: #333; /* Color de texto */
 }
 
 /* Estilos de campos de entrada */
 .registro-input {
-    width: 100%;
+    width: 95%;
     padding: 8px;
-    margin-bottom: 16px;
-    box-sizing: border-box;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
-
-.registro-submit {
-    background-color: #0061ff;
-    color: white;
-    padding: 10px 15px;
     border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    
-}
-
-.registro-submit:hover {
-    background-color: #0061ff;
+    border-bottom: 1px solid #000;
+    background-color: transparent;
+    margin-top: 5px;
+    margin-bottom: 10px;
 }
 
 /* Estilos para mensajes de error */
@@ -485,10 +472,10 @@ body {
 
 .text-top {
     display: block;
-    font-size: 100px; 
+    font-size: 90px; 
     font-weight: bold;
     color: white;
-    padding: 10px 60px; 
+    padding: 10px 40px; 
     border-radius: 0 40px 40px 40px; /* Redondeado en todas las esquinas menos en la superior izquierda */
     background: linear-gradient(to bottom right, #f06 20%, #f90 80%);
     box-shadow: 0 0 10px 3px rgba(255, 255, 255, 0.6); 
@@ -496,7 +483,7 @@ body {
 
 .text-bottom {
     display: block;
-    font-size: 100px; 
+    font-size: 90px; 
     font-weight: bold;
     color: white;
     padding: 10px 40px; 
@@ -528,7 +515,7 @@ body {
     font-size: 20px; 
     color: white;
     padding: 7px 40px; 
-    border-radius: 0 40px 40px 40px; /* Redondeado en todas las esquinas menos en la superior izquierda */
+    border-radius: 15px 0 15px 0; 
     background: linear-gradient(to bottom right, #f06 20%, #f90 80%);
     box-shadow: 0 0 10px 3px rgba(255, 255, 255, 0.6); 
     border:none;
@@ -579,7 +566,7 @@ body {
     color: #333; /* Color de texto */
 }
 
-input[type="text"] {
+.form-container [type="text"] {
     width: 100%;
     padding: 8px;
     border: none;

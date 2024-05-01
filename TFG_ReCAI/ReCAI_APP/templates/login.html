@@ -3,7 +3,9 @@
 
 
 {% block content %}
-<h2>Iniciar Sesión</h2>
+<div class="banner">
+  <span class="text-juego">Inicio Sesión</span>
+</div>
 
   {% if form.errors %}
     <p>Su nombre de usuario y contraseña no coinciden. Inténtalo de nuevo.</p>
@@ -25,7 +27,7 @@
     <label for="{{ form.password.id_for_label }}" class="registro-label">Contraseña:</label>
     {{ form.password }}
     <p>¿No tienes cuenta?<a href="{% url 'registro' %}"> Regístrate aquí</a></p>
-    <input type="submit" value="Iniciar Sesión" class="registro-submit">
+    <input type="submit" value="Iniciar Sesión" class="play-button">
     <input type="hidden" name="next" value="{{ next }}">
   </form>
 
