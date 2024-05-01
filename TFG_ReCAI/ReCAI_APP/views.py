@@ -1001,7 +1001,6 @@ def jugarTurnoTerceraRonda(request, respuesta, palabra_a_adivinar, j1, j2, jugad
             puntos_jugador2 += 10000
 
         palabras_modificadas[int(n_palabra_adivinado)-2] = palabra_a_adivinar
-        n_palabra_adivinado += 1
         if nPalabrasRespondidas == 5:
             fin=1
             request.session['puntos_jugador1'] = puntos_jugador1
@@ -1025,7 +1024,6 @@ def jugarTurnoTerceraRonda(request, respuesta, palabra_a_adivinar, j1, j2, jugad
                 puntos_jugador2 += 10000
 
             palabras_modificadas[int(n_palabra_adivinado)-2] = palabra_a_adivinar
-            n_palabra_adivinado += 1
             if nPalabrasRespondidas == 5:
                 fin=1
                 request.session['puntos_jugador1'] = puntos_jugador1
