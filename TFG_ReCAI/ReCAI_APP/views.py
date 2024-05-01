@@ -184,7 +184,7 @@ def palabras_encadenadas(request):
 
     # Estado actual del juego
 
-    turno_actual = request.session.get('turno_actual', j1)
+    turno_actual = request.session.get('turno_actual', j2)
     n_palabra_adivinado = request.session.get('npa', 1)
     primera_letra = request.session.get('pl', getattr(palabras, 'p' + str(n_palabra_adivinado), '')[0])
     puntos_jugador1 = request.session.get('puntos_jugador1', 0)
@@ -801,6 +801,8 @@ def fin_juego(request):
     jugadorFinal = request.session.get('jugadorFinal', 'Nombre del jugador 1 no ingresado')
     puntos_jugadorFinal = request.session.get('puntos_jugadorFinal', 0)
 
+    #Guardar datos en la bbdd de estadísticas
+
     del request.session['npa']
     del request.session['lm']
     del request.session['pl']
@@ -909,10 +911,12 @@ def jugarTurnoPrimeraRonda(request, html, j1, j2, jugador1, jugador2,
                 puntos_jugador1, puntos_jugador2, turno_actual, palabras, 
                 palabras_modificadas, n_palabra_adivinado, letras_mostradas,
                 primera_letra, fin, respuesta, palabra_a_adivinar)
-            
-            palabras_modificadas[int(n_palabra_adivinado)-1] = getattr(palabras, 'p' + str(n_palabra_adivinado), '')[0]
-            primera_letra = getattr(palabras, 'p' + str(n_palabra_adivinado), None)[0]
+        
             letras_mostradas = 1 
+            palabra_adivinada = getattr(palabras, 'p' + str(n_palabra_adivinado), '')
+            letras_faltantes = len(palabra_adivinada) - letras_mostradas
+            palabras_modificadas[int(n_palabra_adivinado)-1] = getattr(palabras, 'p' + str(n_palabra_adivinado), '')[0] +'_ ' * letras_faltantes + f" ({len(palabra_adivinada)})"
+            primera_letra = getattr(palabras, 'p' + str(n_palabra_adivinado), None)[0]
         else:
             palabra_adivinada = getattr(palabras, 'p' + str(n_palabra_adivinado), '')
             letras_faltantes = len(palabra_adivinada) - letras_mostradas
@@ -955,6 +959,8 @@ def jugarTurnoSegundaRonda(request, respuesta, palabra_a_adivinar, j1, j2, jugad
         if len(palabra_a_adivinar) <= letras_mostradas:
             # Lógica cuando se han revelado todas las letras
             actualizarActivos = True
+            isSeleccionada = 1
+
             nPalabrasRespondidas += 1
             if turno_actual == j1:
                 puntos_jugador1 += 5000
@@ -1017,6 +1023,8 @@ def jugarTurnoTerceraRonda(request, respuesta, palabra_a_adivinar, j1, j2, jugad
         if len(palabra_a_adivinar) <= letras_mostradas:
             # Lógica cuando se han revelado todas las letras
             actualizarActivos = True
+            isSeleccionada = 1
+
             nPalabrasRespondidas += 1
             if turno_actual == j1:
                 puntos_jugador1 += 10000
