@@ -4,17 +4,24 @@
 
 {% block title %} ¡BIENVENIDO AL JUEGO! {% endblock %} 
 {%block content %}
-    <h1>PARTIDA EN JUEGO</h1>
+    <div class="banner">
+        <span class="text-juego">partida en juego</span>
+    </div>
 
-
-    <form id="playerForm" method="post" action="{% url 'pregame' %}">
-        {% csrf_token %}
-        {{ j1 }} : {{ form.jugador1 }}
-        {{ j2 }} : {{ form.jugador2 }}
-        <input type="submit" value="Jugar">
-    </form>
-
-
-
+    <div class="form-container">
+        <form id="playerForm" method="post" action="{% url 'pregame' %}" class="horizontal-form">
+            <p>Nombre de los jugadores</p>
+            {% csrf_token %}
+            <div class="form-row">
+                <label for="jugador1">{{ j1 }}</label>
+                {{ form.jugador1 }}
+            </div>
+            <div class="form-row">
+                <label for="jugador2">{{ j2 }}</label>
+                {{ form.jugador2 }}
+            </div>
+            <input type="submit" value="Jugar" class="play-button">
+        </form>
+    </div>
 </script>
 {% endblock %}

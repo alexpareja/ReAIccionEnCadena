@@ -9,12 +9,15 @@
 </div>
 {% if user.is_authenticated%}
 {% else %}
-    <p><a href="{% url 'my_login'%}">Iniciar Sesión</a>  <a href="{% url 'registro' %}">Registrarse</a></p>
+<p>
+    <a href="{% url 'my_login'%}" class="orange-link">Iniciar Sesión</a>
+    <a href="{% url 'registro' %}" class="orange-link">Registrarse</a>
+</p>
+  
 {% endif %}
-
-    <p>Elige un modo de juego:</p>
-    
+<div class="form-container-index">
     <form method="post" action="{% url 'index' %}" class="game-form">
+        <p>Elige un modo de juego:</p>
         {% csrf_token %}
         <div class="options">
             {% for radio in form.opcion_elegida %}
@@ -23,5 +26,6 @@
         </div>
         <input type="submit" value="Jugar" class="play-button">
     </form>
+</div>
 
 {% endblock %}
