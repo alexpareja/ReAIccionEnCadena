@@ -146,13 +146,17 @@ a {
   
   #una_otra li {
     background-color: #19b112;
-    color: white; /* White text color */
-    margin-bottom: 10px; /* Space between items */
-    padding: 10px 20px; /* Padding inside each item */
-    border-radius: 10px; /* Rounded corners for each item */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add shadow to each item */
-    font-weight: bold; /* Make the text bold */
-    text-transform: uppercase; /* Optional: transform text to uppercase */
+    color: white; 
+    margin-bottom: 10px; 
+    padding: 12.5px 20px; 
+    border-radius: 15px 0 15px 0; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+    font-weight: bold; 
+    text-transform: uppercase; 
+    font-size: 20px;
+    width: 250px; 
+    margin-left: auto; 
+    margin-right: auto; 
   }
   
   #una_otra li:first-child, #una_otra li:last-child {
@@ -166,16 +170,21 @@ a {
 
   #encadenadas li {
     background-color: #19b112;
-    color: white; /* White text color */
-    margin-bottom: 10px; /* Space between items */
-    padding: 10px 20px; /* Padding inside each item */
-    border-radius: 10px; /* Rounded corners for each item */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add shadow to each item */
-    font-weight: bold; /* Make the text bold */
-    text-transform: uppercase; /* Optional: transform text to uppercase */
+    color: white; 
+    margin-bottom: 10px; 
+    padding: 12.5px 20px; 
+    border-radius: 15px 0 15px 0; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+    font-weight: bold; 
+    text-transform: uppercase; 
+    font-size: 20px;
+    text-align: center;
+    width: 250px; 
+    margin-left: auto; 
+    margin-right: 40px; 
   }
 
-  #encadenadas li:nth-child(2) {
+  #encadenadas li:nth-child(1) {
     background-color: #0061ff; /* Blue background for the first and last items */
   }
   
@@ -187,13 +196,17 @@ a {
   
   #centro_cadena li {
     background-color: #19b112;
-    color: white; /* White text color */
-    margin-bottom: 10px; /* Space between items */
-    padding: 10px 20px; /* Padding inside each item */
-    border-radius: 10px; /* Rounded corners for each item */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add shadow to each item */
-    font-weight: bold; /* Make the text bold */
-    text-transform: uppercase; /* Optional: transform text to uppercase */
+    color: white; 
+    margin-bottom: 10px; 
+    padding: 12.5px 20px; 
+    border-radius: 15px 0 15px 0; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+    font-weight: bold; 
+    text-transform: uppercase; 
+    font-size: 20px;
+    width: 250px; 
+    margin-left: auto; 
+    margin-right: auto; 
   }
   
   #centro_cadena li:first-child, #centro_cadena li:last-child, #centro_cadena li:nth-child(4){
@@ -240,7 +253,7 @@ a {
 
 /* usuario.html*/
 body {
-    font-family: 'Segoe UI', sans-serif; 
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
     margin: 0; 
     padding: 0; 
     background-size: cover; 
