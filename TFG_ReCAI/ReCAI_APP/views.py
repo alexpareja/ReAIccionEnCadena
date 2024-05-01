@@ -863,9 +863,9 @@ def jugarTurnoPrimeraRonda(request, html, j1, j2, jugador1, jugador2,
     if respuesta == palabra_a_adivinar:
     # Asignar puntos al jugador correcto
         if turno_actual == j1:
-            puntos_jugador1 += 10000
+            puntos_jugador1 += 2000
         else:
-            puntos_jugador2 += 10000
+            puntos_jugador2 += 2000
 
         palabras_modificadas[int(n_palabra_adivinado)-1] = palabra_a_adivinar
         n_palabra_adivinado += 1
@@ -892,9 +892,9 @@ def jugarTurnoPrimeraRonda(request, html, j1, j2, jugador1, jugador2,
         if len(palabra_a_adivinar) <= letras_mostradas:
             # Lógica cuando se han revelado todas las letras
             if turno_actual == j1:
-                puntos_jugador1 += 10000
+                puntos_jugador1 += 2000
             else:
-                puntos_jugador2 += 10000
+                puntos_jugador2 += 2000
 
             palabras_modificadas[int(n_palabra_adivinado)-1] = palabra_a_adivinar
             n_palabra_adivinado += 1
