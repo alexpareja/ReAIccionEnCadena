@@ -329,7 +329,10 @@ def centro_de_la_cadena(request):
     primera_letra = ''
     respuestaJugadorIA1 = ''
     respuestaJugadorIA2 = ''
-    IA_jugando = 0
+    if (turno_actual == "IA") | (turno_actual == 'IA 1') | (turno_actual == 'IA 2'):
+        IA_jugando = 1  
+    else:
+        IA_jugando = 0 
     palabras_modificadasInit = []
     for i in range(1, 7): 
         nombre_campo = 'p' + str(i)
@@ -937,9 +940,6 @@ def jugarTurnoSegundaRonda(request, respuesta, palabra_a_adivinar, j1, j2, jugad
             palabras_modificadas[int(n_palabra_adivinado)-3] = palabra_a_adivinar
         else:
             palabras_modificadas[int(n_palabra_adivinado)-2] = palabra_a_adivinar
-        n_palabra_adivinado += 1
-        if n_palabra_adivinado == 4:
-            n_palabra_adivinado += 1
         if nPalabrasRespondidas == 4:
             fin=1
             request.session['puntos_jugador1'] = puntos_jugador1
@@ -964,9 +964,6 @@ def jugarTurnoSegundaRonda(request, respuesta, palabra_a_adivinar, j1, j2, jugad
                 palabras_modificadas[int(n_palabra_adivinado)-3] = palabra_a_adivinar
             else:
                 palabras_modificadas[int(n_palabra_adivinado)-2] = palabra_a_adivinar
-            n_palabra_adivinado += 1
-            if n_palabra_adivinado == 4: 
-                n_palabra_adivinado += 1
             if nPalabrasRespondidas == 4:
                 fin=1
                 request.session['puntos_jugador1'] = puntos_jugador1

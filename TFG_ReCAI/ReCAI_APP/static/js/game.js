@@ -114,7 +114,15 @@ document.addEventListener('DOMContentLoaded', function() {
     var actualizarActivos= document.getElementById('actualizarActivos')
     var idP =  document.getElementById('palabra_elegida');
     var liPalabraElegida =  document.getElementById(idP.value);
+    var isSeleccionada = document.getElementById('isSeleccionada');
+    if (isSeleccionada.value == 1){
+        jug = this.getElementById('turno_actual').value;
+        if ((jug == "IA") | (jug == 'IA 1') | (jug == 'IA 2')){
+            seleccionarPalabraIA();
+        }
+    }
     if (actualizarActivos) {
+        //ver si es turno de la IA
         liPalabraElegida.classList.remove('activo');
         liPalabraElegida.classList.add('resuelto');
         localStorage.setItem(liPalabraElegida.id, liPalabraElegida.classList)
@@ -136,7 +144,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
             }
         }
-
         actualizarActivos = false;
     }
 });
@@ -144,6 +151,22 @@ document.addEventListener('DOMContentLoaded', function() {
 function borrarEstilos(){
     localStorage.clear();
 }
+
+function seleccionarPalabraIA() {
+    // Generar un número aleatorio entre 1 y el número total de recuadros
+    var ids = [];
+    var elementosActivos = document.querySelectorAll('li.activo');
+    
+    elementosActivos.forEach(function(elemento) {
+        ids.push(elemento.id);
+    });
+
+    var indiceAleat = Math.floor(Math.random() * ids.length);
+    var elementoAleat = miArray[indiceAleat];
+
+    // Simular un clic en el recuadro seleccionado por la IA
+    document.getElementById(elementoAleat).click();
+  }
 
 /*function obtenerIdsActivos() {
     var ids = [];
