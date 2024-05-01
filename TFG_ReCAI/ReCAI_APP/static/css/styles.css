@@ -1,21 +1,5 @@
 /* styles.css */
 
-body {
-    font-family: 'Segoe UI', sans-serif; 
-    margin: 0; 
-    padding: 0; 
-    /*background-image: url('../img/fondoREC.jpg'); */
-    background-size: cover; 
-    background-position: center; 
-    color: #5a5a5a; 
-    height: 100vh; 
-    overflow: hidden; 
-    display: flex; 
-    justify-content: center; 
-    align-items: center; 
-    flex-direction: column; 
-}
-
 h1, p {
     color: black;
     text-align: center;
@@ -473,3 +457,72 @@ background-color: #0056b3;
 
 }
 
+body {
+    background: radial-gradient(circle at center, #b3d9ff 0%, #80bfff 50%, #0061ff 100%);
+    /* Para navegadores que no soportan gradientes */
+    background: -webkit-radial-gradient(circle at center, #b3d9ff 0%, #80bfff 50%, #0061ff 100%);
+    background: -moz-radial-gradient(circle at center, #b3d9ff 0%, #80bfff 50%, #0061ff 100%);
+    background: -o-radial-gradient(circle at center, #b3d9ff 0%, #80bfff 50%, #0061ff 100%);
+}
+
+.banner {
+    text-align: center;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+.text-top {
+    display: block;
+    font-size: 100px; 
+    font-weight: bold;
+    color: white;
+    padding: 10px 60px; 
+    border-radius: 0 40px 40px 40px; /* Redondeado en todas las esquinas menos en la superior izquierda */
+    background: linear-gradient(to bottom right, #f06 25%, #f90 75%);
+    box-shadow: 0 0 10px 3px rgba(255, 255, 255, 0.6); 
+}
+
+.text-bottom {
+    display: block;
+    font-size: 100px; 
+    font-weight: bold;
+    color: white;
+    padding: 10px 60px; 
+    border-radius: 40px 40px 0 40px; /* Redondeado en todas las esquinas menos en la inferior derecha */
+    background: linear-gradient(to bottom right, #f06 25%, #f90 75%);
+    box-shadow: 0 0 10px 3px rgba(255, 255, 255, 0.6); 
+}
+
+.text-juego {
+    display: block;
+    font-size: 50px; 
+    font-weight: bold;
+    color: white;
+    padding: 10px 60px; 
+    border-radius: 0 40px 40px 40px; /* Redondeado en todas las esquinas menos en la superior izquierda */
+    background: linear-gradient(to bottom right, #f06 25%, #f90 75%);
+    box-shadow: 0 0 10px 3px rgba(255, 255, 255, 0.6); 
+    margin-bottom: 40px;
+}
+
+.text-top {
+    margin-bottom: 10px; 
+}
+
+.game-form {
+    text-align: center;
+}
+
+.options {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.options label {
+    margin-right: 10px;
+}
+
+.play-button {
+    display: block;
+    margin: 0 auto;
+}

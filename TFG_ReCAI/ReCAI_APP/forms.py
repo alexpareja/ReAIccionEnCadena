@@ -48,7 +48,7 @@ class CambiarContraseñaFormulario(PasswordChangeForm):
 
 class OpcionForm(forms.Form):
     opciones = [
-        ('2_jugadores', '2 Jugadores'),
+        ('2_jugadores', 'Jugador vs Jugador'),
         ('jugador_vs_ia', 'Jugador vs IA'),
         ('ia_vs_ia', 'IA vs IA'),
     ]

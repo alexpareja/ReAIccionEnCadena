@@ -3,7 +3,10 @@
 
 {% block title %} INICIO {% endblock %} 
 {%block content %}
-<h1>Bienvenido a Reacción en Cadena</h1>
+<div class="banner">
+    <span class="text-top">reacción</span>
+    <span class="text-bottom">en cadena</span>
+</div>
 {% if user.is_authenticated%}
 {% else %}
     <p><a href="{% url 'my_login'%}">Iniciar Sesión</a>  <a href="{% url 'registro' %}">Registrarse</a></p>
@@ -11,12 +14,14 @@
 
     <p>Elige un modo de juego:</p>
     
-    <form method="post" action="{% url 'index' %}">
+    <form method="post" action="{% url 'index' %}" class="game-form">
         {% csrf_token %}
-        {% for radio in form.opcion_elegida %}
-        {{ radio }}
-        {% endfor %}
-        <input type="submit" value="Jugar">
+        <div class="options">
+            {% for radio in form.opcion_elegida %}
+                <label>{{ radio }}</label>
+            {% endfor %}
+        </div>
+        <input type="submit" value="Jugar" class="play-button">
     </form>
 
 {% endblock %}
