@@ -137,11 +137,31 @@ document.addEventListener('DOMContentLoaded', function() {
                 localStorage.setItem(liAnterior.id, liAnterior.classList)
             }
         }
+        else{
+            if(parseInt(liPalabraElegida.id[1]) == 5){
+                liAnteriorAnterior = document.getElementById('p'+ String(parseInt(liPalabraElegida.id[1])-2));
+                if(!liAnteriorAnterior.classList.contains('resuelto')){
+                    liAnteriorAnterior.classList.add('activo');
+                    localStorage.setItem(liAnteriorAnterior.id, liAnteriorAnterior.classList)
+    
+                }
+            }
+        }
         if (liPosterior != null){
             if(!liPosterior.classList.contains('resuelto')){
                 liPosterior.classList.add('activo');
                 localStorage.setItem(liPosterior.id, liPosterior.classList)
 
+            }
+        }
+        else{
+            if(parseInt(liPalabraElegida.id[1]) == 3){
+                liPosteriorPosterior = document.getElementById('p'+ String(parseInt(liPalabraElegida.id[1])+2));
+                if(!liPosteriorPosterior.classList.contains('resuelto')){
+                    liPosteriorPosterior.classList.add('activo');
+                    localStorage.setItem(liPosteriorPosterior.id, liPosteriorPosterior.classList)
+    
+                }
             }
         }
         actualizarActivos = false;
