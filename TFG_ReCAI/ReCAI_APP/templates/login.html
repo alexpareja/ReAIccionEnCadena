@@ -7,9 +7,7 @@
   <span class="text-juego">Inicio Sesión</span>
 </div>
 
-  {% if form.errors %}
-    <p>Su nombre de usuario y contraseña no coinciden. Inténtalo de nuevo.</p>
-  {% endif %}
+
 
   {% if next %}
     {% if user.is_authenticated %}
@@ -27,6 +25,9 @@
     <label for="{{ form.password.id_for_label }}" class="registro-label">Contraseña:</label>
     {{ form.password }}
     <p>¿No tienes cuenta?<a href="{% url 'registro' %}"> Regístrate aquí</a></p>
+    {% if form.errors %}
+    <p class = "registro-error">Su nombre de usuario y contraseña no coinciden. Inténtalo de nuevo.</p>
+    {% endif %}
     <input type="submit" value="Iniciar Sesión" class="play-button">
     <input type="hidden" name="next" value="{{ next }}">
   </form>
