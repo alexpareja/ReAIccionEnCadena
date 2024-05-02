@@ -1,26 +1,28 @@
 {% load static %}
 
-<h2 id="prueba">Turno del Jugador:</h2>
-<p id="turno_actual">{{ turno_actual }}</p>
+{% if turno_actual == j1 %}
+    <h2 class="prueba">Turno de {{ jugador1 }}</h2>
+{% elif turno_actual == j2 %}
+    <h2 class="prueba">Turno de {{ jugador2 }}</h2>
+{% endif %}
+
 
 <div id="players">
     <!-- Jugador 1 -->
     <div class="player">
-        <img src="{% static '/img/user.png' %}" alt="Foto de {{ jugador1 }}">
-        <p>{{ jugador1 }} ( {{j1}} )</p>
-        <p>Puntos:{{puntos_jugador1}}</p>
+        <p class="player-name orange">{{ jugador1 }} </p>
+        <p class="puntos">{{puntos_jugador1}}</p>
         <p>{{respuestaIA1}}</p>
-
     </div>
 
     <!-- Jugador 2 -->
     <div class="player">
-        <img src="{% static '/img/user.png' %}" alt="Foto de {{ jugador2 }}">
-        <p>{{ jugador2 }} ( {{j2}} )</p>
-        <p>Puntos:{{puntos_jugador2}}</p>
+        <p class="player-name blue">{{ jugador2 }}</p>
+        <p class="puntos">{{puntos_jugador2}}</p>
         <p>{{respuestaIA2}}</p>
     </div>
 </div>
+
 
 <form method="post" id="gameForm">
     {% csrf_token %}
@@ -38,10 +40,10 @@
                 <a>Elige la palabra que quieres adivinar (por arriba o por abajo)</a>
             {% else %}
                 <div id="campo_palabra">
-                <label for="respuesta">Meter palabra:</label>
-                <input type="text" id="inputPalabra" name="respuesta" placeholder='{{primera_letra}}' />
+                <label for="respuesta">Escribe su opción:</label>
+                <input type="text" class="registro-input" name="respuesta" placeholder='{{primera_letra}}' />
                 </div>
-                <input type="submit" value="Enviar" onclick="comprobarPalabra('{{palabra_a_adivinar}}')">
+                <input type="submit" class="play-button" value="Enviar" onclick="comprobarPalabra('{{palabra_a_adivinar}}')">
             {% endif %}
         {% endif %}
     {% endif %}

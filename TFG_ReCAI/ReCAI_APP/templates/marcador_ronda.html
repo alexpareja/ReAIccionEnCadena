@@ -5,25 +5,21 @@
 {%block content %}
 <h1>{{ ronda }} finalizada</h1>
 <div id = "jugadores">
-    <div id="players">
-    <!-- Jugador 1 -->
     <div class="player">
-        <img src="{% static '/img/user.png' %}" alt="Foto de {{ jugador1 }}">
-        <p>{{ jugador1 }} ( {{j1}} )</p>
-        <p>Puntos:{{puntos_jugador1}}</p>
+        <p class="player-name orange">{{ jugador1 }} </p>
+        <p class="puntos">{{puntos_jugador1}}</p>
     </div>
 
     <!-- Jugador 2 -->
     <div class="player">
-        <img src="{% static '/img/user.png' %}" alt="Foto de {{ jugador2 }}">
-        <p>{{ jugador2 }} ( {{j2}} )</p>
-        <p>Puntos:{{puntos_jugador2}}</p>
+        <p class="player-name blue">{{ jugador2 }}</p>
+        <p class="puntos">{{puntos_jugador2}}</p>
     </div>
 </div>
 </div>
 
 <div class="right-column">
-    <button class="start-btn" onclick="location.href='{{ urlDelJuego }}';">Siguiente ronda</button>
+    <button class="play-button" onclick="location.href='{{ urlDelJuego }}';">Siguiente ronda</button>
 </div>
 
 {% endblock %}
