@@ -1,5 +1,6 @@
 {% load static %}
 
+<input hidden id="turno_actual" value='{{turno_actual}}'>
 {% if turno_actual == j1 %}
     <h2 class="prueba">Turno de {{ jugador1 }}</h2>
 {% elif turno_actual == j2 %}
@@ -33,7 +34,7 @@
     <a href="{% url 'marcador_ronda'%}" onclick="borrarEstilos()">Siguiente</a>
     {%else%}
         {% if IA_jugando %}
-            <button href ="{% url 'palabras_encadenadas'%}" class="play-button" onclick="obtenerIdsActivos()">Pulse aqui para que juegue la IA</button>
+            <button href ="{% url 'palabras_encadenadas'%}" class="play-button">Pulse aqui para que juegue la IA</button>
         {%else%}
             {%if isSeleccionada %}
                 <a>Elige la palabra que quieres adivinar <br> (por arriba o por abajo)</a>

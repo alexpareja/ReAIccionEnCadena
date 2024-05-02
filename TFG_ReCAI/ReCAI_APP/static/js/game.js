@@ -121,9 +121,10 @@ document.addEventListener('DOMContentLoaded', function() {
     var liPalabraElegida =  document.getElementById(idP.value);
     var isSeleccionada = document.getElementById('isSeleccionada');
     if (isSeleccionada.value == 1){
-        jug = this.getElementById('turno_actual').value;
+        jug = document.getElementById('turno_actual').value;
         if ((jug == "IA") | (jug == 'IA 1') | (jug == 'IA 2')){
             seleccionarPalabraIA();
+            console.log(jug);
         }
     }
     if (actualizarActivos) {
@@ -187,10 +188,12 @@ function seleccionarPalabraIA() {
     });
 
     var indiceAleat = Math.floor(Math.random() * ids.length);
-    var elementoAleat = miArray[indiceAleat];
+    var elementoAleat = ids[indiceAleat];
 
     // Simular un clic en el recuadro seleccionado por la IA
     document.getElementById(elementoAleat).click();
+    
+    console.log(document.getElementById(elementoAleat), elementoAleat, indiceAleat, elementosActivos);
   }
 
 /*function obtenerIdsActivos() {
