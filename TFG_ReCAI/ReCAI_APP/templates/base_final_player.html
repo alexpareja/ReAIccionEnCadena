@@ -6,9 +6,8 @@
 <div id="players">
     <!-- Jugador 1 -->
     <div class="player">
-        <img src="{% static '/img/user.png' %}" alt="Foto de {{ jugadorFinal }}">
-        <p>{{ jugadorFinal }} ( {{jFinal}} )</p>
-        <p>Puntos:{{puntos_jugadorFinal}}</p>
+        <p class="player-name orange">{{ jugadorFinal }}</p>
+        <h3 class="puntos">Puntos: {{ puntos_jugadorFinal }}</h3>
         <p>{{respuesta_jugadorIA}}</p>
     </div>
 </div>

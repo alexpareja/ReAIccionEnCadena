@@ -54,7 +54,6 @@ def pregame(request):
     return render(request, 'pregame.html', {'form': form, 'j1':j1, 'j2':j2})
 
 def instrucciones_palabras_encadenadas(request):
-    imagen_url = static('img/palabras_encadenadas.png')
     texto_instrucciones = """
     En esta ronda, los jugadores deben adivinar 6 palabras, relacionadas todas ellas con un mismo tema, indicado al incio de la cadena.
 
@@ -70,13 +69,11 @@ def instrucciones_palabras_encadenadas(request):
     contexto = {
         'tituloDelJuego': 'Palabras encadenadas',
         'instrucciones': texto_instrucciones,
-        'imagenDelJuego': imagen_url,
         'urlDelJuego': reverse('palabras_encadenadas'),
     }
     return render(request, 'base_instrucciones.html', contexto)
 
 def instrucciones_centro_de_la_cadena(request):
-    imagen_url = static('img/centro_de_la_cadena.png')
     texto_instrucciones = """
     En esta ronda, los jugadores deben adivinar 4 palabras.
 
@@ -92,13 +89,11 @@ def instrucciones_centro_de_la_cadena(request):
     contexto = {
         'tituloDelJuego': 'Centro de la cadena',
         'instrucciones': texto_instrucciones,
-        'imagenDelJuego': imagen_url,
         'urlDelJuego': reverse('centro_de_la_cadena'),
     }
     return render(request, 'base_instrucciones.html', contexto)
 
 def instrucciones_una_lleva_a_la_otra(request):
-    imagen_url = static('img/una_lleva_a_la_otra.png')
     texto_instrucciones = """
     En esta ronda, los jugadores deben adivinar 5 palabras.
 
@@ -114,13 +109,11 @@ def instrucciones_una_lleva_a_la_otra(request):
     contexto = {
         'tituloDelJuego': 'Una lleva a la otra',
         'instrucciones': texto_instrucciones,
-        'imagenDelJuego': imagen_url,
         'urlDelJuego': reverse('una_lleva_a_la_otra'),
     }
     return render(request, 'base_instrucciones.html', contexto)
 
 def instrucciones_ultima_cadena(request):
-    imagen_url = static('img/ultima_cadena.png')
     texto_instrucciones = """
     A partir de esta ronda, solo jugará el jugador con más puntos acumulados.
 
@@ -134,13 +127,11 @@ def instrucciones_ultima_cadena(request):
     contexto = {
         'tituloDelJuego': 'Última cadena',
         'instrucciones': texto_instrucciones,
-        'imagenDelJuego': imagen_url,
         'urlDelJuego': reverse('ultima_cadena'),
     }
     return render(request, 'base_instrucciones.html', contexto)
 
 def instrucciones_ultima_palabra(request):
-    imagen_url = static('img/ultima_palabra.png')
     texto_instrucciones = """
     
 
@@ -148,7 +139,6 @@ def instrucciones_ultima_palabra(request):
     contexto = {
         'tituloDelJuego': 'Última palabra',
         'instrucciones': texto_instrucciones,
-        'imagenDelJuego': imagen_url,
         'urlDelJuego': reverse('ultima_palabra'),
     }
     return render(request, 'base_instrucciones.html', contexto)
@@ -316,7 +306,10 @@ def centro_de_la_cadena(request):
     jugador2 = request.session.get('jugador2', 'Nombre del jugador 2 no ingresado')
     puntos_jugador1 = request.session.get('puntos_jugador1', 0)
     puntos_jugador2 = request.session.get('puntos_jugador2', 0)
-    turno_actual = request.session.get('turno_actual', j1)
+    if puntos_jugador1 >= puntos_jugador2:
+        turno_actual = j2
+    else:
+        turno_actual = j1
     n_palabra_adivinado = request.session.get('n_palabra_adivinadoRonda2', 0)
 
     # Obteniendo las palabras de la ronda
@@ -475,7 +468,10 @@ def una_lleva_a_la_otra(request):
     jugador2 = request.session.get('jugador2', 'Nombre del jugador 2 no ingresado')
     puntos_jugador1 = request.session.get('puntos_jugador1', 0)
     puntos_jugador2 = request.session.get('puntos_jugador2', 0)
-    turno_actual = request.session.get('turno_actual', j1)
+    if puntos_jugador1 >= puntos_jugador2:
+        turno_actual = j2
+    else:
+        turno_actual = j1
     n_palabra_adivinado = request.session.get('n_palabra_adivinadoRonda3', 0)
 
     # Obteniendo las palabras de la ronda
