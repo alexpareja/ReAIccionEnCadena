@@ -103,6 +103,11 @@ function seleccionarPalabra(elemento) {
 
 document.addEventListener('DOMContentLoaded', function() {
 
+    var actualizarActivos= document.getElementById('actualizarActivos')
+    if(actualizarActivos == null){
+        borrarEstilos();
+    }
+
     var elementos = document.querySelectorAll('#panel li');
     elementos.forEach(function(elemento) {
         var estiloGuardado = localStorage.getItem(elemento.id);
