@@ -306,11 +306,15 @@ def centro_de_la_cadena(request):
     jugador2 = request.session.get('jugador2', 'Nombre del jugador 2 no ingresado')
     puntos_jugador1 = request.session.get('puntos_jugador1', 0)
     puntos_jugador2 = request.session.get('puntos_jugador2', 0)
-    if puntos_jugador1 >= puntos_jugador2:
-        turno_actual = j2
-    else:
-        turno_actual = j1
     n_palabra_adivinado = request.session.get('n_palabra_adivinadoRonda2', 0)
+
+    if n_palabra_adivinado == 0:
+        if puntos_jugador1 >= puntos_jugador2:
+            turno_actual = j2
+        else:
+            turno_actual = j1
+    else:
+        turno_actual = request.session.get('turno_actual', j2)
 
     # Obteniendo las palabras de la ronda
     palabras = EslabonCentral.objects.last()
@@ -468,11 +472,16 @@ def una_lleva_a_la_otra(request):
     jugador2 = request.session.get('jugador2', 'Nombre del jugador 2 no ingresado')
     puntos_jugador1 = request.session.get('puntos_jugador1', 0)
     puntos_jugador2 = request.session.get('puntos_jugador2', 0)
-    if puntos_jugador1 >= puntos_jugador2:
-        turno_actual = j2
-    else:
-        turno_actual = j1
+
     n_palabra_adivinado = request.session.get('n_palabra_adivinadoRonda3', 0)
+
+    if n_palabra_adivinado == 0:
+        if puntos_jugador1 >= puntos_jugador2:
+            turno_actual = j2
+        else:
+            turno_actual = j1
+    else:
+        turno_actual = request.session.get('turno_actual', j2)
 
     # Obteniendo las palabras de la ronda
     palabras = EslabonCentral.objects.last()
