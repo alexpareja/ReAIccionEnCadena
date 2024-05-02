@@ -96,11 +96,24 @@ a {
 .player{
     text-align: center;
     margin: 10px;
-    background-color: #fff; /* Fondo blanco */
     padding: 10px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Sombra suave */
     width: -webkit-fill-available;
+    transition: background-color 0.3s ease;
+}
+
+
+.player.active-orange {
+    background-color: #fff0e1da; /* Fondo claro naranja */
+    border-radius: 40px 0 40px 0; 
+    border: 1px solid #f90; /* Borde naranja */
+    box-shadow: 0 0 15px rgba(230, 126, 34, 0.5); /* Sombra naranja */
+}
+
+.player.active-blue {
+    background-color: #ddf3ff; /* Fondo claro azul */
+    border-radius: 0 40px 0 40px; 
+    border: 1px solid #0061ff; /* Borde azul */
+    box-shadow: 0 0 15px rgba(52, 152, 219, 0.5); /* Sombra azul */
 }
 
 .player-name {
@@ -108,11 +121,11 @@ a {
     padding: 10px 20px;
     border-radius: 20px 0 40px 0; 
     font-weight: bold;
-    font-size: 70px;
+    font-size: 90px;
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
     display: inline-block;
-    width: 230px;
-    height: 30px;
+    width: 260px;
+    height: 35px;
     align-content: center;
     text-transform: uppercase; 
 }
@@ -124,6 +137,14 @@ a {
 .blue {
     background: linear-gradient(0deg, rgba(0, 53, 184, 1) 0%, rgba(77, 160, 255, 1) 100%);
 }
+
+.puntos {
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 5px;
+}
+
 .player p {
     margin: 0;
     font-size: 14px; /* Ajusta según sea necesario */
@@ -552,7 +573,7 @@ body {
     font-weight: bold;
     color: white;
     padding: 10px 40px; 
-    border-radius: 0 40px 40px 40px; /* Redondeado en todas las esquinas menos en la superior izquierda */
+    border-radius: 0 30px 30px 30px; /* Redondeado en todas las esquinas menos en la superior izquierda */
     background: linear-gradient(to bottom right, #f06 20%, #f90 80%);
     box-shadow: 0 0 10px 3px rgba(255, 255, 255, 0.6); 
     margin-bottom: 40px;

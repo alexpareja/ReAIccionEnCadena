@@ -9,20 +9,19 @@
 
 <div id="players">
     <!-- Jugador 1 -->
-    <div class="player">
-        <p class="player-name orange">{{ jugador1 }} </p>
-        <p class="puntos">{{puntos_jugador1}}</p>
-        <p>{{respuestaIA1}}</p>
+    <div class="player {% if turno_actual == j1 %}active-orange{% endif %}">
+        <p class="player-name orange">{{ jugador1 }}</p>
+        <h3 class="puntos">Puntos: {{ puntos_jugador1 }}</h3>
+        <p>{{ respuestaIA1 }}</p>
     </div>
 
     <!-- Jugador 2 -->
-    <div class="player">
+    <div class="player {% if turno_actual == j2 %}active-blue{% endif %}">
         <p class="player-name blue">{{ jugador2 }}</p>
-        <p class="puntos">{{puntos_jugador2}}</p>
-        <p>{{respuestaIA2}}</p>
+        <h3 class="puntos">Puntos: {{ puntos_jugador2 }}</h3>
+        <p>{{ respuestaIA2 }}</p>
     </div>
 </div>
-
 
 <form method="post" id="gameForm">
     {% csrf_token %}
@@ -34,13 +33,13 @@
     <a href="{% url 'marcador_ronda'%}" onclick="borrarEstilos()">Siguiente</a>
     {%else%}
         {% if IA_jugando %}
-            <button href ="{% url 'palabras_encadenadas'%}" onclick="obtenerIdsActivos()">Pulse aqui para que juegue la IA</button>
+            <button href ="{% url 'palabras_encadenadas'%}" class="play-button" onclick="obtenerIdsActivos()">Pulse aqui para que juegue la IA</button>
         {%else%}
             {%if isSeleccionada %}
-                <a>Elige la palabra que quieres adivinar (por arriba o por abajo)</a>
+                <a>Elige la palabra que quieres adivinar <br> (por arriba o por abajo)</a>
             {% else %}
                 <div id="campo_palabra">
-                <label for="respuesta">Escribe su opción:</label>
+                <label for="respuesta" class="registro-label">Escriba su opción:</label>
                 <input type="text" class="registro-input" name="respuesta" placeholder='{{primera_letra}}' />
                 </div>
                 <input type="submit" class="play-button" value="Enviar" onclick="comprobarPalabra('{{palabra_a_adivinar}}')">
