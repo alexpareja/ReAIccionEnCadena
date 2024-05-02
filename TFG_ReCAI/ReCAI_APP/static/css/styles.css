@@ -17,6 +17,27 @@ a {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Sombra suave */
     display: flex;
     align-items: center;
+    border-radius: 15px 0 15px 0; 
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Sombra suave */
+    height: 30px;
+}
+
+.cerrar {
+    margin: 0 auto;
+    font-size: 15px; 
+    color: white;
+    padding: 5px 15px; 
+    margin-left: 8px;
+    border-radius: 15px 0 15px 0; 
+    background: linear-gradient(to bottom right, #f06 20%, #f90 80%);
+    box-shadow: 0 0 10px 3px rgba(255, 255, 255, 0.6); 
+    border:none;
+    transition: background-color 0.3s;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+.cerrar:hover {
+    background: #19b112
 }
 
 .base_perfil{
@@ -24,25 +45,23 @@ a {
     top: 20px;
     right: 20px;
     display: flex;
+    align-items: center;
 }
 
-#mi_perfil img {
-    width: 50px; /* Ajusta según sea necesario */
-    height: 50px; /* Ajusta según sea necesario */
-    border-radius: 50%;
-    margin-right: 10px;
-}
-
-#mi_perfil p {
+.perfil {
     margin: 0;
-    font-size: 14px; /* Ajusta según sea necesario */
+    font-size: 17px; 
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;  
 }
+
 
 #mi_perfil a {
-    color: #0061ff; /* Color del enlace */
+    color: #f06;/* Color del enlace */
     text-decoration: none;
     font-weight: bold;
     margin-left: 5px;
+    font-size: 17px; 
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;  
 }
 
 #back {
@@ -170,6 +189,7 @@ a {
 
 #jugadores{
     width: 50%; /* Ajusta el ancho según sea necesario */
+    height: 450px;
     text-align: center;
     padding: 50px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -177,6 +197,23 @@ a {
     border-radius: 0 30px 0 30px; 
 }
 
+#jugador{
+    width: 50%; /* Ajusta el ancho según sea necesario */
+    height: 350px;
+    text-align: center;
+    padding: 50px;
+    margin-top: 120px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: #f9fafb6e;
+    border-radius: 0 30px 0 30px; 
+}
+
+.comodines {
+    margin-top: 20px;
+    font-weight: bold;
+    font-size: 20px;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
 
 /*Una lleva a la otra y Centro de la cadena*/
 
@@ -279,16 +316,17 @@ a {
     list-style: none; /* Remove default list styling */
     background-color: #19b112;
     color: white; 
-    margin-bottom: 5px; 
+    margin-bottom: 10px; 
+    padding: 12.5px 20px; 
     border-radius: 15px 0 15px 0; 
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
     font-weight: bold; 
     text-transform: uppercase; 
-    font-size: 20px;
+    font-size: 15px;
+    text-align: center;
     width: 250px; 
     margin-left: auto; 
-    margin-right: auto; 
-    text-align: center;
+    margin-right: 40px; 
 
 }
 
@@ -297,13 +335,13 @@ a {
 }
 
 #ultimo_panel li:nth-child(odd) {
-    font-size: 20px; /* Tamaño grande para li impares */
+    font-size: 15px; /* Tamaño grande para li impares */
     color: white;    /* Color gris para li impares */
     background-color: #0061ff; /* Fondo gris para el recuadro de li impares */
 }
 
 #ultimo_panel li:nth-child(even):not(.palabraactual) {
-    font-size: 20px; /* Tamaño pequeño para li pares */
+    font-size: 15px; /* Tamaño pequeño para li pares */
     color: #f90 ;   /* Color naranja para li pares */
     background-color: #ffe5b4; /* Fondo naranja para el recuadro de li pares */
 }

@@ -1,6 +1,6 @@
 {% load static %}
 
-<h2>Fase Final</h2>
+<h2 class="prueba">Fase Final</h2>
 
 
 <div id="players">
@@ -26,11 +26,11 @@
                 <button href ="{% url 'palabras_encadenadas'%}" onclick="obtenerIdsActivos()">Pulse aqui para que juegue la IA</button>
             {%else%}
             <div id="campo_palabra">
-                <label for="respuesta">Meter palabra:</label>
-                <input type="text" id="inputPalabra" name="respuesta" placeholder='{{primera_letra}}' />
+                <label for="respuesta" class="registro-label">Escriba su opción:</label>
+                <input type="text" class="registro-input" name="respuesta" placeholder='{{primera_letra}}' />
                 <input type="hidden" name="pista" value="no"> 
             </div>
-            <input type="submit" value="Enviar">
+            <input type="submit" class="play-button" value="Enviar">
             {% endif %}
         {%endif%}
     {% endif %}

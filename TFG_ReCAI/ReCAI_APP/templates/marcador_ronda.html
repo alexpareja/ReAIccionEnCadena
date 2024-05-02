@@ -4,7 +4,7 @@
 
 {%block content %}
 <h1>{{ ronda }} finalizada</h1>
-<div id = "jugadores">
+<div id = "marcador">
     <div class="player">
         <p class="player-name orange">{{ jugador1 }} </p>
         <h3 class="puntos">Puntos: {{ puntos_jugador1 }}</h3>
@@ -15,11 +15,9 @@
         <p class="player-name blue">{{ jugador2 }}</p>
         <h3 class="puntos">Puntos: {{ puntos_jugador2 }}</h3>
     </div>
-</div>
-</div>
-
-<div class="right-column">
     <button class="play-button" onclick="location.href='{{ urlDelJuego }}';">Siguiente ronda</button>
 </div>
+
+    
 
 {% endblock %}
