@@ -394,6 +394,23 @@ background-color: #0061ff
     color: #333; /* Color de texto */
 }
 
+.registro-form [type="text"] {
+    width: 95%;
+    padding: 8px;
+    border: none;
+    border-bottom: 1px solid #000;
+    background-color: transparent;
+    margin-top: 5px;
+    margin-bottom: 10px;
+}
+
+.registro-form p {
+    font-weight: bold;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    color: #333; /* Color de texto */
+    margin-bottom: 20px;
+}
+
 /* Estilos de campos de entrada */
 .registro-input {
     width: 95%;
@@ -549,51 +566,6 @@ body {
     color: #f90;
 }
 
-.form-container {
-    width: 300px; /* Ajusta el ancho según tus necesidades */
-    margin: 0 auto; /* Centra el formulario horizontalmente */
-}
-
-.horizontal-form {
-    display: flex;
-    flex-direction: column;
-}
-
-.form-row {
-    margin-bottom: 15px;
-}
-
-.form-container form p {
-    font-weight: bold;
-    font-size: 20px;
-    color: #333; /* Color de texto */
-    margin-bottom: 40px; /* Espacio inferior */
-}
-
-.form-container form label {
-    font-weight: bold;
-    color: #333; /* Color de texto */
-}
-
-.form-container [type="text"] {
-    width: 100%;
-    padding: 8px;
-    border: none;
-    border-bottom: 1px solid #000;
-    background-color: transparent;
-    margin-top: 10px;
-}
-
-.form-container-index form p {
-    font-weight: bold;
-    font-size: 20px;
-    color: #333; /* Color de texto */
-}
-
-.form-container-index {
-    display: flex;
-    justify-content: center; /* Centra horizontalmente el formulario */
-}
 
 .options {
     display: grid;

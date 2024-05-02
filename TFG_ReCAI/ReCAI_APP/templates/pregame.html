@@ -7,21 +7,14 @@
     <div class="banner">
         <span class="text-juego">partida en juego</span>
     </div>
-
-    <div class="form-container">
-        <form id="playerForm" method="post" action="{% url 'pregame' %}" class="horizontal-form">
-            <p>Nombre de los jugadores</p>
-            {% csrf_token %}
-            <div class="form-row">
-                <label for="jugador1">{{ j1 }}</label>
-                {{ form.jugador1 }}
-            </div>
-            <div class="form-row">
-                <label for="jugador2">{{ j2 }}</label>
-                {{ form.jugador2 }}
-            </div>
-            <input type="submit" value="Jugar" class="play-button">
-        </form>
-    </div>
+    <form id="playerForm" method="post" action="{% url 'pregame' %}" class="registro-form">
+        <p>Nombre de los jugadores</p>
+        {% csrf_token %}
+        <label for="jugador1" class="registro-label">{{ j1 }}</label>
+        {{ form.jugador1 }}
+        <label for="jugador2" class="registro-label">{{ j2 }}</label>
+        {{ form.jugador2 }}
+        <input type="submit" value="Jugar" class="play-button">
+    </form>
 </script>
 {% endblock %}
