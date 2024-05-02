@@ -9,7 +9,7 @@ import openai
 import json
 from django.templatetags.static import static
 import random
-from django.contrib.auth import update_session_auth_hash, login
+from django.contrib.auth import update_session_auth_hash, login, authenticate
 from django.contrib.auth.models import User
 from .forms import OpcionForm
 from .models import PalabrasEncadenadas, EslabonCentral, RondaFinal
@@ -582,8 +582,16 @@ def my_login(request):
     if request.method == 'POST':
         form = LoginFormulario(request.POST)
         if form.is_valid():
-                login(request, form)
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+            user = authenticate(request, username=username, password=password)
+            if user is not None:
+                login(request, user)
                 return redirect('index')  # Redirige a la página de inicio o a donde prefieras
+            else:
+                # Aquí puedes manejar el caso de inicio de sesión fallido
+                # Por ejemplo, mostrando un mensaje de error en el formulario
+                form.add_error(None, "Nombre de usuario o contraseña incorrectos")
     else:
         form = LoginFormulario()
 
