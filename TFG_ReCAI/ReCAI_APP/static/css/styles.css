@@ -182,9 +182,11 @@ a {
     width: 100%;
 }
 
-#panel{
-    width: 50%; /* Ajusta el ancho según sea necesario */
+#panel {
+    width: 50%;
     align-items: center;
+    display: flex;
+    flex-direction: column;
 }
 
 #jugadores{
@@ -200,6 +202,17 @@ a {
 #jugador{
     width: 50%; /* Ajusta el ancho según sea necesario */
     height: 360px;
+    text-align: center;
+    padding: 50px;
+    margin-top: 85px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: #f9fafb6e;
+    border-radius: 0 30px 0 30px; 
+}
+
+#jugador-palabra{
+    width: 50%; /* Ajusta el ancho según sea necesario */
+    height: 320px;
     text-align: center;
     padding: 50px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -368,6 +381,17 @@ a {
     color: white;    /* Color gris para li impares */
     background-color: #0061ff; /* Fondo gris para el recuadro de li impares */
 }
+
+.form-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.input-wrapper {
+    margin-bottom: 10px; /* Espacio entre los elementos, ajusta según sea necesario */
+}
+
 
 /* usuario.html*/
 body {
@@ -673,10 +697,26 @@ body {
     margin-top: 30px;
 }
 
-.play-button:hover {
-    background: #19b112
+.comodin {
+    display: block;
+    margin: 0 auto;
+    font-size: 20px; 
+    color: white;
+    padding: 7px 40px; 
+    border-radius: 15px 0 15px 0; 
+    background: linear-gradient(to bottom right, #f06 20%, #f90 80%);
+    box-shadow: 0 0 10px 3px rgba(255, 255, 255, 0.6); 
+    border:none;
+    transition: background-color 0.3s;
+    margin-top: 30px;
+    margin-left: -40px;
 }
 
+.play-button:hover,
+.comodin:hover {
+    background: #19b112;
+    cursor: pointer;
+}
 
 .orange-link {
     color: #f06; 

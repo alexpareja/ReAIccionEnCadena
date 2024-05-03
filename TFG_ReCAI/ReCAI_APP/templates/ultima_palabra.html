@@ -14,21 +14,20 @@
                 <li id="p2">{{ solucion_mostrada }}</li>
                 <li id="p3">{{ pista_mostrada }}</li>
         </div>
-{% if pistaMostrada %}
+        {% if pistaMostrada %}
         <form method="post" id="clueForm">
             {% csrf_token %}
             <input type="hidden" name="pista" value="yes"> 
-            <input type="submit" class ="play-button" value="Solicitar pista">
+            <input type="submit" class ="comodin" value="Solicitar pista">
         </form>
-{% endif %}
+        {% endif %}
     </div>
-
+    
     <input type="hidden" id="idPalabra" value="{{idPalabra}}"> 
 
-    <div id = "jugador">
+    <div id = "jugador-palabra">
         {% include 'base_final_player.html' %}
     </div>
-
 </div>
 
 {% endblock %}
