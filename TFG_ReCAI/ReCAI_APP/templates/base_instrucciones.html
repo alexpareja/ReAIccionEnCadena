@@ -8,16 +8,13 @@
 </head>
 <body>
     <div class="container">
-        <div class="left-column">
-            <h1 class="game-title">{{ tituloDelJuego }}</h1>
-            <div class="instructions">
-                {{ instrucciones|linebreaksbr }}
-            </div>
+        <div class="banner">
+            <span class="text-juego">{{ tituloDelJuego }}</span>
         </div>
-        <div class="right-column">
-            <img src="{{ imagenDelJuego }}" alt="Ejemplo del Juego" class="game-image">
-            <button class="start-btn" onclick="location.href='{{ urlDelJuego }}';">Comenzar</button>
+        <div class="instructions">
+            {{ instrucciones|linebreaksbr }}
         </div>
-    </div>
+        <input type="submit" value="Jugar" class="play-button">
+    </div>  
 </body>
 </html>
