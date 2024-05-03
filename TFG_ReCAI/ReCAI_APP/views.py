@@ -83,6 +83,8 @@ def instrucciones_centro_de_la_cadena(request):
 
     En caso de acertar el jugador obtendrá 5000 puntos y pasará a adivinar la siguiente palabra. En el caso contrario, el turno pasará al otro jugador y se mostrará una letra más de la palabra.
 
+    Cada vez que a un jugador le toque adivinar una nueva palabra, podrá seleccionar que quiera, eligiendo entre la que está más arriba o abajo en el panel.
+
     Comienza el jugador con menos puntos acumulados a adivinar la primera palabra.
 
     """
@@ -103,6 +105,8 @@ def instrucciones_una_lleva_a_la_otra(request):
 
     En caso de acertar el jugador obtendrá 10000 puntos y pasará a adivinar la siguiente palabra. En el caso contrario, el turno pasará al otro jugador y se mostrará una letra más de la palabra.
 
+    Cada vez que a un jugador le toque adivinar una nueva palabra, podrá seleccionar que quiera, eligiendo entre la que está más arriba o abajo en el panel.
+
     Comienza el jugador con menos puntos acumulados a adivinar la primera palabra.
 
     """
@@ -121,7 +125,7 @@ def instrucciones_ultima_cadena(request):
 
     El jugador tendrá dos oportunidades para acertar la palabra. Sin embargo, cada fallo le costará la mitad de sus puntos.
 
-    También contará con dos comodines, que le permitirán ver una letra más de la palabra.
+    También contará con dos comodines, que en los primeros dos fallos, le permitirán ver una letra más de la palabra.
 
     """
     contexto = {
@@ -133,7 +137,13 @@ def instrucciones_ultima_cadena(request):
 
 def instrucciones_ultima_palabra(request):
     texto_instrucciones = """
-    
+    Esta es la última ronda del juego.
+
+    EL jugador debe de adivinar unícamente una palabra. Para adivinarla tendrá como pistas la palabra de arriba con la que tiene relación y las dos primeras letras y la última letra de la palabra.
+
+    El jugador puede tomar la decisión de comprar o no el eslabón misterio. Si lo compra se mostrará la palabra de abajo, con la que también tiene relación. Este eslabón le costará la mitad de sus puntos.
+
+    En caso de acertar la palabra el jugador ganará los puntos que tenga acumulados hasta ese momento. En caso contrario, perderá todos los puntos.
 
     """
     contexto = {

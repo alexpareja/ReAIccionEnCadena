@@ -20,7 +20,7 @@
     {%else%}
         {% if fin %}
         <p>Ronda finalizada</p>
-        <a href="{% url 'ultima_palabra'%}">Siguiente</a>
+        <a href="{% url 'instrucciones_ultima_palabra'%}">Siguiente</a>
         {%else%}
             {% if IA_jugando %}
                 <button href ="{% url 'palabras_encadenadas'%}" onclick="obtenerIdsActivos()">Pulse aqui para que juegue la IA</button>
