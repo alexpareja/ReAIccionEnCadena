@@ -28,4 +28,22 @@
     </form>
 </div>
 
+{% if user.is_authenticated %}
+{% if request.path != '/accounts/logout/'  %}
+<div id=mi_perfil class=base_perfil >
+  <p class ="perfil">Hola, <a href="{% url 'usuario' %}">{{user.get_username}}</a></p>
+  <form action="{% url 'my_logout' %}" method="post">
+    {% csrf_token %}
+    <button type="submit" class="cerrar">Cerrar sesión</button>
+  </form>
+</div>
+{% endif %}
+{% else %}
+{% if request.path != '/accounts/login/'  %}
+<div id="mi_perfil" class=base_perfil>
+  <p class ="perfil"><a href="{% url 'my_login'%}">Invitado</a> </a></p>
+</div>
+{% endif %}
+{% endif %}
+
 {% endblock %}

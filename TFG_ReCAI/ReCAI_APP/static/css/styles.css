@@ -199,10 +199,9 @@ a {
 
 #jugador{
     width: 50%; /* Ajusta el ancho según sea necesario */
-    height: 350px;
+    height: 360px;
     text-align: center;
     padding: 50px;
-    margin-top: 100px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     background-color: #f9fafb6e;
     border-radius: 0 30px 0 30px; 
@@ -317,7 +316,7 @@ a {
     background-color: #19b112;
     color: white; 
     margin-bottom: 10px; 
-    padding: 12.5px 20px; 
+    padding: 12.5px 10px; 
     border-radius: 15px 0 15px 0; 
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
     font-weight: bold; 
@@ -344,6 +343,30 @@ a {
     font-size: 15px; /* Tamaño pequeño para li pares */
     color: #f90 ;   /* Color naranja para li pares */
     background-color: #ffe5b4; /* Fondo naranja para el recuadro de li pares */
+}
+
+#ultimo_palabra li {
+    list-style: none; /* Remove default list styling */
+    background-color: #19b112;
+    color: white; 
+    margin-bottom: 10px; 
+    padding: 12.5px 20px; 
+    border-radius: 15px 0 15px 0; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+    font-weight: bold; 
+    text-transform: uppercase; 
+    font-size: 15px;
+    text-align: center;
+    width: 250px; 
+    margin-left: auto; 
+    margin-right: 40px; 
+
+}
+
+#ultimo_palabra li:nth-child(odd) {
+    font-size: 15px; /* Tamaño grande para li impares */
+    color: white;    /* Color gris para li impares */
+    background-color: #0061ff; /* Fondo gris para el recuadro de li impares */
 }
 
 /* usuario.html*/
@@ -582,8 +605,6 @@ background-color: #0061ff
     .main-content, .sidebar {
         flex: none; /* Desactivar el crecimiento y la contracción */
     }
-
-
 }
 
 body {

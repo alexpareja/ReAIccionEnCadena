@@ -9,7 +9,7 @@
 </div>
 <div id="game">
     <div id = "panel">
-        <div id=ultimo_panel>
+        <div id=ultimo_palabra>
                 <li>{{ palabra_inicial }}</li>
                 <li id="p2">{{ solucion_mostrada }}</li>
                 <li id="p3">{{ pista_mostrada }}</li>
@@ -24,8 +24,8 @@
     </div>
 
     <input type="hidden" id="idPalabra" value="{{idPalabra}}"> 
-       
-    <div id = "jugadores">
+
+    <div id = "jugador">
         {% include 'base_final_player.html' %}
     </div>
 
