@@ -4,19 +4,16 @@
 
 {%block content %}
 <h1>Juego Finalizado</h1>
-<div id = "jugadores">
+<div id = "marcador"></div>
     <div id="players">
-    <!-- Jugador 1 -->
-    <div class="player">
-        <img src="{% static '/img/user.png' %}" alt="Foto de {{ jugador1 }}">
-        <p>{{ jugadorFinal }} ( {{jFinal}} )</p>
-        <p>Puntos:{{puntos_jugadorFinal}}</p>
+        <!-- Jugador 1 -->
+        <div class="player">
+            <p class="player-name orange">{{ jugadorFinal }}</p>
+            <h3 class="puntos">Puntos: {{ puntos_jugadorFinal }}</h3>
+            <p>{{respuesta_jugadorIA}}</p>
+        </div>
+        <a class="link-final" href="{% url 'index'%}">Volver al inicio</a>
     </div>
 </div>
-</div>
-
-<div class="right-column">
-    <a href="{% url 'index'%}">Volver al inicio</a>
-</div>
-
+   
 {% endblock %}

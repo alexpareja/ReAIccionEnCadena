@@ -220,6 +220,24 @@ a {
     border-radius: 0 30px 0 30px; 
 }
 
+.link-final{
+    margin-left: 147px;
+    display: block;
+    margin: 0 auto;
+    font-size: 20px; 
+    color: white;
+    padding: 7px 40px; 
+    border-radius: 15px 0 15px 0; 
+    background: linear-gradient(to bottom right, #f06 20%, #f90 80%);
+    box-shadow: 0 0 10px 3px rgba(255, 255, 255, 0.6); 
+    border:none;
+    transition: background-color 0.3s;
+    margin-top: 30px;
+    width: 120px;
+    align-items: center;
+
+}
+
 .comodines {
     margin-top: 20px;
     font-weight: bold;

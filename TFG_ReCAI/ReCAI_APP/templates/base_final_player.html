@@ -23,7 +23,7 @@
         <a href="{% url 'instrucciones_ultima_palabra'%}">Siguiente</a>
         {%else%}
             {% if IA_jugando %}
-                <button href ="{% url 'palabras_encadenadas'%}" onclick="obtenerIdsActivos()">Pulse aqui para que juegue la IA</button>
+                <button href ="{% url 'palabras_encadenadas'%}" onclick="obtenerIdsActivos()" class="play-button">Pulse aqui para que juegue la IA</button>
             {%else%}
             <div id="campo_palabra">
                 <label for="respuesta" class="registro-label">Escriba su opción:</label>
