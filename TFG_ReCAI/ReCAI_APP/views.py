@@ -12,7 +12,7 @@ import random
 from django.contrib.auth import update_session_auth_hash, login, authenticate
 from django.contrib.auth.models import User
 from .forms import OpcionForm
-from .models import PalabrasEncadenadas, EslabonCentral, RondaFinal
+from .models import PalabrasEncadenadas, EslabonCentral, RondaFinal, Puntuaciones
 from django import template
 from django.urls import reverse
 
@@ -914,44 +914,61 @@ def fin_juego(request):
     jugadorFinal = request.session.get('jugadorFinal', 'Nombre del jugador 1 no ingresado')
     puntos_jugadorFinal = request.session.get('puntos_jugadorFinal', 0)
 
+    nueva_puntuacion = Puntuaciones.objects.create(jugador=jugadorFinal, puntos=puntos_jugadorFinal)
+    nueva_puntuacion.save()
+
+    podio = Puntuaciones.objects.order_by('-puntos')[:5]
+
+    estop = any(puntuacion.jugador == jugadorFinal for puntuacion in podio)
+
+
     #Guardar datos en la bbdd de estadísticas
 
-    del request.session['npa']
-    del request.session['lm']
-    del request.session['pl']
+    #del request.session['npa']
+    #del request.session['lm']
+    #del request.session['pl']
 
 
-    del request.session['primera_letraRonda2']
-    del request.session['letras_mostradasRonda2']
-    del request.session['n_palabra_adivinadoRonda2']
+    #del request.session['primera_letraRonda2']
+    #del request.session['letras_mostradasRonda2']
+    #del request.session['n_palabra_adivinadoRonda2']
 
-    del request.session['primera_letraRonda3']
-    del request.session['letras_mostradasRonda3']
-    del request.session['n_palabra_adivinadoRonda3']
+    #del request.session['primera_letraRonda3']
+    #del request.session['letras_mostradasRonda3']
+    #del request.session['n_palabra_adivinadoRonda3']
 
-    del request.session['ronda']
-    del request.session['turno_actual']
+    #del request.session['ronda']
+    #del request.session['turno_actual']
 
         
-    del request.session['letras_mostradas']
-    del request.session['primera_letra']
-    del request.session['n_palabra_adivinado']
-    del request.session['palabrasModificadas']
-    del request.session['comodines']
+    #del request.session['letras_mostradas']
+    #del request.session['primera_letra']
+    #del request.session['n_palabra_adivinado']
+    #del request.session['palabrasModificadas']
+    #del request.session['comodines']
 
-    del request.session['palabra_inicial']
-    del request.session['solucion_mostrada']
-    del request.session['pista_mostrada']
+    #del request.session['palabra_inicial']
+    #del request.session['solucion_mostrada']
+    #del request.session['pista_mostrada']
 
     #guardar puntos en bbdd
 
-    del request.session['jFinal']
-    del request.session['jugadorFinal']
-    del request.session['puntos_jugadorFinal']
+    #del request.session['jFinal']
+    #del request.session['jugadorFinal']
+    #del request.session['puntos_jugadorFinal']
 
 
     return render(request, 'fin_juego.html', {'jFinal': jFinal, 'jugadorFinal': jugadorFinal,
-        'puntos_jugadorFinal' :puntos_jugadorFinal})
+        'puntos_jugadorFinal' :puntos_jugadorFinal, 'podio':podio, 'estop':estop})
+
+def puntuaciones(request):
+
+    podio = Puntuaciones.objects.order_by('-puntos')[:10]
+
+
+
+
+    return render(request, 'puntuaciones.html', {'podio':podio})
 
 @login_required
 def cambiar_contraseña(request):

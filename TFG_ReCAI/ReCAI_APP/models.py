@@ -1,5 +1,12 @@
 from django.db import models
 
+class Puntuaciones(models.Model):
+    jugador = models.CharField(max_length=100);
+    puntos = models.IntegerField(default=0);
+
+    def __str__(self):
+            return self.jugador
+
 class PalabrasEncadenadas(models.Model):
     tema = models.CharField(max_length=100);
     p1 = models.CharField(max_length=20);

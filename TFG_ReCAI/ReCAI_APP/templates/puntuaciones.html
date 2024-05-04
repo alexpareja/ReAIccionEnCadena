@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Mejores Puntuaciones</title>
+</head>
+<body>
+    <h1>Mejores Puntuaciones</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Jugador</th>
+                <th>Puntos</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for puntuacion in podio %}
+            <tr>
+                <td>{{ puntuacion.jugador }}</td>
+                <td>{{ puntuacion.puntos }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

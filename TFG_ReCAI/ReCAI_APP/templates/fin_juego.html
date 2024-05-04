@@ -15,5 +15,28 @@
         <a class="link-final" href="{% url 'index'%}">Volver al inicio</a>
     </div>
 </div>
+
+{% if estop %}
+    <p>¡Enhorabuena, {{ jugadorFinal }}! Te has metido en el top 5.</p>
+    {% endif %}
+
+
+<h1>Mejores Puntuaciones</h1>
+<table>
+    <thead>
+        <tr>
+            <th>Jugador</th>
+            <th>Puntos</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for puntuacion in podio %}
+        <tr>
+            <td>{{ puntuacion.jugador }}</td>
+            <td>{{ puntuacion.puntos }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
    
 {% endblock %}

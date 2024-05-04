@@ -18,6 +18,7 @@ urlpatterns = [
     path('ultima_cadena/', views.ultima_cadena, name='ultima_cadena'),
     path('ultima_palabra/', views.ultima_palabra, name='ultima_palabra'),
     path('fin_juego/', views.fin_juego, name='fin_juego'),
+    path('puntuaciones/', views.puntuaciones, name='puntuaciones'),
     path('pregame/', views.pregame, name='pregame'),
     path('marcador_ronda', views.marcador_ronda, name='marcador_ronda'),
     path('perfil_usuario/', views.perfil_usuario, name='usuario'),

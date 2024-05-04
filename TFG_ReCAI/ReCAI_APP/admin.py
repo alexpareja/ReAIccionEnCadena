@@ -2,6 +2,10 @@ from django.contrib import admin
 from .models import PalabrasEncadenadas
 from .models import EslabonCentral
 from .models import RondaFinal
+from .models import Puntuaciones
+
+class PuntuacionesAdmin(admin.ModelAdmin):
+    list_display = ('jugador', 'puntos')
 
 class EncadenadasAdmin(admin.ModelAdmin):
     list_display = ('tema', 'p1', 'p2', 'p3', 'p4', 'p5', 'p6')
@@ -15,6 +19,6 @@ class FinalAdmin(admin.ModelAdmin):
 admin.site.register(PalabrasEncadenadas, EncadenadasAdmin)
 admin.site.register(EslabonCentral, EslabonAdmin)
 admin.site.register(RondaFinal, FinalAdmin)
-
+admin.site.register(Puntuaciones, PuntuacionesAdmin)
 
 
