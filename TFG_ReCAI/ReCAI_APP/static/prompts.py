@@ -24,6 +24,10 @@ Proporciono este ejemplo para que lo entiendas mejor, devuélvelo en el mismo fo
 }
 
                 """
+PromptPrueba1 = """
+Genera una lista de 6 palabras encadenadas que sigan el mismo tema. Cada palabra debe comenzar con la última letra de la palabra anterior, formando así una cadena. Asegúrate de que el tema sea variado y no se repitan palabras. Puedes elegir temas como nombres de marcas de automóviles, nombres de películas, nombres de libros famosos, nombres de ciudades importantes, nombres de inventos, nombres de personajes históricos, etc. Sé creativo y sorpréndeme con la diversidad de temas que puedes generar. Devuelve solo un JSON con la siguiente estructura: {   "tema": "",   "p1": "",   "p2": "",   "p3": "",   "p4": "",   "p5": "",   "p6": "" }
+"""
+
 PROMPT_RONDA1_IA_PLAYER = """
                         Dame una palabra que se relacione con el tema {} y que empiece por '{}'.
                         La palabra debe tener {} letras en español
@@ -34,7 +38,7 @@ PROMPT_RONDA2Y3 = """
                 Genera una lista de 7 palabras en español, donde cada palabra esté directamente relacionada con la palabra que esta antes y despues suya en la lista.
                 Las palabras deben ser únicas dentro de la lista, es decir, no pueden repetirse. 
                 Asegúrate de que las palabras no tengan relación con sus palabras no adyacentes. 
-                El formato de salida debe ser en JSON, despues da las explicaciones de las relaciones.
+                El formato de salida debe ser en JSON.
                 Formato:
                 {"p1": "","p2": "","p3": "","p4": "","p5": "","p6": "","p7": ""}
 """
@@ -49,8 +53,9 @@ PROMPT_RONDA2y3_IA_PLAYER_JUGARTURNO = """
                                         """
 
 #ronda 4 
-PROMPT_RONDAFINAL_IA_PLAYER = """Teniendo la palabra {} y la palabra {} dame otra que este relacionada de alguna manera con cada una.
-                                Esta palabra empieza por {}. Devuelve únicamente esa palabra en mayúsculas"""
+PROMPT_RONDAFINAL_IA_PLAYER = """Teniendo la palabra {} y la palabra {} dame una palabra que este relacionada de alguna manera con cada una.
+                                Esta relación puede ser de cualquier tipo, y es en español.
+                                Esta palabra empieza por "{}". Devuelve únicamente esa palabra en minúscila y sin tildes."""
 
 #ronda 5
 PROMPT_PALABRAFINAL_IA_PLAYER = """Teniendo la palabra {} dame otra que este relacionada con ella.
@@ -62,7 +67,7 @@ PROMPT_PALABRAFINAL_IA_PLAYER = """Teniendo la palabra {} dame otra que este rel
 #                "respuesta": ""
 #                }
 
-PROMPT_PALABRAFINALCONPISTA_IA_PLAYER = """Teniendo la palabra {} y la palabra {} dame otra que ete relacionada con ella.
+PROMPT_PALABRAFINALCONPISTA_IA_PLAYER = """Teniendo la palabra {} y la palabra {} dame otra que este relacionada con ella.
                                 Esta palabra sigue la siguiente estructura: {}
                                 Devuelve únicamente esa palabra en mayúsculas
                                 """

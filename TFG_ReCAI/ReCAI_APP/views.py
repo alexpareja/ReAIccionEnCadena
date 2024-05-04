@@ -155,14 +155,47 @@ def instrucciones_ultima_palabra(request):
 
 def palabras_encadenadas(request):
     palabras_cargadasR1 = request.session.get('palabras_cargadasR1', False)
-    prompt = prompts.PROMPT_RONDA1
+    prompt = prompts.PromptPrueba1
     if palabras_cargadasR1 == False:
-        JsonPalabras = llamadaAPIChatGPT(prompt)
-        print(JsonPalabras)
-        data = json.loads(JsonPalabras)
+        response = openai.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {
+                "role": "system",
+                "content": "Eres un generador de temas para un concurso. Debes ser creativo a la hora de ofrecer temas, abarcando cualquier tema en español."
+                },
+                {
+                "role": "user",
+                "content": "Piensa en un tema (máximo 2 palabras)  y damelo únicamente en un JSON con la siguiente estructura:\n{\n  \"tema\": \"\"\n}"
+                }
+            ],
+            temperature=1.641,
+            max_tokens=20,
+            )
+
+        #JsonPalabras = llamadaAPIChatGPT(prompt)
+        tema = json.loads(response.choices[0].message.content)["tema"]
+
+        prompt2 = "Dame una lista de 6 palabras en castellano relacionadas con el tema " + tema + ". Asegurate de que cada palabra empiece con la última letra de la anterior palabra de la lista. No puedes repetir palabras ni poner palabras compuestas por más de una palabra, con un máximo de 12 letras. Devuelveme esta lista en un JSON con la siguiente estructura {\"tema\": \"\",   \"p1\": \"\",   \"p2\": \"\",   \"p3\": \"\",   \"p4\": \"\",   \"p5\": \"\",   \"p6\": \"\" }"
+        response = openai.chat.completions.create(
+        model="gpt-3.5-turbo",
+        messages=[
+            {
+            "role": "system",
+            "content": "Eres un generador de palabras. Debes asegurarte de que todas las palabras que generas empiezan por la última letra de la palabra anterior en la lista en español castellano."
+            },
+            {
+            "role": "user",
+            "content": prompt2
+            }
+        ],
+        temperature=0.5,
+        max_tokens=300,
+        )
+        data = json.loads(response.choices[0].message.content)
         request.session['datajson'] = data
         palabras = PalabrasEncadenadas(
-            tema=data["tema"],
+            tema = tema,
             p1=data["p1"],
             p2=data["p2"],
             p3=data["p3"],
@@ -804,6 +837,7 @@ def ultima_palabra(request):
     if (jFinal == "IA") | (jFinal == 'IA 1') | (jFinal == 'IA 2'):
         if pistaMostrada == 0:
             prompt = prompts.PROMPT_PALABRAFINAL_IA_PLAYER.format(palabra_inicial, solucion_mostrada)
+            print(prompt + jsonRespuesta)
             jsonRespuesta = llamadaAPIChatGPT(prompt).upper()
             data = json.loads(jsonRespuesta)
             if data["pista"] == 'SI':
@@ -820,6 +854,7 @@ def ultima_palabra(request):
         else:
             prompt = prompts.PROMPT_PALABRAFINALCONPISTA_IA_PLAYER.format(palabra_inicial, pista_mostrada, solucion_mostrada)
             respuesta = llamadaAPIChatGPT(prompt).upper()
+            print(prompt + respuesta)
             respuestaIA = 'Mi respuesta es ' + respuesta
             (request, puntos_jugadorFinal, respuesta,
             solucion, solucion_mostrada, juego_acabado) = jugarTurnoUltimaPalabra(request,
