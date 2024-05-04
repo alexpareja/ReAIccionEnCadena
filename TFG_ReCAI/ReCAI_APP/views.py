@@ -15,6 +15,8 @@ from .forms import OpcionForm
 from .models import PalabrasEncadenadas, EslabonCentral, RondaFinal, Puntuaciones
 from django import template
 from django.urls import reverse
+import unicodedata
+import re
 
 openai.api_key = settings.OPENAI_API_KEY
 
@@ -834,7 +836,7 @@ def ultima_palabra(request):
     juego_acabado=0  
     jFinal = request.session.get('jFinal', 'Tipo de j1 no ingresado')
     jugadorFinal = request.session.get('jugadorFinal', 'Nombre del jugador 1 no ingresado')
-    puntos_jugadorFinal = request.session.get('puntos_jugadorFinal', 80000)
+    puntos_jugadorFinal = request.session.get('puntos_jugadorFinal', 0)
 
     palabras = RondaFinal.objects.last()
     IA_jugando = 0
@@ -849,6 +851,11 @@ def ultima_palabra(request):
     pista_mostrada = request.session.get('pista_mostrada', '?')
     request.session['pista_mostrada'] = pista_mostrada
     respuestaIA = ''
+    if juego_acabado:
+        return render(request, 'fin_juego.html', {'jFinal': jFinal, 'jugadorFinal': jugadorFinal, 
+                                                'puntos_jugadorFinal' :puntos_jugadorFinal,
+                                                })
+
 
     if (jFinal == "IA") | (jFinal == 'IA 1') | (jFinal == 'IA 2'):
         if pistaMostrada == 0:
@@ -1004,7 +1011,7 @@ def jugarTurnoPrimeraRonda(request, html, j1, j2, jugador1, jugador2,
                             puntos_jugador1, puntos_jugador2, turno_actual, palabras, 
                             palabras_modificadas, n_palabra_adivinado, letras_mostradas,
                             primera_letra, fin, respuesta, palabra_a_adivinar):
-    if respuesta == palabra_a_adivinar:
+    if quitar_acentos(respuesta) == quitar_acentos(palabra_a_adivinar):
     # Asignar puntos al jugador correcto
         if turno_actual == j1:
             puntos_jugador1 += 2000
@@ -1070,7 +1077,7 @@ def jugarTurnoSegundaRonda(request, respuesta, palabra_a_adivinar, j1, j2, jugad
                            turno_actual, puntos_jugador1, puntos_jugador2, palabras,
                            n_palabra_adivinado, palabras_modificadas, fin, letras_mostradas, primera_letra, 
                            isSeleccionada, nPalabrasRespondidas, actualizarActivos):
-    if respuesta == palabra_a_adivinar:
+    if quitar_acentos(respuesta) == quitar_acentos(palabra_a_adivinar):
         nPalabrasRespondidas += 1
         isSeleccionada = 1
         actualizarActivos = True
@@ -1135,7 +1142,7 @@ def jugarTurnoTerceraRonda(request, respuesta, palabra_a_adivinar, j1, j2, jugad
                            turno_actual, puntos_jugador1, puntos_jugador2, palabras,
                            n_palabra_adivinado, palabras_modificadas, fin, letras_mostradas, primera_letra, 
                            isSeleccionada, nPalabrasRespondidas, actualizarActivos):
-    if respuesta == palabra_a_adivinar:
+    if quitar_acentos(respuesta) == quitar_acentos(palabra_a_adivinar):
         nPalabrasRespondidas += 1
         isSeleccionada = 1
         actualizarActivos = True
@@ -1196,7 +1203,7 @@ def jugarTurnoUltimaCadena(request, jFinal, jugadorFinal,
                             n_palabra_adivinado, letras_mostradas,
                             primera_letra, fin, respuesta, palabra_a_adivinar
                             ,comodines, idPalabra, juego_acabado):
-    if respuesta == palabra_a_adivinar:
+    if quitar_acentos(respuesta) == quitar_acentos(palabra_a_adivinar):
         palabras_modificadas[int(n_palabra_adivinado/2)-1] = palabra_a_adivinar
         if n_palabra_adivinado >= 12:
             fin=1
@@ -1248,7 +1255,7 @@ def jugarTurnoUltimaCadena(request, jFinal, jugadorFinal,
             comodines -= 1
             request.session['comodines'] = comodines
         else:
-            puntos_jugadorFinal =  puntos_jugadorFinal/2
+            puntos_jugadorFinal =  int(puntos_jugadorFinal/2)
             request.session['puntos_jugadorFinal'] = puntos_jugadorFinal
 
     return (request, jFinal, jugadorFinal,
@@ -1260,9 +1267,9 @@ def jugarTurnoUltimaCadena(request, jFinal, jugadorFinal,
 def jugarTurnoUltimaPalabra(request, puntos_jugadorFinal, respuesta,
                             solucion, solucion_mostrada, juego_acabado,
                             ):
-    if respuesta.upper() != solucion.upper():
+    if quitar_acentos(respuesta.upper()) != quitar_acentos(solucion.upper()):
         puntos_jugadorFinal = 0
-        request.session['puntos_jugadorFinal'] = puntos_jugadorFinal
+    request.session['puntos_jugadorFinal'] = puntos_jugadorFinal
     solucion_mostrada = solucion
     request.session['solucion_mostrada'] = solucion_mostrada
     juego_acabado = 1
@@ -1274,6 +1281,11 @@ def jugarTurnoUltimaPalabraMostrarPista(request, pistaMostrada, pista_mostrada, 
     request.session['pistaMostrada'] = pistaMostrada
     pista_mostrada = pista
     request.session['pista_mostrada'] = pista_mostrada
-    puntos_jugadorFinal = puntos_jugadorFinal / 2
+    puntos_jugadorFinal = int(puntos_jugadorFinal / 2)
     request.session['puntos_jugadorFinal'] = puntos_jugadorFinal
     return(request, pistaMostrada, pista_mostrada, pista, puntos_jugadorFinal)
+
+def quitar_acentos(texto):
+    texto_normalizado = unicodedata.normalize('NFD', texto)
+    texto_sin_acentos = re.sub(r'[\u0300-\u036f]', '', texto_normalizado)
+    return texto_sin_acentos
