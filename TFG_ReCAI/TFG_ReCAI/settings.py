@@ -136,5 +136,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # PARA CUANDO TENGAMOS CLAVE DE CHATGPT
 import os
-OPENAI_API_KEY = os.environ.get('OPENAI_API_KEY', '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')
+#OPENAI_API_KEYPRUEBAS = os.environ.get('OPENAI_API_KEY', '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')
+OPENAI_API_KEY = os.environ.get('OPENAI_API_KEY', 'sk-proj-rok40QwvyI5LREDWOhvzT3BlbkFJXpQAxLz7JIRqzTluhh6V')
+
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'
