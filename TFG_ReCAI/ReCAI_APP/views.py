@@ -251,12 +251,28 @@ def palabras_encadenadas(request):
         n_letras = len(getattr(palabras, 'p' + str(n_palabra_adivinado), ''))
         prompt = prompts.PROMPT_RONDA1_IA_PLAYER.format(tema, primera_letra, n_letras)
         print(prompt)
-        respuesta = llamadaAPIChatGPT(prompt).upper()
-
+        #respuesta = llamadaAPIChatGPT(prompt).upper()
+        jsonrespuesta = openai.chat.completions.create(
+                        model="gpt-3.5-turbo",
+                        messages=[
+                            {
+                            "role": "system",
+                            "content": "Debes responder palabras relacionadas a un tema que te indica el usuario. Debes relacionar tu respuesta a este tema obligatoriamente."
+                            },
+                            {
+                            "role": "user",
+                            "content": "Dame una palabra que se relacione con el tema " + tema + " y que empiece por " + primera_letra + "-. La palabra debe tener" + str(n_letras) + " letras en español. Devuélveme un JSON con la siguiente estructura:\n{\n\"palabra\": \"\",\n\"explicacion\":\"\"\n}\nLa explicación debe ser muy breve."
+                            }
+                        ],
+                        temperature=1.2,
+                        max_tokens=100,
+                        )
+        dataRespuesta = json.loads(jsonrespuesta.choices[0].message.content)
+        respuesta = dataRespuesta['palabra'].upper()
         if (turno_actual == 'IA 1'):
-            respuestaJugadorIA1 = 'Mi respuesta es ' + respuesta
+            respuestaJugadorIA1 = 'Mi respuesta es ' + respuesta + '. Explicación: ' + dataRespuesta['explicacion']
         else:
-            respuestaJugadorIA2 = 'Mi respuesta es ' + respuesta
+            respuestaJugadorIA2 = 'Mi respuesta es ' + respuesta + '. Explicación: ' + dataRespuesta['explicacion']
         (request, html, j1, j2, jugador1, jugador2,
         puntos_jugador1, puntos_jugador2, turno_actual, palabras, 
         palabras_modificadas, n_palabra_adivinado, letras_mostradas,
