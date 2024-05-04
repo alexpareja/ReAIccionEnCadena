@@ -189,15 +189,17 @@ a {
     flex-direction: column;
 }
 
-#jugadores{
+#jugadores {
     width: 50%; /* Ajusta el ancho según sea necesario */
-    height: 450px;
+    height: auto; /* Ajusta la altura automáticamente según el contenido */
     text-align: center;
     padding: 50px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     background-color: #f9fafb6e;
-    border-radius: 0 30px 0 30px; 
+    border-radius: 0 30px 0 30px;
+    margin: 10px 0; /* Margen de 10px arriba y abajo */
 }
+
 
 #jugador{
     width: 50%; /* Ajusta el ancho según sea necesario */
