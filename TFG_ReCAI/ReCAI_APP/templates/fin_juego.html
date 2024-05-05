@@ -21,22 +21,28 @@
     {% endif %}
 
 
-<h1>Mejores Puntuaciones</h1>
-<table>
-    <thead>
-        <tr>
-            <th>Jugador</th>
-            <th>Puntos</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for puntuacion in podio %}
-        <tr>
-            <td>{{ puntuacion.jugador }}</td>
-            <td>{{ puntuacion.puntos }}</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+<div class="banner">
+    <span class="text-juego">mejores puntuaciones</span>
+</div>
+<div class="puntuaciones-fin">
+    <table>
+        <thead>
+            <tr>
+                <th>Posición</th>
+                <th>Jugador</th>
+                <th>Puntos</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for puntuacion in podio %}
+            <tr>
+                <td>{{ puntuacion.posicion }}</td>
+                <td>{{ puntuacion.jugador }}</td>
+                <td>{{ puntuacion.puntos }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
    
 {% endblock %}

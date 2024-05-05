@@ -69,7 +69,7 @@ def instrucciones_palabras_encadenadas(request):
 
     """
     contexto = {
-        'tituloDelJuego': 'Palabras encadenadas',
+        'tituloDelJuego': 'palabras encadenadas',
         'instrucciones': texto_instrucciones,
         'urlDelJuego': reverse('palabras_encadenadas'),
     }
@@ -91,7 +91,7 @@ def instrucciones_centro_de_la_cadena(request):
 
     """
     contexto = {
-        'tituloDelJuego': 'Centro de la cadena',
+        'tituloDelJuego': 'centro de la cadena',
         'instrucciones': texto_instrucciones,
         'urlDelJuego': reverse('centro_de_la_cadena'),
     }
@@ -113,7 +113,7 @@ def instrucciones_una_lleva_a_la_otra(request):
 
     """
     contexto = {
-        'tituloDelJuego': 'Una lleva a la otra',
+        'tituloDelJuego': 'una lleva a la otra',
         'instrucciones': texto_instrucciones,
         'urlDelJuego': reverse('una_lleva_a_la_otra'),
     }
@@ -131,7 +131,7 @@ def instrucciones_ultima_cadena(request):
 
     """
     contexto = {
-        'tituloDelJuego': 'Última cadena',
+        'tituloDelJuego': 'última cadena',
         'instrucciones': texto_instrucciones,
         'urlDelJuego': reverse('ultima_cadena'),
     }
@@ -149,7 +149,7 @@ def instrucciones_ultima_palabra(request):
 
     """
     contexto = {
-        'tituloDelJuego': 'Última palabra',
+        'tituloDelJuego': 'último eslabón',
         'instrucciones': texto_instrucciones,
         'urlDelJuego': reverse('ultima_palabra'),
     }
@@ -924,9 +924,17 @@ def fin_juego(request):
     nueva_puntuacion = Puntuaciones.objects.create(jugador=jugadorFinal, puntos=puntos_jugadorFinal)
     nueva_puntuacion.save()
 
-    podio = Puntuaciones.objects.order_by('-puntos')[:5]
+    podio_queryset = Puntuaciones.objects.order_by('-puntos')[:5]
 
-    estop = any(puntuacion.jugador == jugadorFinal for puntuacion in podio)
+    podio = []
+    for index, puntuacion in enumerate(podio_queryset, start=1):
+        podio.append({
+            'posicion': index,
+            'jugador': puntuacion.jugador,  
+            'puntos': puntuacion.puntos     
+        })
+
+    estop = any(puntuacion.jugador == jugadorFinal for puntuacion in podio_queryset)
 
 
     #Guardar datos en la bbdd de estadísticas
@@ -969,13 +977,18 @@ def fin_juego(request):
         'puntos_jugadorFinal' :puntos_jugadorFinal, 'podio':podio, 'estop':estop})
 
 def puntuaciones(request):
+    podio_queryset = Puntuaciones.objects.order_by('-puntos')[:10]
 
-    podio = Puntuaciones.objects.order_by('-puntos')[:10]
+    podio = []
+    for index, puntuacion in enumerate(podio_queryset, start=1):
+        podio.append({
+            'posicion': index,
+            'jugador': puntuacion.jugador,  
+            'puntos': puntuacion.puntos     
+        })
 
-
-
-
-    return render(request, 'puntuaciones.html', {'podio':podio})
+    # Pasando el podio a la plantilla
+    return render(request, 'puntuaciones.html', {'podio': podio})
 
 @login_required
 def cambiar_contraseña(request):

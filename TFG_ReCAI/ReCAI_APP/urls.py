@@ -21,8 +21,6 @@ urlpatterns = [
     path('puntuaciones/', views.puntuaciones, name='puntuaciones'),
     path('pregame/', views.pregame, name='pregame'),
     path('marcador_ronda', views.marcador_ronda, name='marcador_ronda'),
-    path('perfil_usuario/', views.perfil_usuario, name='usuario'),
-    path('cambiar_contraseña/', views.cambiar_contraseña, name='cambiar_contraseña'),
     path('logout/', auth_views.LogoutView.as_view(template_name= 'logout.html'), name='my_logout'),
 
     # Agrega más URLs según sea necesario
