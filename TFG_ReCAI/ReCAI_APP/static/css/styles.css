@@ -807,7 +807,7 @@ thead {
 th, td {
     text-align: center;
     padding: 8px;
-    border-bottom: 1px solid #ddd;
+    border-bottom: none;
 }
 
 tr:nth-child(even) {
@@ -817,4 +817,34 @@ tr:nth-child(even) {
 tr:hover {
     background-color: #d8d8d86c;
 }
+
+.center-container {
+    display: flex;
+    flex-direction: row; 
+    align-items: center; 
+    justify-content: center; 
+    min-height: 100vh; 
+    padding: 20px; 
+}
+
+.player-info, .puntuaciones-fin {
+    flex: 1; 
+    margin: 10px; 
+    max-width: 50%; 
+}
+
+.puntuaciones-fin {
+    height: auto;
+    margin: 0 auto;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: #f9fafb6e;
+    border-radius: 0 30px 0 30px; 
+}
+
+.puntuaciones-fin p {
+    margin-top: 25px;
+    color:#f06
+}
+
 

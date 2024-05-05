@@ -3,46 +3,45 @@
 
 
 {%block content %}
-<h1>Juego Finalizado</h1>
-<div id = "marcador"></div>
-    <div id="players">
-        <!-- Jugador 1 -->
+<div class="center-container">
+    <div class="player-info">
+      <div id="players">
+        <h1>Fin del Juego</h1>
         <div class="player">
-            <p class="player-name orange">{{ jugadorFinal }}</p>
-            <h3 class="puntos">Puntos: {{ puntos_jugadorFinal }}</h3>
-            <p>{{respuesta_jugadorIA}}</p>
+          <p class="player-name orange">{{ jugadorFinal }}</p>
+          <h3 class="puntos">Puntos Ganados: {{ puntos_jugadorFinal }}</h3>
+          <p>{{ respuesta_jugadorIA }}</p>
         </div>
-        <a class="link-final" href="{% url 'index'%}">Volver al inicio</a>
+        <a class="link-final" href="{% url 'index' %}">Volver al inicio</a>
+      </div>
     </div>
-</div>
-
-{% if estop %}
-    <p>¡Enhorabuena, {{ jugadorFinal }}! Te has metido en el top 5.</p>
-    {% endif %}
-
-
-<div class="banner">
-    <span class="text-juego">mejores puntuaciones</span>
-</div>
-<div class="puntuaciones-fin">
-    <table>
+  
+    <div class="puntuaciones-fin">
+      <div class="banner">
+        <span class="text-juego">mejores puntuaciones</span>
+      </div>
+      <table>
         <thead>
-            <tr>
-                <th>Posición</th>
-                <th>Jugador</th>
-                <th>Puntos</th>
-            </tr>
+          <tr>
+            <th>Posición</th>
+            <th>Jugador</th>
+            <th>Puntos</th>
+          </tr>
         </thead>
         <tbody>
-            {% for puntuacion in podio %}
-            <tr>
-                <td>{{ puntuacion.posicion }}</td>
-                <td>{{ puntuacion.jugador }}</td>
-                <td>{{ puntuacion.puntos }}</td>
-            </tr>
-            {% endfor %}
+          {% for puntuacion in podio %}
+          <tr>
+            <td>{{ puntuacion.posicion }}</td>
+            <td>{{ puntuacion.jugador }}</td>
+            <td>{{ puntuacion.puntos }}</td>
+          </tr>
+          {% endfor %}
         </tbody>
-    </table>
+      </table>
+      {% if estop %}
+      <p>¡Enhorabuena, {{ jugadorFinal }}! Te has metido en el top 5.</p>
+      {% endif %}
+    </div>
 </div>
    
 {% endblock %}
