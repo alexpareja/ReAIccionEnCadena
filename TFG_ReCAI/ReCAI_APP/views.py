@@ -347,19 +347,19 @@ def centro_de_la_cadena(request):
     palabras_cargadasR2 = request.session.get('palabras_cargadasR2', False)
     prompt = prompts.PROMPT_RONDA2Y3
     if palabras_cargadasR2 == False:
-        JsonPalabras = llamadaAPIChatGPTModeloFineTuning(prompt)
+        arrayPanel = generarPanel7huecos()
+        #JsonPalabras = llamadaAPIChatGPTModeloFineTuning(prompt)
         #JsonPalabras = llamadaAPIChatGPT(prompt)
-        print(JsonPalabras)
-        data = json.loads(JsonPalabras)
-        request.session['datajson'] = data
+        print(arrayPanel)
+        request.session['datajson'] = arrayPanel
         palabras = EslabonCentral(
-            p1=data["p1"],
-            p2=data["p2"],
-            p3=data["p3"],
-            p4=data["p4"],
-            p5=data["p5"],
-            p6=data["p6"],
-            p7=data["p7"])
+            p1=arrayPanel[0],
+            p2=arrayPanel[1],
+            p3=arrayPanel[2],
+            p4=arrayPanel[3],
+            p5=arrayPanel[4],
+            p6=arrayPanel[5],
+            p7=arrayPanel[6])
         palabras.save()
         palabras_cargadasR2 = True
         request.session['palabras_cargadasR2'] = palabras_cargadasR2
@@ -504,23 +504,24 @@ def centro_de_la_cadena(request):
     })
 
 def una_lleva_a_la_otra(request):
-    #palabras_cargadasR3 = request.session.get('palabras_cargadasR3', False)
+    palabras_cargadasR3 = request.session.get('palabras_cargadasR3', False)
     #prompt = prompts.PROMPT_RONDA2y3
-    #if palabras_cargadasR3 == False:
-    #    JsonPalabras = llamadaAPIChatGPT(prompt)
-    #    data = json.loads(JsonPalabras)
-    #    request.session['datajson'] = data
-    #    palabras = EslabonCentral(
-    #        p1=data["p1"],
-    #        p2=data["p2"],
-    #        p3=data["p3"],
-    #        p4=data["p4"],
-    #        p5=data["p5"],
-    #        p6=data["p6"],
-    #        p7=data["p7"])
-    #    palabras.save()
-    #    palabras_cargadasR3 = True
-    #    request.session['palabras_cargadasR3'] = palabras_cargadasR3
+    if palabras_cargadasR3 == False:
+        arrayPanel = generarPanel7huecos()
+        #JsonPalabras = llamadaAPIChatGPT(prompt)
+        #data = json.loads(JsonPalabras)
+        request.session['datajson'] = arrayPanel
+        palabras = EslabonCentral(
+            p1=arrayPanel[0],
+            p2=arrayPanel[1],
+            p3=arrayPanel[2],
+            p4=arrayPanel[3],
+            p5=arrayPanel[4],
+            p6=arrayPanel[5],
+            p7=arrayPanel[6])
+        palabras.save()
+        palabras_cargadasR3 = True
+        request.session['palabras_cargadasR3'] = palabras_cargadasR3
 
     # Datos de los jugadores
     fin = request.session.get('finR3', 0)
@@ -1302,3 +1303,106 @@ def quitar_acentos(texto):
     texto_normalizado = unicodedata.normalize('NFD', texto)
     texto_sin_acentos = re.sub(r'[\u0300-\u036f]', '', texto_normalizado)
     return texto_sin_acentos
+
+def generarPanel7huecos():
+    array = []
+    primer_request = openai.chat.completions.create(
+                    model="gpt-3.5-turbo-0125",
+                    messages=[
+                        {
+                        "role": "system",
+                        "content": "Eres un generador de palabras objetivo para un programa de televisión "
+                        },
+                        {
+                        "role": "user",
+                        "content": "Tienes que proporcionarme 2 palabras, p1 y p7 aleatorias de temas diversos que no tengan nada que ver entre ellas. Hay que devolver únicamente las palabras en el siguiente formato JSON:\n{\n\"p1\":\"\",\n\"p7\":\"\"\n}"
+                        }
+                    ],
+                    temperature=1.65,
+                    max_tokens=100,
+                    )
+    p1 = json.loads(primer_request.choices[0].message.content)["p1"]
+    p7 = json.loads(primer_request.choices[0].message.content)["p7"]
+    segundo_request = openai.chat.completions.create(
+                    model="gpt-3.5-turbo-0125",
+                    messages=[
+                        {
+                        "role": "system",
+                        "content": "Eres el generador de palabras de un programa de televisión de España y debes hacer relaciones con sentido y reales "
+                        },
+                        {
+                        "role": "user",
+                        "content": "Tienes que devolverme dos palabras, p2 debe estar relacionada con la palabra "+ p1 + "y p6 con la palabra" + p7 + ". Devuelve las palabras en el siguiente formato:\n{\n\"p2\":\"\",\n\"p6\":\"\"\n}"
+                        }
+                    ],
+                    temperature=0.89,
+                    max_tokens=100,
+                    )
+    p2 = json.loads(segundo_request.choices[0].message.content)["p2"]
+    p6 = json.loads(segundo_request.choices[0].message.content)["p6"]
+    tercer_request = openai.chat.completions.create(
+                    model="gpt-3.5-turbo-0125",
+                    messages=[
+                        {
+                        "role": "system",
+                        "content": "Eres una persona superinteligente y culta que hace relaciones diversas y sabe mucho de diferentes temas"
+                        },
+                        {
+                        "role": "user",
+                        "content": "Tienes que devolverme dos palabras, p3 debe estar relacionada con la palabra "+ p2 +" y no puede tener relación con "+ p1 +" y p5 con la palabra "+ p6 +" y no puede tener relación con "+ p7 +". Devuelve las palabras en el siguiente formato:\n{\n\"p3\":\"\",\n\"p5\":\"\"\n}"
+                        }
+                    ],
+                    temperature=0.89,
+                    max_tokens=100,
+                    )
+    p3 = json.loads(tercer_request.choices[0].message.content)["p3"]
+    p5 = json.loads(tercer_request.choices[0].message.content)["p5"]
+    cuarto_request = openai.chat.completions.create(
+                    model="gpt-3.5-turbo-0125",
+                    messages=[
+                        {
+                        "role": "system",
+                        "content": "Eres el generador de palabras de un programa de televisión de España y debes hacer relaciones con sentido y reales "
+                        },
+                        {
+                        "role": "user",
+                        "content": "Tienes que devolverme una palabras, p4 que debe estar relacionada si o si con ambas palabras, p3 y p5, y no puede ser ni"+ p1 +" ni " + p2 +" ni "+ p6 +" ni "+ p7 +". Devuelve la palabra en el siguiente formato:\n{\n\"p4\":\"\"\n}"
+                        }
+                    ],
+                    temperature=1.37,
+                    max_tokens=100,
+                    )
+    p4 = json.loads(cuarto_request.choices[0].message.content)["p4"]
+    array.insert(0,p1)
+    array.insert(1,p2)
+    array.insert(2,p3)
+    array.insert(3,p4)
+    array.insert(4,p5)
+    array.insert(5,p6)
+    array.insert(6,p7)
+    return array
+
+def generarPanel15huecos():
+    array = []
+    primer_request = openai.chat.completions
+    p1 = json.loads(primer_request.choices[0].message.content)["p1"]
+    p7 = json.loads(primer_request.choices[0].message.content)["p7"]
+    p9 = json.loads(primer_request.choices[0].message.content)["p9"]
+    p15 = json.loads(primer_request.choices[0].message.content)["p15"]
+    segundo_request = openai.chat.completions
+    p2 = json.loads(primer_request.choices[0].message.content)["p2"]
+    p6 = json.loads(primer_request.choices[0].message.content)["p6"]
+    p10 = json.loads(primer_request.choices[0].message.content)["p10"]
+    p14 = json.loads(primer_request.choices[0].message.content)["p14"]
+    tercer_request = openai.chat.completions
+    p3 = json.loads(primer_request.choices[0].message.content)["p3"]
+    p5 = json.loads(primer_request.choices[0].message.content)["p5"]
+    p11 = json.loads(primer_request.choices[0].message.content)["p11"]
+    p13 = json.loads(primer_request.choices[0].message.content)["p13"]
+    cuarto_request = openai.chat.completions
+    p4 = json.loads(primer_request.choices[0].message.content)["p4"]
+    p8 = json.loads(primer_request.choices[0].message.content)["p8"]
+    p12 = json.loads(primer_request.choices[0].message.content)["p12"]
+
+    array.insert(0, p1)
+
