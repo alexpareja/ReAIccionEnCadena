@@ -209,36 +209,41 @@ a {
 }
 
 #jugadores {
-    width: 50%; /* Ajusta el ancho según sea necesario */
-    height: auto; /* Ajusta la altura automáticamente según el contenido */
+    position: relative; /* La posición relativa permanece */
+    width: 50%; /* Ancho relativo al ancho del viewport */
+    min-height: 36vh;
+    height: auto; /* La altura se ajusta automáticamente */
     text-align: center;
-    padding: 50px;
+    padding: 3em; /* Padding relativo al tamaño de la fuente base */
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     background-color: #f9fafb6e;
-    border-radius: 0 30px 0 30px;
-    margin: 10px 0; /* Margen de 10px arriba y abajo */
+    border-radius: 0 2em 0 2em; /* Radio de bordes usando 'em' para escalabilidad */
+    margin: 1em 0; /* Margen superior e inferior relativo al tamaño de la fuente base */
 }
 
 
-#jugador{
-    width: 50%; /* Ajusta el ancho según sea necesario */
-    height: 360px;
+#jugador {
+    width: 50%; /* Ancho relativo al contenedor padre */
+    height: auto; /* Para flexibilidad, especificamos una altura mínima */
+    max-height: 40vh; /* Altura mínima relativa al alto del viewport */
     text-align: center;
-    padding: 50px;
-    margin-top: 85px;
+    padding: 3.125em; /* Convertido de 50px basado en un tamaño de fuente base de 16px */
+    margin-top: 7.3em; /* Convertido de 85px basado en un tamaño de fuente base de 16px */
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     background-color: #f9fafb6e;
-    border-radius: 0 30px 0 30px; 
+    border-radius: 0 1.875em 0 1.875em; /* Convertido de 30px a 'em' */
 }
 
-#jugador-palabra{
-    width: 50%; /* Ajusta el ancho según sea necesario */
-    height: 320px;
+
+#jugador-palabra {
+    width: 50%;
+    height: auto; 
+    min-height: 32vh; 
     text-align: center;
-    padding: 50px;
+    padding: 3em; /* Padding relativo al tamaño de fuente base */
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     background-color: #f9fafb6e;
-    border-radius: 0 30px 0 30px; 
+    border-radius: 0 3em 0 3em; 
 }
 
 .link-final{
@@ -362,39 +367,52 @@ a {
   
 /*Ultima cadena*/
 
-
 #ultimo_panel li {
-    list-style: none; /* Remove default list styling */
+    list-style: none;
     background-color: #19b112;
-    color: white; 
-    margin-bottom: 10px; 
-    padding: 12.5px 10px; 
-    border-radius: 15px 0 15px 0; 
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
-    font-weight: bold; 
-    text-transform: uppercase; 
-    font-size: 15px;
-    text-align: center;
-    width: 250px; 
-    margin-left: auto; 
-    margin-right: 40px; 
-
+    color: white;
+    margin-bottom: 0.3rem; /* Margen inferior más reducido */
+    padding: 0.5rem 0.5rem; /* Relleno uniforme para centrar el texto verticalmente */
+    border-radius: 15px 0 15px 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra más ligera */
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 0.75rem; /* Tamaño de fuente más pequeño */
+    text-align: center; /* Alineación horizontal del texto */
+    width: 100%;
+    display: flex; /* Utiliza flexbox para centrar el contenido */
+    align-items: center; /* Centra el contenido verticalmente */
+    justify-content: center; /* Centra el contenido horizontalmente */
+    margin-left: auto;
+    margin-right: auto;
 }
 
-#ultimo_panel .palabraactual{
+#ultimo_panel .palabraactual {
     background-color: #19b112;
+    font-size: 0.75rem;
 }
 
 #ultimo_panel li:nth-child(odd) {
-    font-size: 15px; /* Tamaño grande para li impares */
-    color: white;    /* Color gris para li impares */
-    background-color: #0061ff; /* Fondo gris para el recuadro de li impares */
+    font-size: 0.75rem;
+    color: white;
+    background-color: #0061ff;
 }
 
 #ultimo_panel li:nth-child(even):not(.palabraactual) {
-    font-size: 15px; /* Tamaño pequeño para li pares */
-    color: #f90 ;   /* Color naranja para li pares */
-    background-color: #ffe5b4; /* Fondo naranja para el recuadro de li pares */
+    font-size: 0.75rem;
+    color: #f90;
+    background-color: #ffe5b4;
+}
+
+@media (min-width: 768px) {
+    #ultimo_panel li {
+        padding: 1.25rem 1rem; /* Relleno para pantallas más grandes */
+        height: 3px;
+        width: 210px; /* Anchura fija para pantallas más grandes */
+        margin-bottom: 1rem; /* Margen inferior restablecido */
+        font-size: 1rem; /* Tamaño de fuente restablecido */
+        margin-right: 2.5rem; /* Margen derecho ajustado */
+    }
 }
 
 #ultimo_palabra li {
