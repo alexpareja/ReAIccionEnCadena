@@ -47,15 +47,12 @@ PROMPT_RONDA2Y3_IA_PLAYER_ELEGIRPALABRA = """
                                         {} 
                                         """
 
-PROMPT_RONDA2y3_IA_PLAYER_JUGARTURNO = """
-                                        En base a la palabra {} y a la palabra {}, dame una palabra que empiece por {}.
-                                        Devuélveme únicamente esa palabra en mayúsculas.
-                                        """
+PROMPT_RONDA2y3_IA_PLAYER_JUGARTURNO = "En base a la palabra {} y a la palabra {}, dame una palabra que empiece por {}-.\nEs posible que solo recibas 1 de las palabras, debes contestar igual.\nDebes responder con un JSON con el siguiente formato:\n{\n\"palabra\": \" \",\n\"explicacion\":\" \"\n}\nLa explicación debe ser muy breve."
 
 #ronda 4 
 PROMPT_RONDAFINAL_IA_PLAYER = """Teniendo la palabra {} y la palabra {} dame una palabra que este relacionada de alguna manera con cada una.
                                 Esta relación puede ser de cualquier tipo, y es en español.
-                                Esta palabra empieza por "{}". Devuelve únicamente esa palabra en minúscila y sin tildes."""
+                                Esta palabra empieza por "{}". Devuelve únicamente esa palabra."""
 
 #ronda 5
 PROMPT_PALABRAFINAL_IA_PLAYER = """Teniendo la palabra {} dame otra que este relacionada con ella.

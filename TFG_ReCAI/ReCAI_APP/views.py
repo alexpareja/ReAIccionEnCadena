@@ -409,17 +409,52 @@ def centro_de_la_cadena(request):
         primera_letra = request.session.get('primera_letraRonda2', getattr(palabras, 'p' + str(n_palabra_adivinado), '')[0])
         if (turno_actual == "IA") | (turno_actual == 'IA 1') | (turno_actual == 'IA 2'):
             IA_jugando = 1  
-            palabra_antes =  getattr(palabras, 'p' + str(n_palabra_adivinado-1), '')
-            palabra_despues = getattr(palabras, 'p' + str(n_palabra_adivinado+1), '')
-            prompt = prompts.PROMPT_RONDA2y3_IA_PLAYER_JUGARTURNO.format(palabra_antes, palabra_despues, primera_letra)
-            print(prompt)
-            respuesta = llamadaAPIChatGPT(prompt)
+            palabra_antes = '-'
+            palabra_despues = '-'
+            if n_palabra_adivinado > 4:
+                if 0 < (int(n_palabra_adivinado)-3) <= 3:
+                    if palabras_modificadas[int(n_palabra_adivinado)-4] != '':
+                        palabra_antes = palabras_modificadas[int(n_palabra_adivinado)-4]
+                else:
+                    palabra_antes = getattr(palabras, 'p' + str(n_palabra_adivinado-1), '')
+                if 0 <= (int(n_palabra_adivinado)-3) < 3:
+                    if palabras_modificadas[int(n_palabra_adivinado)-2] != '':
+                        palabra_despues = palabras_modificadas[int(n_palabra_adivinado)-2]
+                else:
+                    palabra_despues = getattr(palabras, 'p' + str(n_palabra_adivinado+1), '')
+            else:
+                if 0 < (int(n_palabra_adivinado)-2) <= 3:
+                    if palabras_modificadas[int(n_palabra_adivinado)-3] != '':
+                        palabra_antes =  palabras_modificadas[int(n_palabra_adivinado)-3]
+                else:
+                    palabra_antes = getattr(palabras, 'p' + str(n_palabra_adivinado-1), '')
+                if 0 <= (int(n_palabra_adivinado)-2) < 3:
+                    if palabras_modificadas[int(n_palabra_adivinado)-1] != '':
+                        palabra_despues = palabras_modificadas[int(n_palabra_adivinado)-1]
+                else:
+                    palabra_despues = getattr(palabras, 'p' + str(n_palabra_adivinado+1), '')
+            #prompt = prompts.PROMPT_RONDA2y3_IA_PLAYER_JUGARTURNO.format(palabra_antes, palabra_despues, primera_letra)
+            #print(prompt)
+            respuestaJSON = json.loads(openai.chat.completions.create(
+                        model="gpt-3.5-turbo",
+                        messages=[
+                            {
+                            "role": "user",
+                            "content": "En base a la palabra "+ palabra_antes+" y a la palabra "+ palabra_despues+", dame una palabra que empiece por "+primera_letra+"-.\nEs posible que solo recibas 1 de las palabras, debes contestar igual.\nDebes responder con un JSON con el siguiente formato:\n{\n\"palabra\": \" \",\n\"explicacion\":\" \"\n}\nLa explicación debe ser muy breve."
+                            }
+                        ],
+                        temperature=1,
+                        max_tokens=300,
+                        ).choices[0].message.content)
+            #respuestaJSON = json.loads(llamadaAPIChatGPT(prompt))
+            respuesta = respuestaJSON["palabra"].upper()
+            explicacionIA = respuestaJSON["explicacion"]
             nombre_campo = 'p' + str(n_palabra_adivinado)
             palabra_a_adivinar = getattr(palabras, nombre_campo, '').upper()
             if (turno_actual == "IA") | (turno_actual == 'IA 2'):
-                respuestaJugadorIA2 = 'Mi respuesta es ' + respuesta
+                respuestaJugadorIA2 = 'Mi respuesta es ' + respuesta + ". Explicación: " + explicacionIA
             else:
-                respuestaJugadorIA1 = 'Mi respuesta es ' + respuesta
+                respuestaJugadorIA1 = 'Mi respuesta es ' + respuesta + ". Explicación: " + explicacionIA
 
             (request, respuesta, palabra_a_adivinar, j1, j2, jugador1, jugador2,
             turno_actual, puntos_jugador1, puntos_jugador2, palabras,
@@ -570,17 +605,38 @@ def una_lleva_a_la_otra(request):
         primera_letra = request.session.get('primera_letraRonda3', getattr(palabras, 'p' + str(n_palabra_adivinado), '')[0])
         if (turno_actual == "IA") | (turno_actual == 'IA 1') | (turno_actual == 'IA 2'):
             IA_jugando = 1  
-            palabra_antes =  getattr(palabras, 'p' + str(n_palabra_adivinado-1), '')
-            palabra_despues = getattr(palabras, 'p' + str(n_palabra_adivinado+1), '')
-            prompt = prompts.PROMPT_RONDA2y3_IA_PLAYER_JUGARTURNO.format(palabra_antes, palabra_despues, primera_letra)
-            print(prompt)
-            respuesta = llamadaAPIChatGPT(prompt)
+            palabra_antes =  '-'
+            palabra_despues = '-'
+            if 0 < (int(n_palabra_adivinado)-2) <= 4:
+                if palabras_modificadas[int(n_palabra_adivinado)-3] != '':
+                    palabra_antes =  palabras_modificadas[int(n_palabra_adivinado)-3]
+            else:
+                palabra_antes = getattr(palabras, 'p' + str(n_palabra_adivinado-1), '')
+            if 0 <= (int(n_palabra_adivinado)-2) < 4:
+                if palabras_modificadas[int(n_palabra_adivinado)-1] != '':
+                    palabra_despues = palabras_modificadas[int(n_palabra_adivinado)-1]
+            else:
+                palabra_despues = getattr(palabras, 'p' + str(n_palabra_adivinado+1), '')
+            respuestaJSON = json.loads(openai.chat.completions.create(
+                        model="gpt-3.5-turbo",
+                        messages=[
+                            {
+                            "role": "user",
+                            "content": "En base a la palabra "+ palabra_antes+" y a la palabra "+ palabra_despues+", dame una palabra que empiece por "+primera_letra+"-.\nEs posible que solo recibas 1 de las palabras, debes contestar igual.\nDebes responder con un JSON con el siguiente formato:\n{\n\"palabra\": \" \",\n\"explicacion\":\" \"\n}\nLa explicación debe ser muy breve."
+                            }
+                        ],
+                        temperature=1,
+                        max_tokens=300,
+                        ).choices[0].message.content)
+            #respuestaJSON = json.loads(llamadaAPIChatGPT(prompt))
+            respuesta = respuestaJSON["palabra"].upper()
+            explicacionIA = respuestaJSON["explicacion"]
             nombre_campo = 'p' + str(n_palabra_adivinado)
             palabra_a_adivinar = getattr(palabras, nombre_campo, '').upper()
             if (turno_actual == "IA") | (turno_actual == 'IA 2'):
-                respuestaJugadorIA2 = 'Mi respuesta es ' + respuesta
+                respuestaJugadorIA2 = 'Mi respuesta es ' + respuesta + ". Explicación: " + explicacionIA
             else:
-                respuestaJugadorIA1 = 'Mi respuesta es ' + respuesta
+                respuestaJugadorIA1 = 'Mi respuesta es ' + respuesta + ". Explicación: " + explicacionIA
 
             (request, respuesta, palabra_a_adivinar, j1, j2, jugador1, jugador2,
             turno_actual, puntos_jugador1, puntos_jugador2, palabras,
@@ -699,31 +755,31 @@ def my_login(request):
     return render(request, 'login.html', {'form': form})
 
 def ultima_cadena(request):
-    #palabras_cargadasR4 = request.session.get('palabras_cargadasR4', False)
+    palabras_cargadasR4 = request.session.get('palabras_cargadasR4', False)
     #prompt = prompts.PROMPT_RONDA4
-    #if palabras_cargadasR4 == False:
-    #    JsonPalabras = llamadaAPIChatGPT(prompt)
-    #    data = json.loads(JsonPalabras)
-    #    request.session['datajson'] = data
-    #    palabras = RondaFinal(
-    #        p1=data["p1"],
-    #        p2=data["p2"],
-    #        p3=data["p3"],
-    #        p4=data["p4"],
-    #        p5=data["p5"],
-    #        p6=data["p6"],
-    #        p7=data["p7"],
-    #        p8=data["p8"],
-    #        p9=data["p9"],
-    #        p10=data["p10"],
-    #        p11=data["p11"],
-    #        p12=data["p12"],
-    #        p13=data["p13"],
-    #        final=data["final"],
-    #        pista=data["pista"])
-    #    palabras.save()
-    #    palabras_cargadasR4 = True
-    #    request.session['palabras_cargadasR4'] = palabras_cargadasR4
+    if palabras_cargadasR4 == False:
+        #JsonPalabras = llamadaAPIChatGPT(prompt)
+        arrayPanel = generarPanel15huecos()
+        request.session['datajson'] = arrayPanel
+        palabras = RondaFinal(
+            p1=arrayPanel[0],
+            p2=arrayPanel[1],
+            p3=arrayPanel[2],
+            p4=arrayPanel[3],
+            p5=arrayPanel[4],
+            p6=arrayPanel[5],
+            p7=arrayPanel[6],
+            p8=arrayPanel[7],
+            p9=arrayPanel[8],
+            p10=arrayPanel[9],
+            p11=arrayPanel[10],
+            p12=arrayPanel[11],
+            p13=arrayPanel[12],
+            final=arrayPanel[13],
+            pista=arrayPanel[14])
+        palabras.save()
+        palabras_cargadasR4 = True
+        request.session['palabras_cargadasR4'] = palabras_cargadasR4
     if (request.session.get('j1') != None) | (request.session.get('j2') != None):
         if (request.session.get('puntos_jugador1', 0) >= request.session.get('puntos_jugador2', 0)):
             jFinal = request.session.get('j1', 'Tipo de j1 no ingresado')
@@ -926,7 +982,7 @@ def fin_juego(request):
     nueva_puntuacion.save()
 
     podio_queryset = Puntuaciones.objects.order_by('-puntos')[:5]
-
+    estop = False
     podio = []
     for index, puntuacion in enumerate(podio_queryset, start=1):
         podio.append({
@@ -934,8 +990,8 @@ def fin_juego(request):
             'jugador': puntuacion.jugador,  
             'puntos': puntuacion.puntos     
         })
-
-    estop = any(puntuacion.jugador == jugadorFinal for puntuacion in podio_queryset)
+        if puntos_jugadorFinal >= puntuacion.puntos:
+            estop = True
 
 
     #Guardar datos en la bbdd de estadísticas
@@ -1217,7 +1273,7 @@ def jugarTurnoUltimaCadena(request, jFinal, jugadorFinal,
                             n_palabra_adivinado, letras_mostradas,
                             primera_letra, fin, respuesta, palabra_a_adivinar
                             ,comodines, idPalabra, juego_acabado):
-    if quitar_acentos(respuesta) == quitar_acentos(palabra_a_adivinar):
+    if quitar_acentos(respuesta).upper() == quitar_acentos(palabra_a_adivinar).upper():
         palabras_modificadas[int(n_palabra_adivinado/2)-1] = palabra_a_adivinar
         if n_palabra_adivinado >= 12:
             fin=1
@@ -1307,7 +1363,7 @@ def quitar_acentos(texto):
 def generarPanel7huecos():
     array = []
     primer_request = openai.chat.completions.create(
-                    model="gpt-3.5-turbo-0125",
+                    model="gpt-3.5-turbo",
                     messages=[
                         {
                         "role": "system",
@@ -1315,7 +1371,7 @@ def generarPanel7huecos():
                         },
                         {
                         "role": "user",
-                        "content": "Tienes que proporcionarme 2 palabras, p1 y p7 aleatorias de temas diversos que no tengan nada que ver entre ellas. Hay que devolver únicamente las palabras en el siguiente formato JSON:\n{\n\"p1\":\"\",\n\"p7\":\"\"\n}"
+                        "content": "Tienes que proporcionarme 2 palabras, p1 y p7, aleatorias de temas diversos que no tengan nada que ver entre ellas. Hay que devolver únicamente las palabras en el siguiente formato JSON:\n{\n\"p1\":\"\",\n\"p7\":\"\"\n}"
                         }
                     ],
                     temperature=1.65,
@@ -1324,7 +1380,7 @@ def generarPanel7huecos():
     p1 = json.loads(primer_request.choices[0].message.content)["p1"]
     p7 = json.loads(primer_request.choices[0].message.content)["p7"]
     segundo_request = openai.chat.completions.create(
-                    model="gpt-3.5-turbo-0125",
+                    model="gpt-3.5-turbo",
                     messages=[
                         {
                         "role": "system",
@@ -1341,7 +1397,7 @@ def generarPanel7huecos():
     p2 = json.loads(segundo_request.choices[0].message.content)["p2"]
     p6 = json.loads(segundo_request.choices[0].message.content)["p6"]
     tercer_request = openai.chat.completions.create(
-                    model="gpt-3.5-turbo-0125",
+                    model="gpt-3.5-turbo",
                     messages=[
                         {
                         "role": "system",
@@ -1358,7 +1414,7 @@ def generarPanel7huecos():
     p3 = json.loads(tercer_request.choices[0].message.content)["p3"]
     p5 = json.loads(tercer_request.choices[0].message.content)["p5"]
     cuarto_request = openai.chat.completions.create(
-                    model="gpt-3.5-turbo-0125",
+                    model="gpt-3.5-turbo",
                     messages=[
                         {
                         "role": "system",
@@ -1384,25 +1440,97 @@ def generarPanel7huecos():
 
 def generarPanel15huecos():
     array = []
-    primer_request = openai.chat.completions
+    primer_request = openai.chat.completions.create(
+                model="gpt-3.5-turbo",
+                messages=[
+                    {
+                    "role": "system",
+                    "content": "Eres un generador de palabras creativo para un programa de televisión de España"
+                    },
+                    {
+                    "role": "user",
+                    "content": "Tienes que proporcionarme 4 palabras, p1, p7, p9 y p15 aleatorias de temas diversos que no tengan nada que ver entre ellas. Hay que devolver únicamente las palabras en el siguiente formato JSON:\n{\n\"p1\":\"\",\n\"p7\":\"\",\n\"p9\":\"\",\n\"p15\":\"\"\n}"
+                    }
+                ],
+                temperature=1.4,
+                max_tokens=150,
+                    )
     p1 = json.loads(primer_request.choices[0].message.content)["p1"]
     p7 = json.loads(primer_request.choices[0].message.content)["p7"]
     p9 = json.loads(primer_request.choices[0].message.content)["p9"]
     p15 = json.loads(primer_request.choices[0].message.content)["p15"]
-    segundo_request = openai.chat.completions
-    p2 = json.loads(primer_request.choices[0].message.content)["p2"]
-    p6 = json.loads(primer_request.choices[0].message.content)["p6"]
-    p10 = json.loads(primer_request.choices[0].message.content)["p10"]
-    p14 = json.loads(primer_request.choices[0].message.content)["p14"]
-    tercer_request = openai.chat.completions
-    p3 = json.loads(primer_request.choices[0].message.content)["p3"]
-    p5 = json.loads(primer_request.choices[0].message.content)["p5"]
-    p11 = json.loads(primer_request.choices[0].message.content)["p11"]
-    p13 = json.loads(primer_request.choices[0].message.content)["p13"]
-    cuarto_request = openai.chat.completions
-    p4 = json.loads(primer_request.choices[0].message.content)["p4"]
-    p8 = json.loads(primer_request.choices[0].message.content)["p8"]
-    p12 = json.loads(primer_request.choices[0].message.content)["p12"]
+    segundo_request = openai.chat.completions.create(
+                model="gpt-3.5-turbo",
+                messages=[
+                    {
+                    "role": "system",
+                    "content": "Eres el generador de palabras de un programa de televisión de España y debes hacer relaciones con sentido y reales "
+                    },
+                    {
+                    "role": "user",
+                    "content": "Tienes que devolverme cuatro palabras, p2 debe estar relacionada con la palabra "+ p1 +". p6 con la palabra de estar relacionada con la palabra "+ p7 +". p10 debe estar relacionada con la palabra "+ p9 +". p14 debe estar relacionada con la palabra "+ p15 +". Devuelve las palabras en el siguiente formato:\n{\n\"p2\":\"\",\n\"p6\":\"\",\n\"p10\":\"\",\n\"p14\":\"\"\n}"
+                    }
+                ],
+                temperature=0.89,
+                max_tokens=150,
+                )
+    p2 = json.loads(segundo_request.choices[0].message.content)["p2"]
+    p6 = json.loads(segundo_request.choices[0].message.content)["p6"]
+    p10 = json.loads(segundo_request.choices[0].message.content)["p10"]
+    p14 = json.loads(segundo_request.choices[0].message.content)["p14"]
+    tercer_request = openai.chat.completions.create(
+                model="gpt-3.5-turbo",
+                messages=[
+                    {
+                    "role": "system",
+                    "content": "Eres el generador de palabras de un programa de televisión de España y debes hacer relaciones con sentido y reales "
+                    },
+                    {
+                    "role": "user",
+                    "content": "Tienes que devolverme cuatro palabras. p3 debe estar relacionada con la palabra "+ p2 + " y no tiene que estar relacionado con nada que tenga que ver con la palabra "+ p1 + ". p5 tiene que relacionarse con la palabra "+ p6 + " y no debe tener relación con nada que tenga que ver con "+ p7 + ".  p11 debe relacionarse con la palabra "+ p10 + ", sin tocar temas relacionados con "+ p9 + ". p13 debe relacionarse con "+ p14 + " sin tocar temas que tengan que ver con "+ p15 + ". Ninguna palabra debe repetirse. Devuelve las palabras en el siguiente formato:\n{\n\"p3\":\"\",\n\"p5\":\"\",\n\"p11\":\"\",\n\"p13\":\"\"\n}"
+                    }
+                ],
+                temperature=0.83,
+                max_tokens=256,
+                )
+    p3 = json.loads(tercer_request.choices[0].message.content)["p3"]
+    p5 = json.loads(tercer_request.choices[0].message.content)["p5"]
+    p11 = json.loads(tercer_request.choices[0].message.content)["p11"]
+    p13 = json.loads(tercer_request.choices[0].message.content)["p13"]
+    cuarto_request = openai.chat.completions.create(
+                model="gpt-3.5-turbo",
+                messages=[
+                    {
+                    "role": "system",
+                    "content": "Eres el generador de palabras de un programa de televisión de España y debes hacer relaciones con sentido y reales "
+                    },
+                    {
+                    "role": "user",
+                    "content": "Tienes que devolverme tres palabras. p4 que debe estar relacionada si o si tanto con "+p3+" como con "+p5+". p8 debe estar relacionada con "+p7+" y con "+p9+" a la vez. p12 debe estar relacionada con "+p11+" y "+p13+" a la vez y tiene que ver con las dos palabras. La relación tiene que tener sentido para ambos casos, no puede estar relacionada solo con una de ellas . Ninguna de las palabras puede ser ni estar relacionada con ninguna de las siguientes palabras: "+p1+", "+p2+", "+p6+", "+p14+", "+p15+" ni repetirse. Devuelve la palabra en el siguiente formato:\n{\n\"p4\":\"\",\n\"p8\":\"\",\n\"p12\":\"\"\n}"
+                    }
+                ],
+                temperature=0.51,
+                max_tokens=256,
+                )
+    p4 = json.loads(cuarto_request.choices[0].message.content)["p4"]
+    p8 = json.loads(cuarto_request.choices[0].message.content)["p8"]
+    p12 = json.loads(cuarto_request.choices[0].message.content)["p12"]
 
     array.insert(0, p1)
+    array.insert(1, p2)
+    array.insert(2, p3)
+    array.insert(3, p4)
+    array.insert(4, p5)
+    array.insert(5, p6)
+    array.insert(6, p7)
+    array.insert(7, p8)
+    array.insert(8, p9)
+    array.insert(9, p10)
+    array.insert(10, p11)
+    array.insert(11, p12)
+    array.insert(12, p13)
+    array.insert(13, p14)
+    array.insert(14, p15)
+
+    return array
 
