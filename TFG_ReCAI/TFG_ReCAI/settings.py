@@ -140,3 +140,7 @@ import os
 OPENAI_API_KEY = os.environ.get('OPENAI_API_KEY', 'sk-proj-rok40QwvyI5LREDWOhvzT3BlbkFJXpQAxLz7JIRqzTluhh6V')
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'
+SESSION_COOKIE_AGE = 3600
+SESSION_SAVE_EVERY_REQUEST = True
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True  # Expirar la sesión cuando el navegador se cierre
+

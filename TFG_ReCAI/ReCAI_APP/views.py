@@ -22,6 +22,16 @@ openai.api_key = settings.OPENAI_API_KEY
 
 
 def index(request):
+    user_id = request.session.get('_auth_user_id')
+    user_backend = request.session.get('_auth_user_backend')
+    user_hash = request.session.get('_auth_user_hash')
+
+    request.session.flush()
+
+    request.session['_auth_user_id'] = user_id
+    request.session['_auth_user_backend'] = user_backend
+    request.session['_auth_user_hash'] = user_hash
+
     form = OpcionForm(request.POST or None)
     if request.method == 'POST':
         print(form.errors)
