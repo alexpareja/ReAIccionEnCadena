@@ -41,7 +41,7 @@
             {% else %}
                 <div id="campo_palabra">
                     <label for="respuesta" class="registro-label">Escriba su opción:</label>
-                    <input type="text" class="registro-input" name="respuesta" placeholder='{{primera_letra}}' />
+                    <input id = "campo_respuesta" type="text" class="registro-input" name="respuesta" placeholder='{{primera_letra}}' />
                 </div>
                 <input type="submit" class="play-button" value="Enviar" onclick="comprobarPalabra('{{palabra_a_adivinar}}')">
             {% endif %}
@@ -49,4 +49,3 @@
     {% endif %}
 
 </form>
-
