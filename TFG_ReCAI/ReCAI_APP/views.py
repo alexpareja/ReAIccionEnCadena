@@ -243,7 +243,7 @@ def palabras_encadenadas(request):
         palabra = getattr(palabras, nombre_campo, '')
         palabra_modificada = ''
         if i == n_palabra_adivinado:
-            guiones = '_ ' * (len(palabra) - 1 - i + n_palabra_adivinado)
+            guiones = '_ ' * (len(palabra) - 1)
             palabra_modificada = primera_letra.upper() + guiones + f" ({len(palabra)})"
         elif i > n_palabra_adivinado:
             palabra_modificada = '' 
