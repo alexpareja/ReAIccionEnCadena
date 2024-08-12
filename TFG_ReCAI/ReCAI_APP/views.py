@@ -257,6 +257,7 @@ def palabras_encadenadas(request):
     puntos_jugador2 = request.session.get('puntos_jugador2', 0)
     IA_jugando = 0
     palabras_modificadas = []
+    primer_intento = request.session.get('primer_intento', 0)
 
     for i in range(1, 7):
         nombre_campo = 'p' + str(i)
@@ -279,45 +280,49 @@ def palabras_encadenadas(request):
 
     html = 'palabras_encadenadas.html'
     if (turno_actual == "IA") | (turno_actual == 'IA 1') | (turno_actual == 'IA 2'):
-        IA_jugando = 1
-        tema = getattr(palabras, 'tema', '')
-        n_letras = len(getattr(palabras, 'p' + str(n_palabra_adivinado), ''))
-        prompt = prompts.PROMPT_RONDA1_IA_PLAYER.format(
-            tema, primera_letra, n_letras)
-        print(prompt)
-        # respuesta = llamadaAPIChatGPT(prompt).upper()
-        jsonrespuesta = openai.chat.completions.create(
-            model="gpt-4o-mini",
-            messages=[
-                {
-                    "role": "system",
-                    "content": "Debes responder palabras relacionadas a un tema que te indica el usuario. Debes relacionar tu respuesta a este tema obligatoriamente."
-                },
-                {
-                    "role": "user",
-                    "content": "Dame una palabra que se relacione con el tema " + tema + " y que empiece por " + primera_letra + "-. La palabra debe tener" + str(n_letras) + " letras en español. Devuélveme un JSON con la siguiente estructura:\n{\n\"palabra\": \"\",\n\"explicacion\":\"\"\n}\nLa explicación debe ser muy breve."
-                }
-            ],
-            temperature=1.2,
-            max_tokens=100,
-            response_format={"type": "json_object"}
-        )
-        dataRespuesta = json.loads(jsonrespuesta.choices[0].message.content)
-        respuesta = dataRespuesta['palabra'].upper()
-        if (turno_actual == 'IA 1'):
-            respuestaJugadorIA1 = 'Mi respuesta es ' + respuesta + \
-                '. Explicación: ' + dataRespuesta['explicacion']
-        else:
-            respuestaJugadorIA2 = 'Mi respuesta es ' + respuesta + \
-                '. Explicación: ' + dataRespuesta['explicacion']
-        (request, html, j1, j2, jugador1, jugador2,
-         puntos_jugador1, puntos_jugador2, turno_actual, palabras,
-         palabras_modificadas, n_palabra_adivinado, letras_mostradas,
-         primera_letra, fin, respuesta, palabra_a_adivinar) = jugarTurnoPrimeraRonda(
-            request, html, j1, j2, jugador1, jugador2,
+        if primer_intento == 1:
+            IA_jugando = 1
+            tema = getattr(palabras, 'tema', '')
+            n_letras = len(getattr(palabras, 'p' + str(n_palabra_adivinado), ''))
+            prompt = prompts.PROMPT_RONDA1_IA_PLAYER.format(
+                tema, primera_letra, n_letras)
+            print(prompt)
+            # respuesta = llamadaAPIChatGPT(prompt).upper()
+            jsonrespuesta = openai.chat.completions.create(
+                model="gpt-4o-mini",
+                messages=[
+                    {
+                        "role": "system",
+                        "content": "Debes responder palabras relacionadas a un tema que te indica el usuario. Debes relacionar tu respuesta a este tema obligatoriamente."
+                    },
+                    {
+                        "role": "user",
+                        "content": "Dame una palabra que se relacione con el tema " + tema + " y que empiece por " + primera_letra + "-. La palabra debe tener" + str(n_letras) + " letras en español. Devuélveme un JSON con la siguiente estructura:\n{\n\"palabra\": \"\",\n\"explicacion\":\"\"\n}\nLa explicación debe ser muy breve."
+                    }
+                ],
+                temperature=1.2,
+                max_tokens=100,
+                response_format={"type": "json_object"}
+            )
+            dataRespuesta = json.loads(jsonrespuesta.choices[0].message.content)
+            respuesta = dataRespuesta['palabra'].upper()
+            if (turno_actual == 'IA 1'):
+                respuestaJugadorIA1 = 'Mi respuesta es ' + respuesta + \
+                    '. Explicación: ' + dataRespuesta['explicacion']
+            else:
+                respuestaJugadorIA2 = 'Mi respuesta es ' + respuesta + \
+                    '. Explicación: ' + dataRespuesta['explicacion']
+            (request, html, j1, j2, jugador1, jugador2,
             puntos_jugador1, puntos_jugador2, turno_actual, palabras,
             palabras_modificadas, n_palabra_adivinado, letras_mostradas,
-            primera_letra, fin, respuesta, palabra_a_adivinar)
+            primera_letra, fin, respuesta, palabra_a_adivinar) = jugarTurnoPrimeraRonda(
+                request, html, j1, j2, jugador1, jugador2,
+                puntos_jugador1, puntos_jugador2, turno_actual, palabras,
+                palabras_modificadas, n_palabra_adivinado, letras_mostradas,
+                primera_letra, fin, respuesta, palabra_a_adivinar)
+        else:
+            primer_intento = 1
+            request.session['primer_intento'] = primer_intento
     else:
         IA_jugando = 0
         if request.method == 'POST':
