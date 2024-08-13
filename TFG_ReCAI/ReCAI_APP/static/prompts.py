@@ -50,23 +50,21 @@ PROMPT_RONDA2Y3_IA_PLAYER_ELEGIRPALABRA = """
 PROMPT_RONDA2y3_IA_PLAYER_JUGARTURNO = "En base a la palabra {} y a la palabra {}, dame una palabra que empiece por {}-.\nEs posible que solo recibas 1 de las palabras, debes contestar igual.\nDebes responder con un JSON con el siguiente formato:\n{\n\"palabra\": \" \",\n\"explicacion\":\" \"\n}\nLa explicación debe ser muy breve."
 
 #ronda 4 
-PROMPT_RONDAFINAL_IA_PLAYER = """Teniendo la palabra {} y la palabra {} dame una palabra que este relacionada de alguna manera con cada una.
-                                Esta relación puede ser de cualquier tipo, y es en español.
-                                Esta palabra empieza por "{}". Devuelve únicamente esa palabra."""
+PROMPT_RONDAFINAL_IA_PLAYER = "En base a la palabra {} y a la palabra {}, dame una palabra que este relacionada de alguna manera con cada una que empiece por {}-. Esta relación puede ser de cualquier tipo, y es en español. Debes responder con un JSON con el siguiente formato:{\"palabra\": \" \",\"explicacion\":\" \"}La explicación debe ser muy breve."
 
 #ronda 5
-PROMPT_PALABRAFINAL_IA_PLAYER = """Teniendo la palabra {} dame otra que este relacionada con ella.
+PROMPT_PALABRAFINAL_IA_PLAYER = """Teniendo la palabra {} debes contestar otra que tenga algún tipo de relación con ella.
                                 Esta palabra sigue la siguiente estructura: {}
-                                Devuelve únicamente esa palabra en mayúsculas"""
+                                Actualmente estas en un concurso de televisión y puedes ganar {} € si adivinas esta palabra. Tienes la posibilidad de solicitar una pista (otra palabra relacionada), pero la cantidad de dinero se reducirá a la mitad.
+                                Debes responder con un JSON con el siguiente formato:\n{\n\"palabra\": \" \",\n\"quiero_pista\": \" \",\n\"explicacion\":\" \"\n}\nLa explicación debe ser muy breve, y si quieres una pista debes indicar en el campo pista \'SI\'."""
 #Este decide si quiere la pista o no y lo devuelve en un json
 #                {
 #                "quiero_pista": "SI",
 #                "respuesta": ""
 #                }
 
-PROMPT_PALABRAFINALCONPISTA_IA_PLAYER = """Teniendo la palabra {} y la palabra {} dame otra que este relacionada con ella.
+PROMPT_PALABRAFINALCONPISTA_IA_PLAYER = """En base a la palabra {} y a la palabra {}, dame una palabra que este relacionada de alguna manera con cada una de ellas.
                                 Esta palabra sigue la siguiente estructura: {}
-                                Devuelve únicamente esa palabra en mayúsculas
-                                """
+                                Debes responder con un JSON con el siguiente formato:\n{\n\"palabra\": \" \",\n\"explicacion\":\" \"\n}\nLa explicación debe ser muy breve."""
 #Este recibe la pista tambien y solo devuelve la palabra
 
