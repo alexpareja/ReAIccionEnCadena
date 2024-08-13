@@ -176,20 +176,24 @@ def instrucciones_ultima_palabra(request):
 def palabras_encadenadas(request):
     palabras_cargadasR1 = request.session.get('palabras_cargadasR1', False)
     prompt = prompts.PromptPrueba1
+    system_prompts = [
+    "Eres un generador de palabras únicas y reales en español.",
+    "Proporciona una palabra real y única en español.",
+    "Genera una palabra que sea válida en el idioma español. "]
     while not palabras_cargadasR1:
         response = openai.chat.completions.create(
             model="gpt-4o-mini",
             messages=[
                 {
                     "role": "system",
-                    "content": "Eres un generador de temas para un concurso español."
+                    "content": random.choice(system_prompts)
                 },
                 {
                     "role": "user",
                     "content": "Piensa en un tema de una sola palabra que se pueda encontrar en el diccionario español y damelo con la siguiente estructura JSON:\n{\n  \"tema\": \"\"\n}"
                 }
             ],
-            temperature=1.75,
+            temperature=1.65,
             max_tokens=20,
             response_format={"type": "json_object"}
         )
@@ -1491,19 +1495,23 @@ def quitar_acentos(texto):
 
 def generarPanel7huecos():
     array = []
+    system_prompts = [
+    "Eres un generador de palabras únicas y reales en español. La palabra no debe repetirse.",
+    "Proporciona una palabra real y única en español que no se haya utilizado antes.",
+    "Genera una palabra única que sea válida en el idioma español y que no se repita."]
     primer_request = openai.chat.completions.create(
         model="gpt-4o-mini",
         messages=[
             {
                 "role": "system",
-                "content": "Eres un generador de palabras reales y únicas (no se pueden repetir) para un programa de televisión de España "
+                "content": random.choice(system_prompts)
             },
             {
                 "role": "user",
                 "content": "Proporciona una palabra, p4, aleatoria no inventada que se pueda encontrar en el diccionario español. Hay que devolver únicamente la palabra en el siguiente formato JSON:\n{\n\"p4\":\"\"}"
             }
         ],
-        temperature=1.25,
+        temperature=1.35,
         max_tokens=100,
         response_format={"type": "json_object"}
     )
@@ -1514,7 +1522,7 @@ def generarPanel7huecos():
         messages=[
             {
                 "role": "system",
-                "content": "Eres un generador de palabras reales y únicas (no se pueden repetir) para un programa de televisión de España"
+                "content": "Generas una lista de palabras para un programa de televisión de España "
             },
             {
                 "role": "user",
@@ -1533,7 +1541,7 @@ def generarPanel7huecos():
         messages=[
             {
                 "role": "system",
-                "content": "Eres un generador de palabras reales y únicas (no se pueden repetir) para un programa de televisión de España"
+                "content": "Generas una lista de palabras para un programa de televisión de España"
             },
             {
                 "role": "user",
@@ -1551,7 +1559,7 @@ def generarPanel7huecos():
         messages=[
             {
                 "role": "system",
-                "content": "Eres un generador de palabras reales y únicas (no se pueden repetir) para un programa de televisión de España"
+                "content": "Generas una lista de palabras para un programa de televisión de España"
             },
             {
                 "role": "user",
@@ -1569,7 +1577,7 @@ def generarPanel7huecos():
         messages=[
             {
                 "role": "system",
-                "content": "Eres un generador de palabras reales y únicas (no se pueden repetir) para un programa de televisión de España"
+                "content": "Generas una lista de palabras para un programa de televisión de España"
             },
             {
                 "role": "user",
@@ -1588,7 +1596,7 @@ def generarPanel7huecos():
         messages=[
             {
                 "role": "system",
-                "content": "Eres un generador de palabras reales y únicas (no se pueden repetir) para un programa de televisión de España"
+                "content": "Generas una lista de palabras para un programa de televisión de España "
             },
             {
                 "role": "user",
@@ -1614,19 +1622,23 @@ def generarPanel7huecos():
 
 def generarPanel15huecos():
     array = []
+    system_prompts = [
+    "Eres un generador de palabras únicas y reales en español. La palabra no debe repetirse.",
+    "Proporciona una palabra real y única en español que no se haya utilizado antes.",
+    "Genera una palabra única que sea válida en el idioma español y que no se repita."]
     primer_request = openai.chat.completions.create(
         model="gpt-4o-mini",
         messages=[
             {
                 "role": "system",
-                "content": "Eres un generador de palabras reales y únicas (no se pueden repetir) para un programa de televisión de España "
+                "content": random.choice(system_prompts)
             },
             {
                 "role": "user",
                 "content": "Proporciona una palabra, p8, aleatoria no inventada que se pueda encontrar en el diccionario español. Hay que devolver únicamente la palabra en el siguiente formato JSON:\n{\n\"p8\":\"\"}"
             }
         ],
-        temperature=1.60,
+        temperature=1.50,
         max_tokens=100,
         response_format={"type": "json_object"}
     )
@@ -1637,7 +1649,7 @@ def generarPanel15huecos():
         messages=[
             {
                 "role": "system",
-                "content": "Eres un generador de palabras reales y únicas (no se pueden repetir) para un programa de televisión de España"
+                "content": "Generas una lista de palabras para un programa de televisión de España"
             },
             {
                 "role": "user",
@@ -1656,7 +1668,7 @@ def generarPanel15huecos():
         messages=[
             {
                 "role": "system",
-                "content": "Eres un generador de palabras reales y únicas (no se pueden repetir) para un programa de televisión de España"
+                "content": "Generas una lista de palabras para un programa de televisión de España"
             },
             {
                 "role": "user",
@@ -1675,7 +1687,7 @@ def generarPanel15huecos():
         messages=[
             {
                 "role": "system",
-                "content": "Eres un generador de palabras reales y únicas (no se pueden repetir) para un programa de televisión de España"
+                "content": "Generas una lista de palabras para un programa de televisión de España"
             },
             {
                 "role": "user",
@@ -1695,7 +1707,7 @@ def generarPanel15huecos():
         messages=[
             {
                 "role": "system",
-                "content": "Eres un generador de palabras reales y únicas (no se pueden repetir) para un programa de televisión de España"
+                "content": "Generas una lista de palabras para un programa de televisión de España"
             },
             {
                 "role": "user",
@@ -1714,7 +1726,7 @@ def generarPanel15huecos():
         messages=[
             {
                 "role": "system",
-                "content": "Eres un generador de palabras reales y únicas (no se pueden repetir) para un programa de televisión de España"
+                "content": "Generas una lista de palabras para un programa de televisión de España"
             },
             {
                 "role": "user",
@@ -1733,7 +1745,7 @@ def generarPanel15huecos():
         messages=[
             {
                 "role": "system",
-                "content": "Eres un generador de palabras reales y únicas (no se pueden repetir) para un programa de televisión de España"
+                "content": "Generas una lista de palabras para un programa de televisión de España"
             },
             {
                 "role": "user",
@@ -1752,7 +1764,7 @@ def generarPanel15huecos():
         messages=[
             {
                 "role": "system",
-                "content": "Eres un generador de palabras reales y únicas (no se pueden repetir) para un programa de televisión de España"
+                "content": "Generas una lista de palabras para un programa de televisión de España"
             },
             {
                 "role": "user",
