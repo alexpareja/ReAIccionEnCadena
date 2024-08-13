@@ -1499,7 +1499,7 @@ def generarPanel7huecos():
     "Eres un generador de palabras únicas y reales en español. La palabra no debe repetirse.",
     "Proporciona una palabra real y única en español que no se haya utilizado antes.",
     "Genera una palabra única que sea válida en el idioma español y que no se repita."]
-    primer_request = openai.chat.completions.create(
+    p4_request = openai.chat.completions.create(
         model="gpt-4o-mini",
         messages=[
             {
@@ -1515,28 +1515,66 @@ def generarPanel7huecos():
         max_tokens=100,
         response_format={"type": "json_object"}
     )
-    p4 = json.loads(primer_request.choices[0].message.content)["p4"]
+    p4 = json.loads(p4_request.choices[0].message.content)["p4"]
 
-    segundo_request = openai.chat.completions.create(
+    # p3p5_request = openai.chat.completions.create(
+    #     model="gpt-4o-mini",
+    #     messages=[
+    #         {
+    #             "role": "system",
+    #             "content": "Generas una lista de palabras para un programa de televisión de España "
+    #         },
+    #         {
+    #             "role": "user",
+    #             "content": "Proporciona dos palabras relacionadas con" + p4 + "que no estén relacionadas entre sí y que no se repitan ni sea" + p4 + "Devuelve únicamente las palabras en el siguiente formato JSON:\n{\n\"p3\":\"\",\n\"p5\":\"\"\n}"
+    #         }
+    #     ],
+    #     temperature=0.73,
+    #     max_tokens=100,
+    #     response_format={"type": "json_object"}
+    # )
+    # p3 = json.loads(p3p5_request.choices[0].message.content)["p3"]
+    # p5 = json.loads(p3p5_request.choices[0].message.content)["p5"]
+
+    p3_request = openai.chat.completions.create(
         model="gpt-4o-mini",
         messages=[
             {
                 "role": "system",
-                "content": "Generas una lista de palabras para un programa de televisión de España "
+                "content": "Generas una lista de palabras para un programa de televisión de España"
             },
             {
                 "role": "user",
-                "content": "Proporciona dos palabras relacionadas con" + p4 + "que no estén relacionadas entre sí y que no se repitan ni sea" + p4 + "Devuelve únicamente las palabras en el siguiente formato JSON:\n{\n\"p3\":\"\",\n\"p5\":\"\"\n}"
+                        "content": "Porporciona una palabra p3, que no sea y este relacionda con" + p4 + ". Devuelve la palabra en el siguiente formato JSON:\n{\n\"p3\":\"\"}"
             }
         ],
         temperature=0.73,
         max_tokens=100,
         response_format={"type": "json_object"}
     )
-    p3 = json.loads(segundo_request.choices[0].message.content)["p3"]
-    p5 = json.loads(segundo_request.choices[0].message.content)["p5"]
+    p3 = json.loads(p3_request.choices[0].message.content)["p3"]   
+    
+    
+    p5_request = openai.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[
+            {
+                "role": "system",
+                "content": "Generas una lista de palabras para un programa de televisión de España"
+            },
+            {
+                "role": "user",
+                        "content": "Porporciona una palabra p5, que no sea y este relacionda con" + p4 + " que no sea ni este relacionda con " + p3 + ". Devuelve la palabra en el siguiente formato JSON:\n{\n\"p5\":\"\"}"
+            }
+        ],
+        temperature=0.73,
+        max_tokens=100,
+        response_format={"type": "json_object"}
+    )
+    p5 = json.loads(p5_request.choices[0].message.content)["p5"]
 
-    tercer_request = openai.chat.completions.create(
+
+    p2_request = openai.chat.completions.create(
         model="gpt-4o-mini",
         messages=[
             {
@@ -1552,9 +1590,9 @@ def generarPanel7huecos():
         max_tokens=100,
         response_format={"type": "json_object"}
     )
-    p2 = json.loads(tercer_request.choices[0].message.content)["p2"]
+    p2 = json.loads(p2_request.choices[0].message.content)["p2"]
 
-    cuarto_request = openai.chat.completions.create(
+    p1_request = openai.chat.completions.create(
         model="gpt-4o-mini",
         messages=[
             {
@@ -1570,9 +1608,9 @@ def generarPanel7huecos():
         max_tokens=100,
         response_format={"type": "json_object"}
     )
-    p1 = json.loads(cuarto_request.choices[0].message.content)["p1"]
+    p1 = json.loads(p1_request.choices[0].message.content)["p1"]
 
-    quinto_request = openai.chat.completions.create(
+    p6_request = openai.chat.completions.create(
         model="gpt-4o-mini",
         messages=[
             {
@@ -1588,10 +1626,10 @@ def generarPanel7huecos():
         max_tokens=100,
         response_format={"type": "json_object"}
     )
-    p6 = json.loads(quinto_request.choices[0].message.content)["p6"]
+    p6 = json.loads(p6_request.choices[0].message.content)["p6"]
 
 
-    sexto_request = openai.chat.completions.create(
+    p7_request = openai.chat.completions.create(
         model="gpt-4o-mini",
         messages=[
             {
@@ -1607,7 +1645,7 @@ def generarPanel7huecos():
         max_tokens=100,
         response_format={"type": "json_object"}
     )
-    p7 = json.loads(sexto_request.choices[0].message.content)["p7"]
+    p7 = json.loads(p7_request.choices[0].message.content)["p7"]
 
 
     array.insert(0, p1)
