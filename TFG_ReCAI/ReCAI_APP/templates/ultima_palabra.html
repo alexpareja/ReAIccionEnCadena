@@ -15,11 +15,13 @@
                 <li id="p3">{{ pista_mostrada }}</li>
         </div>
         {% if pistaMostrada %}
+        {% if IA_jugando == 0 %}
         <form method="post" id="clueForm">
             {% csrf_token %}
             <input type="hidden" name="pista" value="yes"> 
             <input type="submit" class ="comodin" value="Solicitar pista">
         </form>
+        {% endif %}
         {% endif %}
     </div>
     

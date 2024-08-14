@@ -177,27 +177,30 @@ def palabras_encadenadas(request):
     palabras_cargadasR1 = request.session.get('palabras_cargadasR1', False)
     prompt = prompts.PromptPrueba1
     system_prompts = [
-        "Eres un generador de palabras únicas y reales en español.",
-        "Proporciona una palabra real y única en español.",
-        "Genera una palabra que sea válida en el idioma español. "]
+        "Eres un generador de palabras únicas y reales en español.", #1 like
+        "Proporciona dos palabras reales y únicas en español.", #2 like
+        "Genera dos palabras que sean válidas en el idioma español. ", #1 like 
+        "Eres un generador de temas para un concurso. Debes ser creativo a la hora de ofrecer temas, abarcando cualquier tema en español."]
+    sys_pr = random.choice(system_prompts)
+    print(sys_pr)
     while not palabras_cargadasR1:
         response = openai.chat.completions.create(
             model="gpt-4o-mini",
             messages=[
                 {
                     "role": "system",
-                    "content": random.choice(system_prompts)
+                    "content": sys_pr
                 },
                 {
                     "role": "user",
-                    "content": "Piensa en un tema de una sola palabra que se pueda encontrar en el diccionario español y damelo con la siguiente estructura JSON:\n{\n  \"tema\": \"\"\n}"
+                    "content": "Piensa en un tema (máximo 2 palabras) y damelo con la siguiente estructura JSON:\n{\n  \"tema\": \"\"\n}"
                 }
             ],
             temperature=1.65,
             max_tokens=20,
             response_format={"type": "json_object"}
         )
-
+        print(response)
         # JsonPalabras = llamadaAPIChatGPT(prompt)
         tema = json.loads(response.choices[0].message.content)["tema"]
 
@@ -878,6 +881,8 @@ def ultima_cadena(request):
     if palabras_cargadasR4 == False:
         # JsonPalabras = llamadaAPIChatGPT(prompt)
         arrayPanel = generarPanel15huecos()
+        while len(set(arrayPanel)) != 15:
+            arrayPanel = generarPanel15huecos()
         request.session['datajson'] = arrayPanel
         palabras = RondaFinal(
             p1=arrayPanel[0],
@@ -1051,8 +1056,7 @@ def ultima_palabra(request):
 
                 # prompt = prompts.PROMPT_PALABRAFINAL_IA_PLAYER.format(
                 #    palabra_inicial, solucion_mostrada)
-                prompt = "Teniendo la palabra " + palabra_inicial + " debes contestar otra que tenga algún tipo de relación con ella. Esta palabra sigue la siguiente estructura: " + solucion_mostrada + " Actualmente estas en un concurso de televisión y puedes ganar " + puntos_jugadorFinal + \
-                    " € si adivinas esta palabra. Tienes la posibilidad de solicitar una pista (otra palabra relacionada), pero la cantidad de dinero se reducirá a la mitad. Debes responder con un JSON con el siguiente formato:\n{\n\"palabra\": \" \",\n\"quiero_pista\": \" \",\n\"explicacion\":\" \"\n}\nLa explicación debe ser muy breve, y si quieres una pista debes indicar en el campo pista \'SI\'."
+                prompt = "Teniendo la palabra " + palabra_inicial + " debes contestar otra que tenga algún tipo de relación con ella. Esta palabra sigue la siguiente estructura: " + solucion_mostrada + " Actualmente estas en un concurso de televisión y puedes ganar " + str(puntos_jugadorFinal) + "€ si adivinas esta palabra. Tienes la posibilidad de solicitar una pista (otra palabra relacionada), pero la cantidad de dinero se reducirá a la mitad. Debes responder con un JSON con el siguiente formato:\n{\n\"palabra\": \" \",\n\"quiero_pista\": \" \",\n\"explicacion\":\" \"\n}\nLa explicación debe ser muy breve, y si quieres una pista debes indicar en el campo pista \'SI\'."
                 print(prompt)
                 jsonRespuesta = llamadaAPIChatGPT(prompt)
                 data = json.loads(jsonRespuesta)
@@ -1595,7 +1599,7 @@ def generarPanel7huecos():
             },
             {
                 "role": "user",
-                "content": "Porporciona una palabra p3, que no sea y este relacionda con" + p4 + ". mediante " + relaciones[random.randint(0, 13)] + " Devuelve la palabra en el siguiente formato JSON:\n{\n\"p3\":\"\"}"
+                "content": "Porporciona una palabra p3, que este relacionda con" + p4 + ". mediante " + relaciones[random.randint(0, 13)] + " Las dos palabras no pueden ser iguales. Devuelve la palabra en el siguiente formato JSON:\n{\n\"p3\":\"\"}"
             }
         ],
         temperature=0.6,
@@ -1720,10 +1724,10 @@ def generarPanel15huecos():
             },
             {
                 "role": "user",
-                "content": "Proporciona una palabra, p8, aleatoria no inventada que se pueda encontrar en el diccionario español. Hay que devolver únicamente la palabra en el siguiente formato JSON:\n{\n\"p8\":\"\"}"
+                "content": "Proporciona un sustantivo, p8, aleatorio no inventado en español de uso común. Hay que devolver únicamente la palabra en el siguiente formato JSON:\n{\n\"p8\":\"\"}"
             }
         ],
-        temperature=1.50,
+        temperature=1.25,
         max_tokens=100,
         response_format={"type": "json_object"}
     )
@@ -1738,7 +1742,7 @@ def generarPanel15huecos():
             },
             {
                 "role": "user",
-                "content": "Proporciona dos, p7 y p9 palabras relacionas con" + p8 + "que no estén relacionadas entre sí" ".Devuelve las palabras en el siguiente formato JSON:\n{\n\"p7\":\"\",\n\"p9\":\"\"}"
+                "content": "Proporciona dos, p7 y p9 palabras relacionas con" + p8 + "que no estén relacionadas entre sí. Devuelve las palabras en el siguiente formato JSON:\n{\n\"p7\":\"\",\n\"p9\":\"\"}"
             }
         ],
         temperature=0.89,
