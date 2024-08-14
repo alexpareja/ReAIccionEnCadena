@@ -177,9 +177,9 @@ def palabras_encadenadas(request):
     palabras_cargadasR1 = request.session.get('palabras_cargadasR1', False)
     prompt = prompts.PromptPrueba1
     system_prompts = [
-    "Eres un generador de palabras únicas y reales en español.",
-    "Proporciona una palabra real y única en español.",
-    "Genera una palabra que sea válida en el idioma español. "]
+        "Eres un generador de palabras únicas y reales en español.",
+        "Proporciona una palabra real y única en español.",
+        "Genera una palabra que sea válida en el idioma español. "]
     while not palabras_cargadasR1:
         response = openai.chat.completions.create(
             model="gpt-4o-mini",
@@ -287,7 +287,8 @@ def palabras_encadenadas(request):
         if primer_intentoR1 == 1:
             IA_jugando = 1
             tema = getattr(palabras, 'tema', '')
-            n_letras = len(getattr(palabras, 'p' + str(n_palabra_adivinado), ''))
+            n_letras = len(
+                getattr(palabras, 'p' + str(n_palabra_adivinado), ''))
             prompt = prompts.PROMPT_RONDA1_IA_PLAYER.format(
                 tema, primera_letra, n_letras)
             print(prompt)
@@ -308,7 +309,8 @@ def palabras_encadenadas(request):
                 max_tokens=100,
                 response_format={"type": "json_object"}
             )
-            dataRespuesta = json.loads(jsonrespuesta.choices[0].message.content)
+            dataRespuesta = json.loads(
+                jsonrespuesta.choices[0].message.content)
             respuesta = dataRespuesta['palabra'].upper()
             if (turno_actual == 'IA 1'):
                 respuestaJugadorIA1 = 'Mi respuesta es ' + respuesta + \
@@ -317,9 +319,9 @@ def palabras_encadenadas(request):
                 respuestaJugadorIA2 = 'Mi respuesta es ' + respuesta + \
                     '. Explicación: ' + dataRespuesta['explicacion']
             (request, html, j1, j2, jugador1, jugador2,
-            puntos_jugador1, puntos_jugador2, turno_actual, palabras,
-            palabras_modificadas, n_palabra_adivinado, letras_mostradas,
-            primera_letra, fin, respuesta, palabra_a_adivinar) = jugarTurnoPrimeraRonda(
+             puntos_jugador1, puntos_jugador2, turno_actual, palabras,
+             palabras_modificadas, n_palabra_adivinado, letras_mostradas,
+             primera_letra, fin, respuesta, palabra_a_adivinar) = jugarTurnoPrimeraRonda(
                 request, html, j1, j2, jugador1, jugador2,
                 puntos_jugador1, puntos_jugador2, turno_actual, palabras,
                 palabras_modificadas, n_palabra_adivinado, letras_mostradas,
@@ -395,6 +397,9 @@ def centro_de_la_cadena(request):
     prompt = prompts.PROMPT_RONDA2Y3
     if palabras_cargadasR2 == False:
         arrayPanel = generarPanel7huecos()
+        while len(set(arrayPanel)) != 7:
+            arrayPanel = generarPanel7huecos()
+
         # JsonPalabras = llamadaAPIChatGPTModeloFineTuning(prompt)
         # JsonPalabras = llamadaAPIChatGPT(prompt)
         print(arrayPanel)
@@ -512,7 +517,8 @@ def centro_de_la_cadena(request):
                 respuesta = respuestaJSON["palabra"].upper()
                 explicacionIA = respuestaJSON["explicacion"]
                 nombre_campo = 'p' + str(n_palabra_adivinado)
-                palabra_a_adivinar = getattr(palabras, nombre_campo, '').upper()
+                palabra_a_adivinar = getattr(
+                    palabras, nombre_campo, '').upper()
                 if (turno_actual == "IA") | (turno_actual == 'IA 2'):
                     respuestaJugadorIA2 = 'Mi respuesta es ' + \
                         respuesta + ". Explicación: " + explicacionIA
@@ -521,13 +527,13 @@ def centro_de_la_cadena(request):
                         respuesta + ". Explicación: " + explicacionIA
 
                 (request, respuesta, palabra_a_adivinar, j1, j2, jugador1, jugador2,
-                turno_actual, puntos_jugador1, puntos_jugador2, palabras,
-                n_palabra_adivinado, palabras_modificadas, fin, letras_mostradas, primera_letra,
-                isSeleccionada, nPalabrasRespondidas, actualizarActivos) = jugarTurnoSegundaRonda(request,
-                                                                                                respuesta, palabra_a_adivinar, j1, j2, jugador1, jugador2,
-                                                                                                turno_actual, puntos_jugador1, puntos_jugador2, palabras,
-                                                                                                n_palabra_adivinado, palabras_modificadas, fin, letras_mostradas, primera_letra,
-                                                                                                isSeleccionada, nPalabrasRespondidas, actualizarActivos)
+                 turno_actual, puntos_jugador1, puntos_jugador2, palabras,
+                 n_palabra_adivinado, palabras_modificadas, fin, letras_mostradas, primera_letra,
+                 isSeleccionada, nPalabrasRespondidas, actualizarActivos) = jugarTurnoSegundaRonda(request,
+                                                                                                   respuesta, palabra_a_adivinar, j1, j2, jugador1, jugador2,
+                                                                                                   turno_actual, puntos_jugador1, puntos_jugador2, palabras,
+                                                                                                   n_palabra_adivinado, palabras_modificadas, fin, letras_mostradas, primera_letra,
+                                                                                                   isSeleccionada, nPalabrasRespondidas, actualizarActivos)
             else:
                 primer_intentoR2 = 1
                 request.session['primer_intentoR2'] = primer_intentoR2
@@ -549,7 +555,7 @@ def centro_de_la_cadena(request):
     else:
         if (turno_actual == "IA") | (turno_actual == 'IA 1') | (turno_actual == 'IA 2'):
             if (primer_intentoR2 == 1):
-                if (request.method == 'POST') & (fin == 0) :
+                if (request.method == 'POST') & (fin == 0):
                     if (request.POST.get('palabra_elegida')):
                         palabra_elegida = request.POST.get('palabra_elegida')
                         isSeleccionada = 0
@@ -564,7 +570,7 @@ def centro_de_la_cadena(request):
                                 n_palabra_adivinado)-2] = primera_letra
             else:
                 primer_intentoR2 = 1
-                request.session['primer_intentoR2'] = primer_intentoR2                
+                request.session['primer_intentoR2'] = primer_intentoR2
         else:
             if (request.method == 'POST') & (fin == 0):
                 palabra_elegida = request.POST.get('palabra_elegida', '')
@@ -620,6 +626,8 @@ def una_lleva_a_la_otra(request):
     # prompt = prompts.PROMPT_RONDA2y3
     if palabras_cargadasR3 == False:
         arrayPanel = generarPanel7huecos()
+        while len(set(arrayPanel)) != 7:
+            arrayPanel = generarPanel7huecos()
         # JsonPalabras = llamadaAPIChatGPT(prompt)
         # data = json.loads(JsonPalabras)
         request.session['datajson'] = arrayPanel
@@ -680,9 +688,8 @@ def una_lleva_a_la_otra(request):
 
     palabras_modificadas = request.session.get(
         'palabrasModificadasR3', palabras_modificadasInit)
-    
-    primer_intentoR3 = request.session.get('primer_intentoR3', 0)
 
+    primer_intentoR3 = request.session.get('primer_intentoR3', 0)
 
     if isSeleccionada == 0:
         primera_letra = request.session.get('primera_letraRonda3', getattr(
@@ -764,10 +771,11 @@ def una_lleva_a_la_otra(request):
                             palabras, 'p' + str(n_palabra_adivinado), '')[0]
                         palabras_modificadas[int(
                             n_palabra_adivinado)-2] = primera_letra
-                print(str(n_palabra_adivinado) + palabra_elegida + primera_letra)
+                print(str(n_palabra_adivinado) +
+                      palabra_elegida + primera_letra)
             else:
                 primer_intentoR3 = 1
-                request.session['primer_intentoR3'] = primer_intentoR3         
+                request.session['primer_intentoR3'] = primer_intentoR3
 
         else:
             if (request.method == 'POST') & (fin == 0):
@@ -930,7 +938,6 @@ def ultima_cadena(request):
     palabras_modificadas = []
     IA_jugando = 0
 
-
     for i in range(1, 14):  # Assuming there are 15 fields in RondaFinal
         nombre_campo = 'p' + str(i)
         palabra = getattr(palabras, nombre_campo, '')
@@ -948,7 +955,6 @@ def ultima_cadena(request):
     respuestaIA = ''
     primer_intentoR4 = request.session.get('primer_intentoR4', 0)
 
-
     if (n_palabra_adivinado > 12):
         fin = 1
         return render(request, 'ultima_cadena.html', {'jFinal': jFinal, 'jugadorFinal': jugadorFinal,
@@ -962,24 +968,27 @@ def ultima_cadena(request):
             palabra1 = getattr(palabras, 'p' + str(n_palabra_adivinado-1), '')
             palabra2 = getattr(palabras, 'p' + str(n_palabra_adivinado+1), '')
 
-            prompt = "En base a la palabra " + palabra1 + " y a la palabra " + palabra2 + ", dame una tercera palabra que este relacionada de alguna manera con cada una, que empiece por " + primera_letra + "-. Esta relación puede ser de cualquier tipo, y es en español. Debes responder con un JSON con el siguiente formato:{\"palabra\": \" \",\"explicacion\":\" \"}La explicación debe ser muy breve."
+            prompt = "En base a la palabra " + palabra1 + " y a la palabra " + palabra2 + ", dame una tercera palabra que este relacionada de alguna manera con cada una, que empiece por " + primera_letra + \
+                "-. Esta relación puede ser de cualquier tipo, y es en español. Debes responder con un JSON con el siguiente formato:{\"palabra\": \" \",\"explicacion\":\" \"}La explicación debe ser muy breve."
             respuesta = llamadaAPIChatGPT(prompt)
             decoded_respuesta = json.loads(respuesta)
 
-            respuestaIA = 'Mi respuesta es ' + decoded_respuesta["palabra"].upper() + '. ' + decoded_respuesta["explicacion"]
+            respuestaIA = 'Mi respuesta es ' + \
+                decoded_respuesta["palabra"].upper(
+                ) + '. ' + decoded_respuesta["explicacion"]
             nombre_campo = 'p' + str(n_palabra_adivinado)
             palabra_a_adivinar = getattr(palabras, nombre_campo, None)
             (request, jFinal, jugadorFinal,
-            puntos_jugadorFinal, palabras, palabras_modificadas,
-            n_palabra_adivinado, letras_mostradas,
-            primera_letra, fin, decoded_respuesta["palabra"], palabra_a_adivinar, comodines, idPalabra, juego_acabado) = jugarTurnoUltimaCadena(
+             puntos_jugadorFinal, palabras, palabras_modificadas,
+             n_palabra_adivinado, letras_mostradas,
+             primera_letra, fin, decoded_respuesta["palabra"], palabra_a_adivinar, comodines, idPalabra, juego_acabado) = jugarTurnoUltimaCadena(
                 request, jFinal, jugadorFinal,
                 puntos_jugadorFinal, palabras, palabras_modificadas,
                 n_palabra_adivinado, letras_mostradas,
                 primera_letra, fin, decoded_respuesta["palabra"], palabra_a_adivinar, comodines, idPalabra, juego_acabado)
         else:
             primer_intentoR4 = 1
-            request.session['primer_intentoR4'] = primer_intentoR4     
+            request.session['primer_intentoR4'] = primer_intentoR4
     else:
         if request.method == 'POST':
             print(n_palabra_adivinado)
@@ -1039,37 +1048,44 @@ def ultima_palabra(request):
     if (jFinal == "IA") | (jFinal == 'IA 1') | (jFinal == 'IA 2'):
         if primer_intentoR5 == 1:
             if pistaMostrada == 1:
-                
-                #prompt = prompts.PROMPT_PALABRAFINAL_IA_PLAYER.format(
+
+                # prompt = prompts.PROMPT_PALABRAFINAL_IA_PLAYER.format(
                 #    palabra_inicial, solucion_mostrada)
-                prompt = "Teniendo la palabra "+ palabra_inicial +" debes contestar otra que tenga algún tipo de relación con ella. Esta palabra sigue la siguiente estructura: "+ solucion_mostrada +" Actualmente estas en un concurso de televisión y puedes ganar "+ puntos_jugadorFinal + " € si adivinas esta palabra. Tienes la posibilidad de solicitar una pista (otra palabra relacionada), pero la cantidad de dinero se reducirá a la mitad. Debes responder con un JSON con el siguiente formato:\n{\n\"palabra\": \" \",\n\"quiero_pista\": \" \",\n\"explicacion\":\" \"\n}\nLa explicación debe ser muy breve, y si quieres una pista debes indicar en el campo pista \'SI\'."
+                prompt = "Teniendo la palabra " + palabra_inicial + " debes contestar otra que tenga algún tipo de relación con ella. Esta palabra sigue la siguiente estructura: " + solucion_mostrada + " Actualmente estas en un concurso de televisión y puedes ganar " + puntos_jugadorFinal + \
+                    " € si adivinas esta palabra. Tienes la posibilidad de solicitar una pista (otra palabra relacionada), pero la cantidad de dinero se reducirá a la mitad. Debes responder con un JSON con el siguiente formato:\n{\n\"palabra\": \" \",\n\"quiero_pista\": \" \",\n\"explicacion\":\" \"\n}\nLa explicación debe ser muy breve, y si quieres una pista debes indicar en el campo pista \'SI\'."
                 print(prompt)
                 jsonRespuesta = llamadaAPIChatGPT(prompt)
                 data = json.loads(jsonRespuesta)
                 if data["quiero_pista"] == 'SI':
                     respuestaIA = 'No estoy seguro... Compro la palabra pista.'
                     (request, pistaMostrada, pista_mostrada, pista,
-                    puntos_jugadorFinal) = jugarTurnoUltimaPalabraMostrarPista(request, pistaMostrada,
+                     puntos_jugadorFinal) = jugarTurnoUltimaPalabraMostrarPista(request, pistaMostrada,
                                                                                 pista_mostrada, pista, puntos_jugadorFinal)
                 else:
                     respuesta = data["palabra"]
-                    respuestaIA = 'Mi respuesta es ' + data["palabra"].upper() + '. ' + data["explicacion"]
+                    respuestaIA = 'Mi respuesta es ' + \
+                        data["palabra"].upper() + '. ' + data["explicacion"]
                     (request, puntos_jugadorFinal, respuesta,
-                    solucion, solucion_mostrada, juego_acabado) = jugarTurnoUltimaPalabra(request,
-                                                                                        puntos_jugadorFinal, respuesta,
-                                                                                        solucion, solucion_mostrada, juego_acabado)
+                     solucion, solucion_mostrada, juego_acabado) = jugarTurnoUltimaPalabra(request,
+                                                                                           puntos_jugadorFinal, respuesta,
+                                                                                           solucion, solucion_mostrada, juego_acabado)
             else:
-                #prompt = prompts.PROMPT_PALABRAFINALCONPISTA_IA_PLAYER.format(
+                # prompt = prompts.PROMPT_PALABRAFINALCONPISTA_IA_PLAYER.format(
                 #    palabra_inicial, pista_mostrada, solucion_mostrada)
-                prompt = "En base a la palabra " + palabra_inicial + " y a la palabra " + pista_mostrada + ", dame una palabra que este relacionada de alguna manera con cada una de ellas. Esta palabra sigue la siguiente estructura: "+ solucion_mostrada +" Debes responder con un JSON con el siguiente formato:\n{\n\"palabra\": \" \",\n\"explicacion\":\" \"\n}\nLa explicación debe ser muy breve."
+                prompt = "En base a la palabra " + palabra_inicial + " y a la palabra " + pista_mostrada + ", dame una palabra que este relacionada de alguna manera con cada una de ellas. Esta palabra sigue la siguiente estructura: " + \
+                    solucion_mostrada + \
+                    " Debes responder con un JSON con el siguiente formato:\n{\n\"palabra\": \" \",\n\"explicacion\":\" \"\n}\nLa explicación debe ser muy breve."
                 respuesta = llamadaAPIChatGPT(prompt)
                 decoded_respuesta = json.loads(respuesta)
                 print(prompt + decoded_respuesta["palabra"])
-                respuestaIA = 'Tras ver la pista, mi respuesta es ' + decoded_respuesta["palabra"] + '. ' + decoded_respuesta["explicacion"]
+                respuestaIA = 'Tras ver la pista, mi respuesta es ' + \
+                    decoded_respuesta["palabra"] + '. ' + \
+                    decoded_respuesta["explicacion"]
                 (request, puntos_jugadorFinal, decoded_respuesta["palabra"],
-                solucion, solucion_mostrada, juego_acabado) = jugarTurnoUltimaPalabra(request,
-                                                                                    puntos_jugadorFinal, decoded_respuesta["palabra"],
-                                                                                    solucion, solucion_mostrada, juego_acabado)
+                 solucion, solucion_mostrada, juego_acabado) = jugarTurnoUltimaPalabra(request,
+                                                                                       puntos_jugadorFinal, decoded_respuesta[
+                                                                                           "palabra"],
+                                                                                       solucion, solucion_mostrada, juego_acabado)
         else:
             primer_intentoR5 = 1
             request.session['primer_intentoR5'] = primer_intentoR5
@@ -1200,7 +1216,7 @@ def llamadaAPIChatGPT(prompt):
         messages=[
             {"role": "user", "content": prompt},
         ],
-        response_format={"type": "json_object"  }
+        response_format={"type": "json_object"}
     )
     return response.choices[0].message.content
 
@@ -1526,10 +1542,13 @@ def quitar_acentos(texto):
 
 def generarPanel7huecos():
     array = []
+    relaciones = ['sinonimia', 'antonimia', 'hiponimia', 'hiperonimia', 'meronimia', 'holonimia', 'paronimia',
+                  'homonimia', 'cohiponimia', 'complementariedad', 'causa-efecto', 'metonimia', 'secuencialidad', 'asociación']
+
     system_prompts = [
-    "Eres un generador de palabras únicas y reales en español. La palabra no debe repetirse.",
-    "Proporciona una palabra real y única en español que no se haya utilizado antes.",
-    "Genera una palabra única que sea válida en el idioma español y que no se repita."]
+        "Eres un generador de palabras únicas y reales en español. La palabra no debe repetirse.",
+        "Proporciona una palabra real y única en español que no se haya utilizado antes.",
+        "Genera una palabra única que sea válida en el idioma español y que no se repita."]
     p4_request = openai.chat.completions.create(
         model="gpt-4o-mini",
         messages=[
@@ -1539,10 +1558,10 @@ def generarPanel7huecos():
             },
             {
                 "role": "user",
-                "content": "Proporciona una palabra, p4, aleatoria no inventada que se pueda encontrar en el diccionario español. Hay que devolver únicamente la palabra en el siguiente formato JSON:\n{\n\"p4\":\"\"}"
+                "content": "Proporciona un sustantivo, p4, aleatorio no inventado en español de uso común. Hay que devolver únicamente la palabra en el siguiente formato JSON:\n{\n\"p4\":\"\"}"
             }
         ],
-        temperature=1.35,
+        temperature=1.25,
         max_tokens=100,
         response_format={"type": "json_object"}
     )
@@ -1576,16 +1595,15 @@ def generarPanel7huecos():
             },
             {
                 "role": "user",
-                        "content": "Porporciona una palabra p3, que no sea y este relacionda con" + p4 + ". Devuelve la palabra en el siguiente formato JSON:\n{\n\"p3\":\"\"}"
+                "content": "Porporciona una palabra p3, que no sea y este relacionda con" + p4 + ". mediante " + relaciones[random.randint(0, 13)] + " Devuelve la palabra en el siguiente formato JSON:\n{\n\"p3\":\"\"}"
             }
         ],
-        temperature=0.73,
+        temperature=0.6,
         max_tokens=100,
         response_format={"type": "json_object"}
     )
-    p3 = json.loads(p3_request.choices[0].message.content)["p3"]   
-    
-    
+    p3 = json.loads(p3_request.choices[0].message.content)["p3"]
+
     p5_request = openai.chat.completions.create(
         model="gpt-4o-mini",
         messages=[
@@ -1595,15 +1613,14 @@ def generarPanel7huecos():
             },
             {
                 "role": "user",
-                        "content": "Porporciona una palabra p5, que no sea y este relacionda con" + p4 + " que no sea ni este relacionda con " + p3 + ". Devuelve la palabra en el siguiente formato JSON:\n{\n\"p5\":\"\"}"
+                "content": "Porporciona una palabra p5, que este relacionda con" + p4 + "  . mediante " + relaciones[random.randint(0, 13)] + " y que no guarde relación con' " + p3 + " ' . Ninguna de las tres palabras puede ser la misma. Devuelve la palabra en el siguiente formato JSON:\n{\n\"p5\":\"\"}"
             }
         ],
-        temperature=0.73,
+        temperature=0.6,
         max_tokens=100,
         response_format={"type": "json_object"}
     )
     p5 = json.loads(p5_request.choices[0].message.content)["p5"]
-
 
     p2_request = openai.chat.completions.create(
         model="gpt-4o-mini",
@@ -1614,10 +1631,10 @@ def generarPanel7huecos():
             },
             {
                 "role": "user",
-                        "content": "Porporciona una palabra p2, que no sea y este relacionda con" + p3 + " que no sea ni este relacionda con " + p4 + "o" + p5 + ". Devuelve la palabra en el siguiente formato JSON:\n{\n\"p2\":\"\"}"
+                "content": "Porporciona una palabra p2, que este relacionda con" + p3 + " . mediante " + relaciones[random.randint(0, 13)] + "  y que no guarde relación con" + p4 + "y" + p5 + ". Ninguna de las palabras se pueden repetir. Devuelve la palabra en el siguiente formato JSON:\n{\n\"p2\":\"\"}"
             }
         ],
-        temperature=0.73,
+        temperature=0.6,
         max_tokens=100,
         response_format={"type": "json_object"}
     )
@@ -1632,10 +1649,10 @@ def generarPanel7huecos():
             },
             {
                 "role": "user",
-                        "content": "Porporciona una palabra p1, que no sea y este relacionda con" + p2 + " que no sea ni este relacionda con " + p4 + "," + p3 + "o" + p5 + ". Devuelve la palabra en el siguiente formato JSON:\n{\n\"p1\":\"\"}"
+                "content": "Porporciona una palabra p1, que este relacionda con" + p2 + " . mediante " + relaciones[random.randint(0, 13)] + " y que no guarde relación con " + p4 + "," + p3 + "y" + p5 + ". Ninguna de las palabras se pueden repetir. Devuelve la palabra en el siguiente formato JSON:\n{\n\"p1\":\"\"}"
             }
         ],
-        temperature=0.73,
+        temperature=0.6,
         max_tokens=100,
         response_format={"type": "json_object"}
     )
@@ -1650,15 +1667,14 @@ def generarPanel7huecos():
             },
             {
                 "role": "user",
-                        "content": "Porporciona una palabra p6, que no sea y este relacionda con" + p5 + " que no sea ni este relacionda con " + p4 + "," + p3 + "," + p1 + "o" + p2 + ". Devuelve la palabra en el siguiente formato JSON:\n{\n\"p6\":\"\"}"
+                "content": "Porporciona una palabra p6, que este relacionda con" + p5 + " . mediante " + relaciones[random.randint(0, 13)] + " y que no guarde relación con " + p4 + "," + p3 + "," + p1 + "y" + p2 + ". Ninguna de las palabras se pueden repetir. Devuelve la palabra en el siguiente formato JSON:\n{\n\"p6\":\"\"}"
             }
         ],
-        temperature=0.73,
+        temperature=0.6,
         max_tokens=100,
         response_format={"type": "json_object"}
     )
     p6 = json.loads(p6_request.choices[0].message.content)["p6"]
-
 
     p7_request = openai.chat.completions.create(
         model="gpt-4o-mini",
@@ -1669,15 +1685,14 @@ def generarPanel7huecos():
             },
             {
                 "role": "user",
-                        "content": "Porporciona una palabra p7, que no sea y este relacionda con" + p6 + " que no sea ni este relacionda con " + p4 + "," + p3 + "," + p1 +"," + p5 + "o" + p2 + ". Devuelve la palabra en el siguiente formato JSON:\n{\n\"p7\":\"\"}"
+                "content": "Porporciona una palabra p7, que este relacionda con" + p6 + " . mediante " + relaciones[random.randint(0, 13)] + " y que no guarde relación con " + p4 + "," + p3 + "," + p1 + "," + p5 + "y" + p2 + ". Ninguna de las palabras se pueden repetir. Devuelve la palabra en el siguiente formato JSON:\n{\n\"p7\":\"\"}"
             }
         ],
-        temperature=0.73,
+        temperature=0.6,
         max_tokens=100,
         response_format={"type": "json_object"}
     )
     p7 = json.loads(p7_request.choices[0].message.content)["p7"]
-
 
     array.insert(0, p1)
     array.insert(1, p2)
@@ -1686,15 +1701,16 @@ def generarPanel7huecos():
     array.insert(4, p5)
     array.insert(5, p6)
     array.insert(6, p7)
+
     return array
 
 
 def generarPanel15huecos():
     array = []
     system_prompts = [
-    "Eres un generador de palabras únicas y reales en español. La palabra no debe repetirse.",
-    "Proporciona una palabra real y única en español que no se haya utilizado antes.",
-    "Genera una palabra única que sea válida en el idioma español y que no se repita."]
+        "Eres un generador de palabras únicas y reales en español. La palabra no debe repetirse.",
+        "Proporciona una palabra real y única en español que no se haya utilizado antes.",
+        "Genera una palabra única que sea válida en el idioma español y que no se repita."]
     primer_request = openai.chat.completions.create(
         model="gpt-4o-mini",
         messages=[
@@ -1741,7 +1757,7 @@ def generarPanel15huecos():
             },
             {
                 "role": "user",
-                "content": "Proporciona una palabra p6 relacionada con " +p7+ ". Adicionalmente, proporcioname una palabra p10 relacionada con " + p9 + ". Ninguna palabra debe repetirse, y no puede estar relacionada con "+p8+ ". Devuelve las palabras en el siguiente formato JSON:\n{\n\"p6\":\"\",\n\"p10\":\"\"}"
+                "content": "Proporciona una palabra p6 relacionada con " + p7 + ". Adicionalmente, proporcioname una palabra p10 relacionada con " + p9 + ". Ninguna palabra debe repetirse, y no puede estar relacionada con "+p8 + ". Devuelve las palabras en el siguiente formato JSON:\n{\n\"p6\":\"\",\n\"p10\":\"\"}"
             }
         ],
         temperature=0.83,
@@ -1760,7 +1776,7 @@ def generarPanel15huecos():
             },
             {
                 "role": "user",
-                "content": "Proporciona una palabra p5 relacionada con " +p6+ ". Adicionalmente, proporcioname una palabra p11 relacionada con " + p10 + ". Ninguna palabra debe repetirse, y no puede estar relacionada con "+p8+ ", " +p7+ " ni" +p9+ ". Devuelve las palabras en el siguiente formato JSON:\n{\n\"p5\":\"\",\n\"p11\":\"\"}"
+                "content": "Proporciona una palabra p5 relacionada con " + p6 + ". Adicionalmente, proporcioname una palabra p11 relacionada con " + p10 + ". Ninguna palabra debe repetirse, y no puede estar relacionada con "+p8 + ", " + p7 + " ni" + p9 + ". Devuelve las palabras en el siguiente formato JSON:\n{\n\"p5\":\"\",\n\"p11\":\"\"}"
             }
         ],
         temperature=0.83,
@@ -1770,7 +1786,6 @@ def generarPanel15huecos():
     p5 = json.loads(cuarto_request.choices[0].message.content)["p5"]
     p11 = json.loads(cuarto_request.choices[0].message.content)["p11"]
 
-    
     quinto_request = openai.chat.completions.create(
         model="gpt-4o-mini",
         messages=[
@@ -1780,7 +1795,7 @@ def generarPanel15huecos():
             },
             {
                 "role": "user",
-                "content": "Proporciona una palabra p4 relacionada con " +p5+ ". Adicionalmente, proporcioname una palabra p12 relacionada con " + p11 + ". Ninguna palabra debe repetirse, y no puede estar relacionada con "+p8+ "," +p6+ "," + p10 +", " +p7+ " ni" +p9+ ". Devuelve las palabras en el siguiente formato JSON:\n{\n\"p4\":\"\",\n\"p12\":\"\"}"
+                "content": "Proporciona una palabra p4 relacionada con " + p5 + ". Adicionalmente, proporcioname una palabra p12 relacionada con " + p11 + ". Ninguna palabra debe repetirse, y no puede estar relacionada con "+p8 + "," + p6 + "," + p10 + ", " + p7 + " ni" + p9 + ". Devuelve las palabras en el siguiente formato JSON:\n{\n\"p4\":\"\",\n\"p12\":\"\"}"
             }
         ],
         temperature=0.83,
@@ -1799,7 +1814,7 @@ def generarPanel15huecos():
             },
             {
                 "role": "user",
-                "content": "Proporciona una palabra p3 relacionada con " +p4+ ". Adicionalmente, proporcioname una palabra p13 relacionada con " + p12 + ". Ninguna palabra debe repetirse, y no puede estar relacionada con "+p8+ "," +p5+ "," + p10 +", " +p7+ ","+p11+ ","+ p6+ " ni" +p9+ ". Devuelve las palabras en el siguiente formato JSON:\n{\n\"p3\":\"\",\n\"p13\":\"\"}"
+                "content": "Proporciona una palabra p3 relacionada con " + p4 + ". Adicionalmente, proporcioname una palabra p13 relacionada con " + p12 + ". Ninguna palabra debe repetirse, y no puede estar relacionada con "+p8 + "," + p5 + "," + p10 + ", " + p7 + ","+p11 + "," + p6 + " ni" + p9 + ". Devuelve las palabras en el siguiente formato JSON:\n{\n\"p3\":\"\",\n\"p13\":\"\"}"
             }
         ],
         temperature=0.83,
@@ -1818,7 +1833,7 @@ def generarPanel15huecos():
             },
             {
                 "role": "user",
-                "content": "Proporciona una palabra p2 relacionada con " +p3+ ". Adicionalmente, proporcioname una palabra p14 relacionada con " + p13 + ". Ninguna palabra debe repetirse, y no puede estar relacionada con "+p8+ "," +p5+ "," + p10 +", " +p7+ ","+p11+ ","+ p6+ "," +p4+ "," + p12+  " ni" +p9+ ". Devuelve las palabras en el siguiente formato JSON:\n{\n\"p2\":\"\",\n\"p14\":\"\"}"
+                "content": "Proporciona una palabra p2 relacionada con " + p3 + ". Adicionalmente, proporcioname una palabra p14 relacionada con " + p13 + ". Ninguna palabra debe repetirse, y no puede estar relacionada con "+p8 + "," + p5 + "," + p10 + ", " + p7 + ","+p11 + "," + p6 + "," + p4 + "," + p12 + " ni" + p9 + ". Devuelve las palabras en el siguiente formato JSON:\n{\n\"p2\":\"\",\n\"p14\":\"\"}"
             }
         ],
         temperature=0.83,
@@ -1837,7 +1852,7 @@ def generarPanel15huecos():
             },
             {
                 "role": "user",
-                "content": "Proporciona una palabra p1 relacionada con " +p2+ ". Adicionalmente, proporcioname una palabra p15 relacionada con " + p14 + ". Ninguna palabra debe repetirse, y no puede ser ni estar relacionada con "+p8+ "," +p5+ "," + p10 +", " +p7+ ","+p11+ ","+ p6+ "," +p4+ "," + p12+ "," + p3 + "," + p13 + " ni" +p9+ ". Devuelve las palabras en el siguiente formato JSON:\n{\n\"p1\":\"\",\n\"p15\":\"\"}"
+                "content": "Proporciona una palabra p1 relacionada con " + p2 + ". Adicionalmente, proporcioname una palabra p15 relacionada con " + p14 + ". Ninguna palabra debe repetirse, y no puede ser ni estar relacionada con "+p8 + "," + p5 + "," + p10 + ", " + p7 + ","+p11 + "," + p6 + "," + p4 + "," + p12 + "," + p3 + "," + p13 + " ni" + p9 + ". Devuelve las palabras en el siguiente formato JSON:\n{\n\"p1\":\"\",\n\"p15\":\"\"}"
             }
         ],
         temperature=0.83,
