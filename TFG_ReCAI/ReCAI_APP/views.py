@@ -177,10 +177,10 @@ def palabras_encadenadas(request):
     palabras_cargadasR1 = request.session.get('palabras_cargadasR1', False)
     prompt = prompts.PromptPrueba1
     system_prompts = [
-        "Eres un generador de palabras únicas y reales en español.", #1 like
+        "Eres un generador de palabras únicas y reales en español.", #2 like #2 dislike
         "Proporciona dos palabras reales y únicas en español.", #2 like
         "Genera dos palabras que sean válidas en el idioma español. ", #1 like 
-        "Eres un generador de temas para un concurso. Debes ser creativo a la hora de ofrecer temas, abarcando cualquier tema en español."]
+        "Eres un generador de temas para un concurso. Debes ser creativo a la hora de ofrecer temas, abarcando cualquier tema en español."] # 1 meh
     sys_pr = random.choice(system_prompts)
     print(sys_pr)
     while not palabras_cargadasR1:
@@ -1742,10 +1742,10 @@ def generarPanel15huecos():
             },
             {
                 "role": "user",
-                "content": "Proporciona dos, p7 y p9 palabras relacionas con" + p8 + "que no estén relacionadas entre sí. Devuelve las palabras en el siguiente formato JSON:\n{\n\"p7\":\"\",\n\"p9\":\"\"}"
+                "content": "Proporciona dos palabras p7 y p9, que estén relacionadas con" + p8 + "que no guarden relación entre sí. Las palabras no pueden repetirse. Devuelve las palabras en el siguiente formato JSON:\n{\n\"p7\":\"\",\n\"p9\":\"\"}"
             }
         ],
-        temperature=0.89,
+        temperature=0.6,
         max_tokens=150,
         response_format={"type": "json_object"}
     )
@@ -1761,10 +1761,10 @@ def generarPanel15huecos():
             },
             {
                 "role": "user",
-                "content": "Proporciona una palabra p6 relacionada con " + p7 + ". Adicionalmente, proporcioname una palabra p10 relacionada con " + p9 + ". Ninguna palabra debe repetirse, y no puede estar relacionada con "+p8 + ". Devuelve las palabras en el siguiente formato JSON:\n{\n\"p6\":\"\",\n\"p10\":\"\"}"
+                "content": "Proporciona una palabra p6 relacionada con " + p7 + ". Adicionalmente, proporcioname una palabra p10 relacionada con " + p9 + ". Ninguna palabra debe repetirse, y no puede estar relacionada con "+ p8 + ". Devuelve las palabras en el siguiente formato JSON:\n{\n\"p6\":\"\",\n\"p10\":\"\"}"
             }
         ],
-        temperature=0.83,
+        temperature=0.6,
         max_tokens=256,
         response_format={"type": "json_object"}
     )
@@ -1783,7 +1783,7 @@ def generarPanel15huecos():
                 "content": "Proporciona una palabra p5 relacionada con " + p6 + ". Adicionalmente, proporcioname una palabra p11 relacionada con " + p10 + ". Ninguna palabra debe repetirse, y no puede estar relacionada con "+p8 + ", " + p7 + " ni" + p9 + ". Devuelve las palabras en el siguiente formato JSON:\n{\n\"p5\":\"\",\n\"p11\":\"\"}"
             }
         ],
-        temperature=0.83,
+        temperature=0.6,
         max_tokens=256,
         response_format={"type": "json_object"}
     )
@@ -1802,7 +1802,7 @@ def generarPanel15huecos():
                 "content": "Proporciona una palabra p4 relacionada con " + p5 + ". Adicionalmente, proporcioname una palabra p12 relacionada con " + p11 + ". Ninguna palabra debe repetirse, y no puede estar relacionada con "+p8 + "," + p6 + "," + p10 + ", " + p7 + " ni" + p9 + ". Devuelve las palabras en el siguiente formato JSON:\n{\n\"p4\":\"\",\n\"p12\":\"\"}"
             }
         ],
-        temperature=0.83,
+        temperature=0.6,
         max_tokens=256,
         response_format={"type": "json_object"}
     )
@@ -1821,7 +1821,7 @@ def generarPanel15huecos():
                 "content": "Proporciona una palabra p3 relacionada con " + p4 + ". Adicionalmente, proporcioname una palabra p13 relacionada con " + p12 + ". Ninguna palabra debe repetirse, y no puede estar relacionada con "+p8 + "," + p5 + "," + p10 + ", " + p7 + ","+p11 + "," + p6 + " ni" + p9 + ". Devuelve las palabras en el siguiente formato JSON:\n{\n\"p3\":\"\",\n\"p13\":\"\"}"
             }
         ],
-        temperature=0.83,
+        temperature=0.6,
         max_tokens=256,
         response_format={"type": "json_object"}
     )
@@ -1840,7 +1840,7 @@ def generarPanel15huecos():
                 "content": "Proporciona una palabra p2 relacionada con " + p3 + ". Adicionalmente, proporcioname una palabra p14 relacionada con " + p13 + ". Ninguna palabra debe repetirse, y no puede estar relacionada con "+p8 + "," + p5 + "," + p10 + ", " + p7 + ","+p11 + "," + p6 + "," + p4 + "," + p12 + " ni" + p9 + ". Devuelve las palabras en el siguiente formato JSON:\n{\n\"p2\":\"\",\n\"p14\":\"\"}"
             }
         ],
-        temperature=0.83,
+        temperature=0.6,
         max_tokens=256,
         response_format={"type": "json_object"}
     )
@@ -1859,7 +1859,7 @@ def generarPanel15huecos():
                 "content": "Proporciona una palabra p1 relacionada con " + p2 + ". Adicionalmente, proporcioname una palabra p15 relacionada con " + p14 + ". Ninguna palabra debe repetirse, y no puede ser ni estar relacionada con "+p8 + "," + p5 + "," + p10 + ", " + p7 + ","+p11 + "," + p6 + "," + p4 + "," + p12 + "," + p3 + "," + p13 + " ni" + p9 + ". Devuelve las palabras en el siguiente formato JSON:\n{\n\"p1\":\"\",\n\"p15\":\"\"}"
             }
         ],
-        temperature=0.83,
+        temperature=0.6,
         max_tokens=256,
         response_format={"type": "json_object"}
     )
