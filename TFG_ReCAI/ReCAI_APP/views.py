@@ -171,7 +171,7 @@ def palabras_encadenadas(request):
     prompt = prompts.PromptPrueba1
     system_prompts = [
         "Eres un generador de palabras únicas y reales en español.", #2 like #2 dislike
-        "Proporciona dos palabras reales y únicas en español.", #2 like
+        "Proporciona dos palabras reales y únicas en español.", #2 like FUERAAAAAA
         "Genera dos palabras que sean válidas en el idioma español. ", #2 like 
         "Eres un generador de temas para un concurso. Debes ser creativo a la hora de ofrecer temas, abarcando cualquier tema en español."] # 1 meh
     sys_pr = random.choice(system_prompts)
@@ -495,19 +495,8 @@ def centro_de_la_cadena(request):
                             palabras, 'p' + str(n_palabra_adivinado+1), '')
                 # prompt = prompts.PROMPT_RONDA2y3_IA_PLAYER_JUGARTURNO.format(palabra_antes, palabra_despues, primera_letra)
                 # print(prompt)
-                respuestaJSON = json.loads(openai.chat.completions.create(
-                    model="gpt-4o-mini",
-                    messages=[
-                        {
-                            "role": "user",
-                            "content": "En base a la palabra " + palabra_antes+" y a la palabra " + palabra_despues+", dame una palabra que empiece por "+primera_letra+"-.\nEs posible que solo recibas 1 de las palabras, debes contestar igual.\nDebes responder con un JSON con el siguiente formato:\n{\n\"palabra\": \" \",\n\"explicacion\":\" \"\n}\nLa explicación debe ser muy breve."
-                        }
-                    ],
-                    temperature=1,
-                    max_tokens=300,
-                    response_format={"type": "json_object"}
-                ).choices[0].message.content)
-                # respuestaJSON = json.loads(llamadaAPIChatGPT(prompt))
+                print(palabra_antes + '      ' + palabra_despues)
+                respuestaJSON = json.loads(llamadaAPIChatGPT(palabra_antes, palabra_despues, primera_letra))
                 respuesta = respuestaJSON["palabra"].upper()
                 explicacionIA = respuestaJSON["explicacion"]
                 nombre_campo = 'p' + str(n_palabra_adivinado)
@@ -705,19 +694,7 @@ def una_lleva_a_la_otra(request):
             else:
                 palabra_despues = getattr(
                     palabras, 'p' + str(n_palabra_adivinado+1), '')
-            respuestaJSON = json.loads(openai.chat.completions.create(
-                model="gpt-4o-mini",
-                messages=[
-                    {
-                        "role": "user",
-                        "content": "En base a la palabra " + palabra_antes+" y a la palabra " + palabra_despues+", dame una palabra que empiece por "+primera_letra+"-.\nEs posible que solo recibas 1 de las palabras, debes contestar igual.\nDebes responder con un JSON con el siguiente formato:\n{\n\"palabra\": \" \",\n\"explicacion\":\" \"\n}\nLa explicación debe ser muy breve."
-                    }
-                ],
-                temperature=1,
-                max_tokens=300,
-                response_format={"type": "json_object"}
-            ).choices[0].message.content)
-            # respuestaJSON = json.loads(llamadaAPIChatGPT(prompt))
+            respuestaJSON = json.loads(llamadaAPIChatGPT(palabra_antes, palabra_despues, primera_letra))
             respuesta = respuestaJSON["palabra"].upper()
             explicacionIA = respuestaJSON["explicacion"]
             nombre_campo = 'p' + str(n_palabra_adivinado)
@@ -959,24 +936,21 @@ def ultima_cadena(request):
             palabra1 = getattr(palabras, 'p' + str(n_palabra_adivinado-1), '')
             palabra2 = getattr(palabras, 'p' + str(n_palabra_adivinado+1), '')
 
-            prompt = "En base a la palabra " + palabra1 + " y a la palabra " + palabra2 + ", dame una tercera palabra que este relacionada de alguna manera con cada una, que empiece por " + primera_letra + \
-                "-. Esta relación puede ser de cualquier tipo, y es en español. Debes responder con un JSON con el siguiente formato:{\"palabra\": \" \",\"explicacion\":\" \"}La explicación debe ser muy breve."
-            respuesta = llamadaAPIChatGPT(prompt)
-            decoded_respuesta = json.loads(respuesta)
+            respuestaJSON = json.loads(llamadaAPIChatGPT(palabra1, palabra2, primera_letra))
 
             respuestaIA = 'Mi respuesta es ' + \
-                decoded_respuesta["palabra"].upper(
-                ) + '. ' + decoded_respuesta["explicacion"]
+                respuestaJSON["palabra"].upper(
+                ) + '. ' + respuestaJSON["explicacion"]
             nombre_campo = 'p' + str(n_palabra_adivinado)
             palabra_a_adivinar = getattr(palabras, nombre_campo, None)
             (request, jFinal, jugadorFinal,
              puntos_jugadorFinal, palabras, palabras_modificadas,
              n_palabra_adivinado, letras_mostradas,
-             primera_letra, fin, decoded_respuesta["palabra"], palabra_a_adivinar, comodines, idPalabra, juego_acabado) = jugarTurnoUltimaCadena(
+             primera_letra, fin, respuestaJSON["palabra"], palabra_a_adivinar, comodines, idPalabra, juego_acabado) = jugarTurnoUltimaCadena(
                 request, jFinal, jugadorFinal,
                 puntos_jugadorFinal, palabras, palabras_modificadas,
                 n_palabra_adivinado, letras_mostradas,
-                primera_letra, fin, decoded_respuesta["palabra"], palabra_a_adivinar, comodines, idPalabra, juego_acabado)
+                primera_letra, fin, respuestaJSON["palabra"], palabra_a_adivinar, comodines, idPalabra, juego_acabado)
         else:
             primer_intentoR4 = 1
             request.session['primer_intentoR4'] = primer_intentoR4
@@ -1043,7 +1017,7 @@ def ultima_palabra(request):
                 #    palabra_inicial, solucion_mostrada)
                 prompt = "Teniendo la palabra " + palabra_inicial + " debes contestar otra que tenga algún tipo de relación con ella. Esta palabra sigue la siguiente estructura: " + solucion_mostrada + " Actualmente estas en un concurso de televisión y puedes ganar " + str(puntos_jugadorFinal) + "€ si adivinas esta palabra. Tienes la posibilidad de solicitar una pista (otra palabra relacionada), pero la cantidad de dinero se reducirá a la mitad. Debes responder con un JSON con el siguiente formato:\n{\n\"palabra\": \" \",\n\"quiero_pista\": \" \",\n\"explicacion\":\" \"\n}\nLa explicación debe ser muy breve, y si quieres una pista debes indicar en el campo pista \'SI\'."
                 print(prompt)
-                jsonRespuesta = llamadaAPIChatGPT(prompt)
+                jsonRespuesta = llamadaAPIChatGPTUltimaPalabra(prompt)
                 data = json.loads(jsonRespuesta)
                 if data["quiero_pista"] == 'SI':
                     respuestaIA = 'No estoy seguro... Compro la palabra pista.'
@@ -1064,7 +1038,7 @@ def ultima_palabra(request):
                 prompt = "En base a la palabra " + palabra_inicial + " y a la palabra " + pista_mostrada + ", dame una palabra que este relacionada de alguna manera con cada una de ellas. Esta palabra sigue la siguiente estructura: " + \
                     solucion_mostrada + \
                     " Debes responder con un JSON con el siguiente formato:\n{\n\"palabra\": \" \",\n\"explicacion\":\" \"\n}\nLa explicación debe ser muy breve."
-                respuesta = llamadaAPIChatGPT(prompt)
+                respuesta = llamadaAPIChatGPTUltimaPalabra(prompt)
                 decoded_respuesta = json.loads(respuesta)
                 print(prompt + decoded_respuesta["palabra"])
                 respuestaIA = 'Tras ver la pista, mi respuesta es ' + \
@@ -1195,7 +1169,36 @@ def cambiar_contraseña(request):
         form = CambiarContraseñaFormulario(request.user)
     return render(request, 'cambiar_contraseña.html', {'form': form})
 
-def llamadaAPIChatGPT(prompt):
+def llamadaAPIChatGPT(palabra_antes, palabra_despues, primera_letra):
+    response = openai.chat.completions.create(
+                    model="gpt-4o-mini",
+                    messages=[
+                    {
+                    "role": "system",
+                    "content": [
+                    {
+                    "type": "text",
+                    "text": "Eres un jugador en el programa de televisión de Telecinco \"Palabras Encadenadas\". Debes hacer relaciones basadas en diferentes palabras. Las respuestas que proporciones deben existir en castellano. "
+                    }]
+                    },
+                    {
+                    "role": "user",
+                    "content": [
+                    {           
+                    "type": "text",
+                    "text": "En base a la palabra " + palabra_antes +  " y a la palabra " + palabra_despues + " dame una palabra que empiece por la letra " +primera_letra + ". Es posible que solo recibas una palabra, debes contestar igual.\\nDebes responder usando formato JSON con el siguiente formato:\\n{\\n\\\"palabra\\\": \\\" \\\",\\n\\\"explicacion\\\":\\\" \\\"\\n}\\n La explicación debe ser muy breve y se debe explicar como se relaciona la palabra que proporcionas con cada una de las palabras iniciales.\" \n"
+                    }
+                    ]
+                    }
+                    ]
+                    ,temperature=0.73,
+                    max_tokens=300,
+                    response_format={"type": "json_object"}
+    )
+    return response.choices[0].message.content
+
+
+def llamadaAPIChatGPTUltimaPalabra(prompt):
     response = openai.chat.completions.create(
         model="gpt-4o-mini",
         messages=[
@@ -1204,6 +1207,7 @@ def llamadaAPIChatGPT(prompt):
         response_format={"type": "json_object"}
     )
     return response.choices[0].message.content
+
 
 def llamadaAPIChatGPTModeloFineTuning(prompt):
     response = openai.chat.completions.create(
@@ -1542,25 +1546,6 @@ def generarPanel7huecos():
         response_format={"type": "json_object"}
     )
     p4 = json.loads(p4_request.choices[0].message.content)["p4"]
-
-    # p3p5_request = openai.chat.completions.create(
-    #     model="gpt-4o-mini",
-    #     messages=[
-    #         {
-    #             "role": "system",
-    #             "content": "Generas una lista de palabras para un programa de televisión de España "
-    #         },
-    #         {
-    #             "role": "user",
-    #             "content": "Proporciona dos palabras relacionadas con" + p4 + "que no estén relacionadas entre sí y que no se repitan ni sea" + p4 + "Devuelve únicamente las palabras en el siguiente formato JSON:\n{\n\"p3\":\"\",\n\"p5\":\"\"\n}"
-    #         }
-    #     ],
-    #     temperature=0.73,
-    #     max_tokens=100,
-    #     response_format={"type": "json_object"}
-    # )
-    # p3 = json.loads(p3p5_request.choices[0].message.content)["p3"]
-    # p5 = json.loads(p3p5_request.choices[0].message.content)["p5"]
 
     p3_request = openai.chat.completions.create(
         model="gpt-4o-mini",
