@@ -535,6 +535,7 @@ def centro_de_la_cadena(request):
         else:
             if request.method == 'POST':
                 respuesta = request.POST.get('respuesta', '').upper()
+                primer_intentoR2 = 1
                 nombre_campo = 'p' + str(n_palabra_adivinado)
                 palabra_a_adivinar = getattr(
                     palabras, nombre_campo, '').upper()
@@ -547,6 +548,8 @@ def centro_de_la_cadena(request):
                                                                                                                      turno_actual, puntos_jugador1, puntos_jugador2, palabras,
                                                                                                                      n_palabra_adivinado, palabras_modificadas, fin, letras_mostradas, primera_letra,
                                                                                                                      isSeleccionada, nPalabrasRespondidas, actualizarActivos, primer_intentoR2)
+                if primer_intentoR2 == 0:
+                    isSeleccionada = 1
     else:
         if (turno_actual == "IA") | (turno_actual == 'IA 1') | (turno_actual == 'IA 2'):
             if (primer_intentoR2 == 1):
@@ -569,6 +572,7 @@ def centro_de_la_cadena(request):
         else:
             if (request.method == 'POST') & (fin == 0):
                 palabra_elegida = request.POST.get('palabra_elegida', '')
+                primer_intentoR2 = 1
                 isSeleccionada = 0
                 n_palabra_adivinado = int(palabra_elegida[1:])
                 primera_letra = getattr(
@@ -736,6 +740,7 @@ def una_lleva_a_la_otra(request):
         else:
             if request.method == 'POST':
                 respuesta = request.POST.get('respuesta', '').upper()
+                primer_intentoR3 = 1
                 nombre_campo = 'p' + str(n_palabra_adivinado)
                 palabra_a_adivinar = getattr(
                     palabras, nombre_campo, '').upper()
@@ -748,6 +753,8 @@ def una_lleva_a_la_otra(request):
                                                                                                                      turno_actual, puntos_jugador1, puntos_jugador2, palabras,
                                                                                                                      n_palabra_adivinado, palabras_modificadas, fin, letras_mostradas, primera_letra,
                                                                                                                      isSeleccionada, nPalabrasRespondidas, actualizarActivos, primer_intentoR3)
+                if primer_intentoR3 == 0:
+                    isSeleccionada = 1
     else:
         if (turno_actual == "IA") | (turno_actual == 'IA 1') | (turno_actual == 'IA 2'):
             if (primer_intentoR3 == 1):
@@ -770,6 +777,7 @@ def una_lleva_a_la_otra(request):
             if (request.method == 'POST') & (fin == 0):
                 palabra_elegida = request.POST.get('palabra_elegida', '')
                 isSeleccionada = 0
+                primer_intentoR3 = 1
                 n_palabra_adivinado = int(palabra_elegida[1:])
                 primera_letra = getattr(
                     palabras, 'p' + str(n_palabra_adivinado), '')[0]
