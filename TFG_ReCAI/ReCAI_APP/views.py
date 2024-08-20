@@ -179,17 +179,18 @@ def palabras_encadenadas(request):
     while not palabras_cargadasR1:
         tema, arrayPanel, data = generarPanelPE()
         if all(arrayPanel[i].startswith(arrayPanel[i-1][-1]) for i in range(1, len(arrayPanel))):
-            request.session['datajson'] = arrayPanel
-            modelo_palabras = PalabrasEncadenadas(
-                tema=tema,
-                p1=data["p1"],
-                p2=data["p2"],
-                p3=data["p3"],
-                p4=data["p4"],
-                p5=data["p5"],
-                p6=data["p6"])
-            modelo_palabras.save()
-            palabras_cargadasR1 = True
+            if len(set(arrayPanel)) == 6: 
+                request.session['datajson'] = arrayPanel
+                modelo_palabras = PalabrasEncadenadas(
+                    tema=tema,
+                    p1=data["p1"],
+                    p2=data["p2"],
+                    p3=data["p3"],
+                    p4=data["p4"],
+                    p5=data["p5"],
+                    p6=data["p6"])
+                modelo_palabras.save()
+                palabras_cargadasR1 = True
 
     request.session['palabras_cargadasR1'] = palabras_cargadasR1
 
@@ -206,7 +207,6 @@ def palabras_encadenadas(request):
     letras_mostradas = request.session.get('lm', 1)
 
     # Estado actual del juego
-
     turno_actual = request.session.get('turno_actual', j2)
     n_palabra_adivinado = request.session.get('npa', 1)
     primera_letra = request.session.get('pl', getattr(
@@ -215,7 +215,7 @@ def palabras_encadenadas(request):
     puntos_jugador2 = request.session.get('puntos_jugador2', 0)
     IA_jugando = 0
     palabras_modificadas = []
-    primer_intentoR1 = request.session.get('primer_intentoR1', 0)
+    pausaIA_R1 = request.session.get('pausaIA_R1', 0)
 
     for i in range(1, 7):
         nombre_campo = 'p' + str(i)
@@ -238,15 +238,11 @@ def palabras_encadenadas(request):
 
     html = 'palabras_encadenadas.html'
     if (turno_actual == "IA") | (turno_actual == 'IA 1') | (turno_actual == 'IA 2'):
-        if primer_intentoR1 == 1:
+        if pausaIA_R1 == 1:
             IA_jugando = 1
             tema = getattr(palabras, 'tema', '')
             n_letras = len(
                 getattr(palabras, 'p' + str(n_palabra_adivinado), ''))
-            # prompt = prompts.PROMPT_RONDA1_IA_PLAYER.format(
-            # tema, primera_letra, n_letras)
-            # print(prompt)
-            # respuesta = llamadaAPIChatGPT(prompt).upper()
             jsonrespuesta = openai.chat.completions.create(
                 model="gpt-4o-mini",
                 messages=[
@@ -263,15 +259,14 @@ def palabras_encadenadas(request):
                 max_tokens=100,
                 response_format={"type": "json_object"}
             )
-            dataRespuesta = json.loads(
-                jsonrespuesta.choices[0].message.content)
-            respuesta = dataRespuesta['palabra'].upper()
+            respuestaJSON = json.loads(jsonrespuesta.choices[0].message.content)
+            respuesta= respuestaJSON['palabra'].upper()
+
             if (turno_actual == 'IA 1'):
-                respuestaJugadorIA1 = 'Mi respuesta es ' + respuesta + \
-                    '. Explicación: ' + dataRespuesta['explicacion']
+                respuestaJugadorIA1 = respuestaIA(respuestaJSON['palabra'].upper(), respuestaJSON['explicacion'])
             else:
-                respuestaJugadorIA2 = 'Mi respuesta es ' + respuesta + \
-                    '. Explicación: ' + dataRespuesta['explicacion']
+                respuestaJugadorIA2 =  respuestaIA(respuestaJSON['palabra'].upper(), respuestaJSON['explicacion'])
+
             (request, html, j1, j2, jugador1, jugador2,
              puntos_jugador1, puntos_jugador2, turno_actual, palabras,
              palabras_modificadas, n_palabra_adivinado, letras_mostradas,
@@ -281,8 +276,8 @@ def palabras_encadenadas(request):
                 palabras_modificadas, n_palabra_adivinado, letras_mostradas,
                 primera_letra, fin, respuesta, palabra_a_adivinar)
         else:
-            primer_intentoR1 = 1
-            request.session['primer_intentoR1'] = primer_intentoR1
+            pausaIA_R1 = 1
+            request.session['pausaIA_R1'] = pausaIA_R1
     else:
         IA_jugando = 0
         if request.method == 'POST':
@@ -397,7 +392,7 @@ def centro_de_la_cadena(request):
     respuestaJugadorIA1 = ''
     respuestaJugadorIA2 = ''
     IA_jugando = 0
-    primer_intentoR2 = request.session.get('primer_intentoR2', 0)
+    pausaIA_R2 = request.session.get('pausaIA_R2', 0)
     palabras_modificadasInit = []
     for i in range(1, 7):
         nombre_campo = 'p' + str(i)
@@ -414,7 +409,7 @@ def centro_de_la_cadena(request):
         primera_letra = request.session.get('primera_letraRonda2', getattr(
             palabras, 'p' + str(n_palabra_adivinado), '')[0])
         if (turno_actual == "IA") | (turno_actual == 'IA 1') | (turno_actual == 'IA 2'):
-            if primer_intentoR2 == 1:
+            if pausaIA_R2 == 1:
                 IA_jugando = 1
                 palabra_antes = '-'
                 palabra_despues = '-'
@@ -448,40 +443,36 @@ def centro_de_la_cadena(request):
                     else:
                         palabra_despues = getattr(
                             palabras, 'p' + str(n_palabra_adivinado + 1), '')
-                # prompt = prompts.PROMPT_RONDA2y3_IA_PLAYER_JUGARTURNO.format(palabra_antes, palabra_despues, primera_letra)
-                # print(prompt)
-                print(palabra_antes + '      ' + palabra_despues)
-                respuestaJSON = json.loads(llamadaAPIChatGPT(
-                    palabra_antes, palabra_despues, primera_letra))
+
+                respuestaJSON = json.loads(llamadaAPIChatGPT(palabra_antes, palabra_despues, primera_letra))
                 respuesta = respuestaJSON["palabra"].upper()
-                explicacionIA = respuestaJSON["explicacion"]
+                
+                if (turno_actual == 'IA 1'):
+                    respuestaJugadorIA1 = respuestaIA(respuestaJSON['palabra'].upper(), respuestaJSON['explicacion'])
+                else:
+                    respuestaJugadorIA2 =  respuestaIA(respuestaJSON['palabra'].upper(), respuestaJSON['explicacion'])
+                
                 nombre_campo = 'p' + str(n_palabra_adivinado)
                 palabra_a_adivinar = getattr(
                     palabras, nombre_campo, '').upper()
-                if (turno_actual == "IA") | (turno_actual == 'IA 2'):
-                    respuestaJugadorIA2 = 'Mi respuesta es ' + \
-                        respuesta + ". Explicación: " + explicacionIA
-                else:
-                    respuestaJugadorIA1 = 'Mi respuesta es ' + \
-                        respuesta + ". Explicación: " + explicacionIA
-
+                
                 (request, respuesta, palabra_a_adivinar, j1, j2, jugador1, jugador2,
                  turno_actual, puntos_jugador1, puntos_jugador2, palabras,
                  n_palabra_adivinado, palabras_modificadas, fin, letras_mostradas, primera_letra,
-                 isSeleccionada, nPalabrasRespondidas, actualizarActivos, primer_intentoR2) = jugarTurnoSegundaRonda(request,
+                 isSeleccionada, nPalabrasRespondidas, actualizarActivos, pausaIA_R2) = jugarTurnoSegundaRonda(request,
                                                                                                                      respuesta, palabra_a_adivinar, j1, j2, jugador1, jugador2,
                                                                                                                      turno_actual, puntos_jugador1, puntos_jugador2, palabras,
                                                                                                                      n_palabra_adivinado, palabras_modificadas, fin, letras_mostradas, primera_letra,
-                                                                                                                     isSeleccionada, nPalabrasRespondidas, actualizarActivos, primer_intentoR2)
+                                                                                                                     isSeleccionada, nPalabrasRespondidas, actualizarActivos, pausaIA_R2)
             else:
-                primer_intentoR2 = 1
+                pausaIA_R2 = 1
                 isSeleccionada = 1
                 request.session['isSeleccionada'] = isSeleccionada
-            request.session['primer_intentoR2'] = primer_intentoR2
+            request.session['pausaIA_R2'] = pausaIA_R2
         else:
             if request.method == 'POST':
                 respuesta = request.POST.get('respuesta', '').upper()
-                primer_intentoR2 = 1
+                pausaIA_R2 = 1
                 nombre_campo = 'p' + str(n_palabra_adivinado)
                 palabra_a_adivinar = getattr(
                     palabras, nombre_campo, '').upper()
@@ -489,16 +480,16 @@ def centro_de_la_cadena(request):
                 (request, respuesta, palabra_a_adivinar, j1, j2, jugador1, jugador2,
                  turno_actual, puntos_jugador1, puntos_jugador2, palabras,
                  n_palabra_adivinado, palabras_modificadas, fin, letras_mostradas, primera_letra,
-                 isSeleccionada, nPalabrasRespondidas, actualizarActivos, primer_intentoR2) = jugarTurnoSegundaRonda(request,
+                 isSeleccionada, nPalabrasRespondidas, actualizarActivos, pausaIA_R2) = jugarTurnoSegundaRonda(request,
                                                                                                                      respuesta, palabra_a_adivinar, j1, j2, jugador1, jugador2,
                                                                                                                      turno_actual, puntos_jugador1, puntos_jugador2, palabras,
                                                                                                                      n_palabra_adivinado, palabras_modificadas, fin, letras_mostradas, primera_letra,
-                                                                                                                     isSeleccionada, nPalabrasRespondidas, actualizarActivos, primer_intentoR2)
-                if primer_intentoR2 == 0:
+                                                                                                                     isSeleccionada, nPalabrasRespondidas, actualizarActivos, pausaIA_R2)
+                if pausaIA_R2 == 0:
                     isSeleccionada = 1
     else:
         if (turno_actual == "IA") | (turno_actual == 'IA 1') | (turno_actual == 'IA 2'):
-            if (primer_intentoR2 == 1):
+            if (pausaIA_R2 == 1):
                 if (request.method == 'POST') & (fin == 0):
                     if (request.POST.get('palabra_elegida')):
                         palabra_elegida = request.POST.get('palabra_elegida')
@@ -513,12 +504,12 @@ def centro_de_la_cadena(request):
                             palabras_modificadas[int(
                                 n_palabra_adivinado)-2] = primera_letra
             else:
-                primer_intentoR2 = 1
-                request.session['primer_intentoR2'] = primer_intentoR2
+                pausaIA_R2 = 1
+                request.session['pausaIA_R2'] = pausaIA_R2
         else:
             if (request.method == 'POST') & (fin == 0):
                 palabra_elegida = request.POST.get('palabra_elegida', '')
-                primer_intentoR2 = 1
+                pausaIA_R2 = 1
                 isSeleccionada = 0
                 n_palabra_adivinado = int(palabra_elegida[1:])
                 primera_letra = getattr(
@@ -621,7 +612,7 @@ def una_lleva_a_la_otra(request):
     respuestaJugadorIA1 = ''
     respuestaJugadorIA2 = ''
     IA_jugando = 0
-    primer_intentoR3 = request.session.get('primer_intentoR3', 0)
+    pausaIA_R3 = request.session.get('pausaIA_R3', 0)
     # Estado actual del juego
     palabras_modificadasInit = []
     for i in range(1, 7):
@@ -639,7 +630,7 @@ def una_lleva_a_la_otra(request):
         primera_letra = request.session.get('primera_letraRonda3', getattr(
             palabras, 'p' + str(n_palabra_adivinado), '')[0])
         if (turno_actual == "IA") | (turno_actual == 'IA 1') | (turno_actual == 'IA 2'):
-            if primer_intentoR3 == 1:
+            if pausaIA_R3 == 1:
                 IA_jugando = 1
                 palabra_antes = '-'
                 palabra_despues = '-'
@@ -660,33 +651,31 @@ def una_lleva_a_la_otra(request):
                 respuestaJSON = json.loads(llamadaAPIChatGPT(
                     palabra_antes, palabra_despues, primera_letra))
                 respuesta = respuestaJSON["palabra"].upper()
-                explicacionIA = respuestaJSON["explicacion"]
                 nombre_campo = 'p' + str(n_palabra_adivinado)
                 palabra_a_adivinar = getattr(
                     palabras, nombre_campo, '').upper()
-                if (turno_actual == "IA") | (turno_actual == 'IA 2'):
-                    respuestaJugadorIA2 = 'Mi respuesta es ' + \
-                        respuesta + ". Explicación: " + explicacionIA
+                
+                if (turno_actual == 'IA 1'):
+                    respuestaJugadorIA1 = respuestaIA(respuestaJSON['palabra'].upper(), respuestaJSON['explicacion'])
                 else:
-                    respuestaJugadorIA1 = 'Mi respuesta es ' + \
-                        respuesta + ". Explicación: " + explicacionIA
+                    respuestaJugadorIA2 =  respuestaIA(respuestaJSON['palabra'].upper(), respuestaJSON['explicacion'])
                 (request, respuesta, palabra_a_adivinar, j1, j2, jugador1, jugador2,
                  turno_actual, puntos_jugador1, puntos_jugador2, palabras,
                  n_palabra_adivinado, palabras_modificadas, fin, letras_mostradas, primera_letra,
-                    isSeleccionada, nPalabrasRespondidas, actualizarActivos, primer_intentoR3) = jugarTurnoTerceraRonda(request,
+                    isSeleccionada, nPalabrasRespondidas, actualizarActivos, pausaIA_R3) = jugarTurnoTerceraRonda(request,
                                                                                                                         respuesta, palabra_a_adivinar, j1, j2, jugador1, jugador2,
                                                                                                                         turno_actual, puntos_jugador1, puntos_jugador2, palabras,
                                                                                                                         n_palabra_adivinado, palabras_modificadas, fin, letras_mostradas, primera_letra,
-                                                                                                                        isSeleccionada, nPalabrasRespondidas, actualizarActivos, primer_intentoR3)
+                                                                                                                        isSeleccionada, nPalabrasRespondidas, actualizarActivos, pausaIA_R3)
             else:
-                primer_intentoR3 = 1
+                pausaIA_R3 = 1
                 isSeleccionada = 1
                 request.session['isSeleccionada'] = isSeleccionada
-            request.session['primer_intentoR3'] = primer_intentoR3
+            request.session['pausaIA_R3'] = pausaIA_R3
         else:
             if request.method == 'POST':
                 respuesta = request.POST.get('respuesta', '').upper()
-                primer_intentoR3 = 1
+                pausaIA_R3 = 1
                 nombre_campo = 'p' + str(n_palabra_adivinado)
                 palabra_a_adivinar = getattr(
                     palabras, nombre_campo, '').upper()
@@ -694,16 +683,16 @@ def una_lleva_a_la_otra(request):
                 (request, respuesta, palabra_a_adivinar, j1, j2, jugador1, jugador2,
                  turno_actual, puntos_jugador1, puntos_jugador2, palabras,
                  n_palabra_adivinado, palabras_modificadas, fin, letras_mostradas, primera_letra,
-                 isSeleccionada, nPalabrasRespondidas, actualizarActivos, primer_intentoR3) = jugarTurnoTerceraRonda(request,
+                 isSeleccionada, nPalabrasRespondidas, actualizarActivos, pausaIA_R3) = jugarTurnoTerceraRonda(request,
                                                                                                                      respuesta, palabra_a_adivinar, j1, j2, jugador1, jugador2,
                                                                                                                      turno_actual, puntos_jugador1, puntos_jugador2, palabras,
                                                                                                                      n_palabra_adivinado, palabras_modificadas, fin, letras_mostradas, primera_letra,
-                                                                                                                     isSeleccionada, nPalabrasRespondidas, actualizarActivos, primer_intentoR3)
-                if primer_intentoR3 == 0:
+                                                                                                                     isSeleccionada, nPalabrasRespondidas, actualizarActivos, pausaIA_R3)
+                if pausaIA_R3 == 0:
                     isSeleccionada = 1
     else:
         if (turno_actual == "IA") | (turno_actual == 'IA 1') | (turno_actual == 'IA 2'):
-            if (primer_intentoR3 == 1):
+            if (pausaIA_R3 == 1):
                 if (request.method == 'POST') & (fin == 0):
                     if (request.POST.get('palabra_elegida')):
                         palabra_elegida = request.POST.get('palabra_elegida')
@@ -716,14 +705,14 @@ def una_lleva_a_la_otra(request):
                 print(str(n_palabra_adivinado) +
                       palabra_elegida + primera_letra)
             else:
-                primer_intentoR3 = 1
-                request.session['primer_intentoR3'] = primer_intentoR3
+                pausaIA_R3 = 1
+                request.session['pausaIA_R3'] = pausaIA_R3
 
         else:
             if (request.method == 'POST') & (fin == 0):
                 palabra_elegida = request.POST.get('palabra_elegida', '')
                 isSeleccionada = 0
-                primer_intentoR3 = 1
+                pausaIA_R3 = 1
                 n_palabra_adivinado = int(palabra_elegida[1:])
                 primera_letra = getattr(
                     palabras, 'p' + str(n_palabra_adivinado), '')[0]
@@ -898,7 +887,7 @@ def ultima_cadena(request):
 
     request.session['palabrasModificadas'] = palabras_modificadas
     respuestaIA = ''
-    primer_intentoR4 = request.session.get('primer_intentoR4', 0)
+    pausaIA_R4 = request.session.get('pausaIA_R4', 0)
 
     if (n_palabra_adivinado > 12):
         fin = 1
@@ -909,15 +898,14 @@ def ultima_cadena(request):
                                                       })
 
     if (jFinal == "IA") | (jFinal == 'IA 1') | (jFinal == 'IA 2'):
-        if primer_intentoR4 == 1:
+        if pausaIA_R4 == 1:
             palabra1 = getattr(palabras, 'p' + str(n_palabra_adivinado-1), '')
             palabra2 = getattr(palabras, 'p' + str(n_palabra_adivinado+1), '')
 
             respuestaJSON = json.loads(llamadaAPIChatGPT(
                 palabra1, palabra2, primera_letra))
-
-            respuestaIA = 'Mi respuesta es ' + \
-                respuestaJSON["palabra"].upper(
+#cambiaaarrr
+            respuestaIA = 'Mi respuesta es ' + respuestaJSON["palabra"].upper(
                 ) + '. ' + respuestaJSON["explicacion"]
             nombre_campo = 'p' + str(n_palabra_adivinado)
             palabra_a_adivinar = getattr(palabras, nombre_campo, None)
@@ -930,8 +918,8 @@ def ultima_cadena(request):
                 n_palabra_adivinado, letras_mostradas,
                 primera_letra, fin, respuestaJSON["palabra"], palabra_a_adivinar, comodines, idPalabra, juego_acabado)
         else:
-            primer_intentoR4 = 1
-            request.session['primer_intentoR4'] = primer_intentoR4
+            pausaIA_R4 = 1
+            request.session['pausaIA_R4'] = pausaIA_R4
     else:
         if request.method == 'POST':
             print(n_palabra_adivinado)
@@ -991,7 +979,7 @@ def ultima_palabra(request):
     pista_mostrada = request.session.get('pista_mostrada', '?')
     request.session['pista_mostrada'] = pista_mostrada
     respuestaIA = ''
-    primer_intentoR5 = request.session.get('primer_intentoR5', 0)
+    pausaIA_R5 = request.session.get('pausaIA_R5', 0)
 
     if juego_acabado:
         return render(request, 'fin_juego.html', {'jFinal': jFinal, 'jugadorFinal': jugadorFinal,
@@ -999,7 +987,7 @@ def ultima_palabra(request):
                                                   })
 
     if (jFinal == "IA") | (jFinal == 'IA 1') | (jFinal == 'IA 2'):
-        if primer_intentoR5 == 1:
+        if pausaIA_R5 == 1:
             if pistaMostrada == 1:
 
                 # prompt = prompts.PROMPT_PALABRAFINAL_IA_PLAYER.format(
@@ -1016,7 +1004,8 @@ def ultima_palabra(request):
                      puntos_jugadorFinal) = jugarTurnoUltimaPalabraMostrarPista(request, pistaMostrada,
                                                                                 pista_mostrada, pista, puntos_jugadorFinal)
                 else:
-                    respuesta = data["palabra"]
+                    respuesta = data["palabra"] 
+                    #cambiaaaar
                     respuestaIA = 'Mi respuesta es ' + \
                         data["palabra"].upper() + '. ' + data["explicacion"]
                     (request, puntos_jugadorFinal, respuesta,
@@ -1041,8 +1030,8 @@ def ultima_palabra(request):
                                                                                            "palabra"],
                                                                                        solucion, solucion_mostrada, juego_acabado)
         else:
-            primer_intentoR5 = 1
-            request.session['primer_intentoR5'] = primer_intentoR5
+            pausaIA_R5 = 1
+            request.session['pausaIA_R5'] = pausaIA_R5
     else:
         if request.method == 'POST':
             solicitaPista = request.POST.get('pista', '')
@@ -1171,6 +1160,10 @@ def cambiar_contraseña(request):
         form = CambiarContraseñaFormulario(request.user)
     return render(request, 'cambiar_contraseña.html', {'form': form})
 
+def respuestaIA (respuesta, explicacion):
+    respuesta = 'Mi respuesta es ' + respuesta + \
+            '. Explicación: ' + explicacion
+    return respuesta
 
 def llamadaAPIChatGPT(palabra_antes, palabra_despues, primera_letra):
     response = openai.chat.completions.create(
@@ -1264,7 +1257,7 @@ def jugarTurnoPrimeraRonda(request, html, j1, j2, jugador1, jugador2,
 def jugarTurnoSegundaRonda(request, respuesta, palabra_a_adivinar, j1, j2, jugador1, jugador2,
                            turno_actual, puntos_jugador1, puntos_jugador2, palabras,
                            n_palabra_adivinado, palabras_modificadas, fin, letras_mostradas, primera_letra,
-                           isSeleccionada, nPalabrasRespondidas, actualizarActivos, primer_intentoR2):    
+                           isSeleccionada, nPalabrasRespondidas, actualizarActivos, pausaIA_R2):    
     def actualizarPalabra(palabra):
         # Actualiza la palabra adivinada en la lista de palabras modificadas
         if n_palabra_adivinado > 4:
@@ -1277,7 +1270,7 @@ def jugarTurnoSegundaRonda(request, respuesta, palabra_a_adivinar, j1, j2, jugad
         # La respuesta es correcta
         nPalabrasRespondidas += 1
         actualizarActivos = True
-        primer_intentoR2 = 0
+        pausaIA_R2 = 0
         puntos_jugador1, puntos_jugador2 = actualizarPuntos(j1, turno_actual, puntos_jugador1, puntos_jugador2, 5000)
         palabras_modificadas = actualizarPalabra(palabra_a_adivinar)
 
@@ -1292,7 +1285,7 @@ def jugarTurnoSegundaRonda(request, respuesta, palabra_a_adivinar, j1, j2, jugad
         if len(palabra_a_adivinar) <= letras_mostradas:
             # Lógica cuando se han revelado todas las letras
             actualizarActivos = True
-            primer_intentoR2 = 0
+            pausaIA_R2 = 0
             nPalabrasRespondidas += 1
             puntos_jugador1, puntos_jugador2 = actualizarPuntos(j1, turno_actual, puntos_jugador1, puntos_jugador2, 5000)
             palabras_modificadas = actualizarPalabra(palabra_a_adivinar)
@@ -1311,18 +1304,18 @@ def jugarTurnoSegundaRonda(request, respuesta, palabra_a_adivinar, j1, j2, jugad
     return (request, respuesta, palabra_a_adivinar, j1, j2, jugador1, jugador2,
             turno_actual, puntos_jugador1, puntos_jugador2, palabras,
             n_palabra_adivinado, palabras_modificadas, fin, letras_mostradas, primera_letra,
-            isSeleccionada, nPalabrasRespondidas, actualizarActivos, primer_intentoR2)
+            isSeleccionada, nPalabrasRespondidas, actualizarActivos, pausaIA_R2)
 
 
 def jugarTurnoTerceraRonda(request, respuesta, palabra_a_adivinar, j1, j2, jugador1, jugador2,
                            turno_actual, puntos_jugador1, puntos_jugador2, palabras,
                            n_palabra_adivinado, palabras_modificadas, fin, letras_mostradas, primera_letra,
-                           isSeleccionada, nPalabrasRespondidas, actualizarActivos, primer_intentoR3):
+                           isSeleccionada, nPalabrasRespondidas, actualizarActivos, pausaIA_R3):
     if quitar_acentos(respuesta) == quitar_acentos(palabra_a_adivinar):
         # La respuesta es correcta
         nPalabrasRespondidas += 1
         actualizarActivos = True
-        primer_intentoR3 = 0
+        pausaIA_R3 = 0
         puntos_jugador1, puntos_jugador2 = actualizarPuntos(j1, turno_actual, puntos_jugador1, puntos_jugador2, 10000)
         palabras_modificadas[int(n_palabra_adivinado)-2] = palabra_a_adivinar
         if nPalabrasRespondidas == 5:
@@ -1336,7 +1329,7 @@ def jugarTurnoTerceraRonda(request, respuesta, palabra_a_adivinar, j1, j2, jugad
         if len(palabra_a_adivinar) <= letras_mostradas:
             # Lógica cuando se han revelado todas las letras
             actualizarActivos = True
-            primer_intentoR3 = 0
+            pausaIA_R3 = 0
             nPalabrasRespondidas += 1
             puntos_jugador1, puntos_jugador2 = actualizarPuntos(j1, turno_actual, puntos_jugador1, puntos_jugador2, 10000)
             palabras_modificadas[int(n_palabra_adivinado)-2] = palabra_a_adivinar
@@ -1354,7 +1347,7 @@ def jugarTurnoTerceraRonda(request, respuesta, palabra_a_adivinar, j1, j2, jugad
     return (request, respuesta, palabra_a_adivinar, j1, j2, jugador1, jugador2,
             turno_actual, puntos_jugador1, puntos_jugador2, palabras,
             n_palabra_adivinado, palabras_modificadas, fin, letras_mostradas, primera_letra,
-            isSeleccionada, nPalabrasRespondidas, actualizarActivos, primer_intentoR3)
+            isSeleccionada, nPalabrasRespondidas, actualizarActivos, pausaIA_R3)
 
 
 def jugarTurnoUltimaCadena(request, jFinal, jugadorFinal,puntos_jugadorFinal, palabras, 
