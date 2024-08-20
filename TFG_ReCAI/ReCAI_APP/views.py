@@ -1207,72 +1207,36 @@ def jugarTurnoPrimeraRonda(request, html, j1, j2, jugador1, jugador2,
                            puntos_jugador1, puntos_jugador2, turno_actual, palabras,
                            palabras_modificadas, n_palabra_adivinado, letras_mostradas,
                            primera_letra, fin, respuesta, palabra_a_adivinar):
-    if quitar_acentos(respuesta) == quitar_acentos(palabra_a_adivinar):
-        # Asignar puntos al jugador correcto
-        if turno_actual == j1:
-            puntos_jugador1 += 2000
-        else:
-            puntos_jugador2 += 2000
-
-        palabras_modificadas[int(n_palabra_adivinado)-1] = palabra_a_adivinar
+    def actualizarEstado(n_palabra_adivinado, letras_mostradas, palabras):
+        # Actualizar el estado de la partida después de una respuesta correcta
         n_palabra_adivinado += 1
-        if n_palabra_adivinado > 6:
-            fin = 1
-            request.session['puntos_jugador1'] = puntos_jugador1
-            request.session['puntos_jugador2'] = puntos_jugador2
-            return (request, html, j1, j2, jugador1, jugador2,
-                    puntos_jugador1, puntos_jugador2, turno_actual, palabras,
-                    palabras_modificadas, n_palabra_adivinado, letras_mostradas,
-                    primera_letra, fin, respuesta, palabra_a_adivinar)
         letras_mostradas = 1
-        palabra_adivinada = getattr(
-            palabras, 'p' + str(n_palabra_adivinado), '')
+        palabra_adivinada = getattr(palabras, 'p' + str(n_palabra_adivinado), '')
         letras_faltantes = len(palabra_adivinada) - letras_mostradas
         palabras_modificadas[int(n_palabra_adivinado)-1] = getattr(palabras, 'p' + str(
             n_palabra_adivinado), '')[0] + '_ ' * letras_faltantes + f" ({len(palabra_adivinada)})"
-        primera_letra = getattr(
-            palabras, 'p' + str(n_palabra_adivinado), None)[0]
+        primera_letra = getattr(palabras, 'p' + str(n_palabra_adivinado), None)[0]
+        return n_palabra_adivinado, letras_mostradas, primera_letra
+
+    if quitar_acentos(respuesta) == quitar_acentos(palabra_a_adivinar) or len(palabra_a_adivinar) <= letras_mostradas:
+        # Respuesta correcta o se han mostrado todas las letras de la palabra
+        puntos_jugador1, puntos_jugador2 = actualizarPuntos(j1, turno_actual, puntos_jugador1, puntos_jugador2, 2000)
+        palabras_modificadas[int(n_palabra_adivinado)-1] = palabra_a_adivinar
+        #Ronda acabada o siguiente palabra
+        if n_palabra_adivinado >= 6:
+            fin = 1
+        else:
+            n_palabra_adivinado, letras_mostradas, primera_letra = actualizarEstado(n_palabra_adivinado, letras_mostradas, palabras)
     else:
-        if turno_actual == j2:
-            turno_actual = j1
-        else:
-            turno_actual = j2
-
+        # Respuesta incorrecta, cambiar de turno y mostrar una letra más
+        turno_actual = j1 if turno_actual == j2 else j2
         letras_mostradas += 1
-        if len(palabra_a_adivinar) <= letras_mostradas:
-            # Lógica cuando se han revelado todas las letras
-            if turno_actual == j1:
-                puntos_jugador1 += 2000
-            else:
-                puntos_jugador2 += 2000
+        palabra_adivinada = getattr(palabras, 'p' + str(n_palabra_adivinado), '')
+        letras_faltantes = len(palabra_adivinada) - letras_mostradas
+        primera_letra += palabra_adivinada[letras_mostradas-1]
+        palabras_modificadas[int(n_palabra_adivinado)-1] = primera_letra + \
+            '_ ' * letras_faltantes + f" ({len(palabra_adivinada)})"
 
-            palabras_modificadas[int(
-                n_palabra_adivinado)-1] = palabra_a_adivinar
-            n_palabra_adivinado += 1
-            if n_palabra_adivinado > 6:
-                fin = 1
-                request.session['puntos_jugador1'] = puntos_jugador1
-                request.session['puntos_jugador2'] = puntos_jugador2
-                return (request, html, j1, j2, jugador1, jugador2,
-                        puntos_jugador1, puntos_jugador2, turno_actual, palabras,
-                        palabras_modificadas, n_palabra_adivinado, letras_mostradas,
-                        primera_letra, fin, respuesta, palabra_a_adivinar)
-
-            letras_mostradas = 1
-            palabra_adivinada = getattr(
-                palabras, 'p' + str(n_palabra_adivinado), '')
-            letras_faltantes = len(palabra_adivinada) - letras_mostradas
-            palabras_modificadas[int(n_palabra_adivinado)-1] = getattr(palabras, 'p' + str(
-                n_palabra_adivinado), '')[0] + '_ ' * letras_faltantes + f" ({len(palabra_adivinada)})"
-            primera_letra = getattr(
-                palabras, 'p' + str(n_palabra_adivinado), None)[0]
-        else:
-            palabra_adivinada = getattr(
-                palabras, 'p' + str(n_palabra_adivinado), '')
-            letras_faltantes = len(palabra_adivinada) - letras_mostradas
-            primera_letra += palabra_adivinada[letras_mostradas-1]
-            palabras_modificadas[int(n_palabra_adivinado)-1] = primera_letra + \
-                '_ ' * letras_faltantes + f" ({len(palabra_adivinada)})"
     return (request, html, j1, j2, jugador1, jugador2,
             puntos_jugador1, puntos_jugador2, turno_actual, palabras,
             palabras_modificadas, n_palabra_adivinado, letras_mostradas,
@@ -1282,17 +1246,14 @@ def jugarTurnoPrimeraRonda(request, html, j1, j2, jugador1, jugador2,
 def jugarTurnoSegundaRonda(request, respuesta, palabra_a_adivinar, j1, j2, jugador1, jugador2,
                            turno_actual, puntos_jugador1, puntos_jugador2, palabras,
                            n_palabra_adivinado, palabras_modificadas, fin, letras_mostradas, primera_letra,
-                           isSeleccionada, nPalabrasRespondidas, actualizarActivos, primer_intentoR2):
+                           isSeleccionada, nPalabrasRespondidas, actualizarActivos, primer_intentoR2):    
     if quitar_acentos(respuesta) == quitar_acentos(palabra_a_adivinar):
         nPalabrasRespondidas += 1
-        # isSeleccionada = 1
         actualizarActivos = True
         primer_intentoR2 = 0
     # Asignar puntos al jugador correcto
-        if turno_actual == j1:
-            puntos_jugador1 += 5000
-        else:
-            puntos_jugador2 += 5000
+        puntos_jugador1, puntos_jugador2 = actualizarPuntos(j1, turno_actual, puntos_jugador1, puntos_jugador2, 5000)
+        
         if n_palabra_adivinado > 4:
             palabras_modificadas[int(
                 n_palabra_adivinado)-3] = palabra_a_adivinar
@@ -1317,10 +1278,8 @@ def jugarTurnoSegundaRonda(request, respuesta, palabra_a_adivinar, j1, j2, jugad
             primer_intentoR2 = 0
 
             nPalabrasRespondidas += 1
-            if turno_actual == j1:
-                puntos_jugador1 += 5000
-            else:
-                puntos_jugador2 += 5000
+            puntos_jugador1, puntos_jugador2 = actualizarPuntos(j1, turno_actual, puntos_jugador1, puntos_jugador2, 5000)
+
             if n_palabra_adivinado > 4:
                 palabras_modificadas[int(
                     n_palabra_adivinado)-3] = palabra_a_adivinar
@@ -1364,10 +1323,7 @@ def jugarTurnoTerceraRonda(request, respuesta, palabra_a_adivinar, j1, j2, jugad
         primer_intentoR3 = 0
 
     # Asignar puntos al jugador correcto
-        if turno_actual == j1:
-            puntos_jugador1 += 10000
-        else:
-            puntos_jugador2 += 10000
+        puntos_jugador1, puntos_jugador2 = actualizarPuntos(j1, turno_actual, puntos_jugador1, puntos_jugador2, 10000)
 
         palabras_modificadas[int(n_palabra_adivinado)-2] = palabra_a_adivinar
         if nPalabrasRespondidas == 5:
@@ -1390,10 +1346,8 @@ def jugarTurnoTerceraRonda(request, respuesta, palabra_a_adivinar, j1, j2, jugad
             primer_intentoR3 = 0
 
             nPalabrasRespondidas += 1
-            if turno_actual == j1:
-                puntos_jugador1 += 10000
-            else:
-                puntos_jugador2 += 10000
+            puntos_jugador1, puntos_jugador2 = actualizarPuntos(j1, turno_actual, puntos_jugador1, puntos_jugador2, 10000)
+
 
             palabras_modificadas[int(
                 n_palabra_adivinado)-2] = palabra_a_adivinar
@@ -1515,6 +1469,14 @@ def quitar_acentos(texto):
     texto_normalizado = unicodedata.normalize('NFD', texto)
     texto_sin_acentos = re.sub(r'[\u0300-\u036f]', '', texto_normalizado)
     return texto_sin_acentos
+
+def actualizarPuntos(j1, turno_actual, puntos_jugador1, puntos_jugador2, puntos_ronda):
+        if turno_actual == j1:
+            puntos_jugador1 += puntos_ronda
+        else:
+            puntos_jugador2 += puntos_ronda
+
+        return puntos_jugador1, puntos_jugador2
 
 def generarPanelPE():
     system_prompts = [
