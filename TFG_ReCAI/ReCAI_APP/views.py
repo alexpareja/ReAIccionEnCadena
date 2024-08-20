@@ -174,61 +174,12 @@ def instrucciones_ultima_palabra(request):
 
 
 def palabras_encadenadas(request):
+
     palabras_cargadasR1 = request.session.get('palabras_cargadasR1', False)
-    prompt = prompts.PromptPrueba1
-    system_prompts = [
-        "Eres un generador de palabras únicas y reales en español.",  # 2 like #2 dislike
-        "Proporciona dos palabras reales y únicas en español.",  # 2 like FUERAAAAAA
-        "Genera dos palabras que sean válidas en el idioma español. ",  # 2 like
-        "Eres un generador de temas para un concurso. Debes ser creativo a la hora de ofrecer temas, abarcando cualquier tema en español."]  # 1 meh
-    sys_pr = random.choice(system_prompts)
-    print(sys_pr)
     while not palabras_cargadasR1:
-        response = openai.chat.completions.create(
-            model="gpt-4o-mini",
-            messages=[
-                {
-                    "role": "system",
-                    "content": sys_pr
-                },
-                {
-                    "role": "user",
-                    "content": "Piensa en un tema (máximo 2 palabras) y damelo con la siguiente estructura JSON:\n{\n  \"tema\": \"\"\n}"
-                }
-            ],
-            temperature=1.65,
-            max_tokens=20,
-            response_format={"type": "json_object"}
-        )
-        print(response)
-        # JsonPalabras = llamadaAPIChatGPT(prompt)
-        tema = json.loads(response.choices[0].message.content)["tema"]
-
-        prompt2 = "Dame una lista de 6 palabras en castellano relacionadas con el tema " + tema + \
-            ". Asegurate de que cada palabra empiece con la última letra de la anterior palabra de la lista. Las 6 palabras no pueden ser iguales ni poner palabras compuestas por más de una palabra, con un máximo de 12 letras. Devuelveme esta lista en un JSON con la siguiente estructura {\"tema\": \"\",   \"p1\": \"\",   \"p2\": \"\",   \"p3\": \"\",   \"p4\": \"\",   \"p5\": \"\",   \"p6\": \"\" }"
-        response = openai.chat.completions.create(
-            model="gpt-4o-mini",
-            messages=[
-                {
-                    "role": "system",
-                    "content": "Eres un generador de palabras. Debes asegurarte de que todas las palabras que generas empiezan por la última letra de la palabra anterior en la lista en español castellano."
-                },
-                {
-                    "role": "user",
-                    "content": prompt2
-                }
-            ],
-            temperature=0.5,
-            max_tokens=300,
-            response_format={"type": "json_object"}
-        )
-        data = json.loads(response.choices[0].message.content)
-        palabras = [data["p1"], data["p2"], data["p3"],
-                    data["p4"], data["p5"], data["p6"]]
-
-        # Verificar si las palabras encadenadas son correctas
-        if all(palabras[i].startswith(palabras[i-1][-1]) for i in range(1, len(palabras))):
-            request.session['datajson'] = data
+        tema, arrayPanel, data = generarPanelPE()
+        if all(arrayPanel[i].startswith(arrayPanel[i-1][-1]) for i in range(1, len(arrayPanel))):
+            request.session['datajson'] = arrayPanel
             modelo_palabras = PalabrasEncadenadas(
                 tema=tema,
                 p1=data["p1"],
@@ -397,15 +348,10 @@ def marcador_ronda(request):
 
 def centro_de_la_cadena(request):
     palabras_cargadasR2 = request.session.get('palabras_cargadasR2', False)
-    prompt = prompts.PROMPT_RONDA2Y3
     if palabras_cargadasR2 == False:
         arrayPanel = generarPanel7huecos()
         while len(set(arrayPanel)) != 7:
             arrayPanel = generarPanel7huecos()
-
-        # JsonPalabras = llamadaAPIChatGPTModeloFineTuning(prompt)
-        # JsonPalabras = llamadaAPIChatGPT(prompt)
-        print(arrayPanel)
         request.session['datajson'] = arrayPanel
         palabras = EslabonCentral(
             p1=arrayPanel[0],
@@ -1569,6 +1515,52 @@ def quitar_acentos(texto):
     texto_normalizado = unicodedata.normalize('NFD', texto)
     texto_sin_acentos = re.sub(r'[\u0300-\u036f]', '', texto_normalizado)
     return texto_sin_acentos
+
+def generarPanelPE():
+    system_prompts = [
+    "Eres un generador de palabras únicas y reales en español.",  
+    "Proporciona dos palabras reales y únicas en español.", 
+    "Genera dos palabras que sean válidas en el idioma español. ",  
+    "Eres un generador de temas para un concurso. Debes ser creativo a la hora de ofrecer temas, abarcando cualquier tema en español."] 
+    response = openai.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[
+            {
+                "role": "system",
+                "content": random.choice(system_prompts)
+            },
+            {
+                "role": "user",
+                "content": "Piensa en un tema (máximo 2 palabras) y damelo con la siguiente estructura JSON:\n{\n  \"tema\": \"\"\n}"
+            }
+        ],
+        temperature=1.65,
+        max_tokens=20,
+        response_format={"type": "json_object"}
+    )
+    tema = json.loads(response.choices[0].message.content)["tema"]
+
+    response = openai.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[
+            {
+                "role": "system",
+                "content": "Eres un generador de palabras. Debes asegurarte de que todas las palabras que generas empiezan por la última letra de la palabra anterior en la lista en español castellano."
+            },
+            {
+                "role": "user",
+                "content": "Dame una lista de 6 palabras en castellano relacionadas con el tema " + tema + ". Asegurate de que cada palabra empiece con la última letra de la anterior palabra de la lista. Las 6 palabras no pueden ser iguales ni poner palabras compuestas por más de una palabra, con un máximo de 12 letras. Devuelveme esta lista en un JSON con la siguiente estructura {\"tema\": \"\",   \"p1\": \"\",   \"p2\": \"\",   \"p3\": \"\",   \"p4\": \"\",   \"p5\": \"\",   \"p6\": \"\" }"
+            }
+        ],
+        temperature=0.5,
+        max_tokens=300,
+        response_format={"type": "json_object"}
+    )
+    arrayPanel = json.loads(response.choices[0].message.content)
+    palabras = [arrayPanel["p1"], arrayPanel["p2"], arrayPanel["p3"],
+                arrayPanel["p4"], arrayPanel["p5"], arrayPanel["p6"]]
+
+    return tema, palabras, arrayPanel
 
 
 def generarPanel7huecos():
