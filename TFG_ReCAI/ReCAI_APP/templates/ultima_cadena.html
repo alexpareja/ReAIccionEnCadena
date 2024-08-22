@@ -1,38 +1,37 @@
-{% extends 'base_generic.html' %} 
+{% extends 'base_generic.html' %}
 {% load static %}
 
 
-{% block title %} PARTIDA EN JUEGO {% endblock %} 
+{% block title %} PARTIDA EN JUEGO {% endblock %}
 {%block content %}
 <div class="banner">
     <span class="text-juego">última cadena</span>
 </div>
 <div id="game">
-    <div id = "panel">
+    <div id="panel">
         <div id=ultimo_panel>
-                <li>{{ palabras.p1 }}</li>
-                <li id="p2">{{ palabras_modificadas.0 }}</li>
-                <li>{{ palabras.p3 }}</li>
-                <li id="p4">{{ palabras_modificadas.1}}</li>
-                <li>{{ palabras.p5 }}</li>
-                <li id="p6">{{ palabras_modificadas.2 }}</li>
-                <li>{{ palabras.p7 }}</li>
-                <li id="p8">{{ palabras_modificadas.3 }}</li>
-                <li>{{ palabras.p9 }}</li>
-                <li id="p10">{{ palabras_modificadas.4}}</li>
-                <li>{{ palabras.p11}}</li>
-                <li id="p12">{{ palabras_modificadas.5}}</li>
-                <li>{{palabras.p13}}</li>
+            <li>{{ palabras.p1 }}</li>
+            <li id="p2">{{ palabras_modificadas.0 }}</li>
+            <li>{{ palabras.p3 }}</li>
+            <li id="p4">{{ palabras_modificadas.1}}</li>
+            <li>{{ palabras.p5 }}</li>
+            <li id="p6">{{ palabras_modificadas.2 }}</li>
+            <li>{{ palabras.p7 }}</li>
+            <li id="p8">{{ palabras_modificadas.3 }}</li>
+            <li>{{ palabras.p9 }}</li>
+            <li id="p10">{{ palabras_modificadas.4}}</li>
+            <li>{{ palabras.p11}}</li>
+            <li id="p12">{{ palabras_modificadas.5}}</li>
+            <li>{{palabras.p13}}</li>
         </div>
     </div>
 
-    <input type="hidden" id="idPalabra" value="{{idPalabra}}"> 
-       
-    <div id = "jugador">
+    <input type="hidden" id="idPalabra" value="{{idPalabra}}">
+
+    <div id="jugadores">
         {% include 'base_final_player.html' %}
         <p class="comodines">Comodines restantes: {{comodines}}</p>
     </div>
-
 </div>
 
 {% endblock %}

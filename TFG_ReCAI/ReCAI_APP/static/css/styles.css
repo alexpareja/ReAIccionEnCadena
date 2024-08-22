@@ -223,20 +223,6 @@ a {
     margin: 1em 0;
 }
 
-
-#jugador {
-    width: 50%;
-    height: auto;
-    max-height: 40vh;
-    text-align: center;
-    padding: 3.125em;
-    margin-top: 2em;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    background-color: #f9fafb6e;
-    border-radius: 0 1.875em 0 1.875em;
-}
-
-
 #jugador-palabra {
     width: 50%;
     height: auto;
