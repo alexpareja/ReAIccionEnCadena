@@ -461,7 +461,7 @@ def centro_de_la_cadena(request):
                                                                                                                      respuesta, palabra_a_adivinar, j1, j2, jugador1, jugador2,
                                                                                                                      turno_actual, puntos_jugador1, puntos_jugador2, palabras,
                                                                                                                      n_palabra_adivinado, palabras_modificadas, fin, letras_mostradas, primera_letra,
-                                                                                                                      esSeleccionable, nPalabrasRespondidas, actualizarActivos, pausaIA_R2, IA_jugando)
+                                                                                                                      esSeleccionable, nPalabrasRespondidas, actualizarActivos, pausaIA_R2)
                 if pausaIA_R2 == 1 and turno_actual not in ['IA 1', 'IA 2', 'IA']:
                     esSeleccionable = 1
             else:
@@ -482,7 +482,7 @@ def centro_de_la_cadena(request):
                                                                                                                      respuesta, palabra_a_adivinar, j1, j2, jugador1, jugador2,
                                                                                                                      turno_actual, puntos_jugador1, puntos_jugador2, palabras,
                                                                                                                      n_palabra_adivinado, palabras_modificadas, fin, letras_mostradas, primera_letra,
-                                                                                                                     esSeleccionable, nPalabrasRespondidas, actualizarActivos, pausaIA_R2, IA_jugando)
+                                                                                                                     esSeleccionable, nPalabrasRespondidas, actualizarActivos, pausaIA_R2)
                 if pausaIA_R2 == 1:
                     esSeleccionable = 1
     else:
@@ -1502,8 +1502,7 @@ def generarPanel7huecos():
         max_tokens=100,
         response_format={"type": "json_object"}
     )
-    #p2 = json.loads(p2_request.choices[0].message.content)["p2"]
-    p2="popoi"
+    p2 = json.loads(p2_request.choices[0].message.content)["p2"]
     p1_request = openai.chat.completions.create(
         model="gpt-4o-mini",
         messages=[
