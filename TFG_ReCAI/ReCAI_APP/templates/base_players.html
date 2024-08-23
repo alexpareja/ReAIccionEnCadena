@@ -36,7 +36,7 @@
         {% if IA_jugando %}
             <button href ="{% url 'palabras_encadenadas'%}" class="play-button">Pulse aqui para que juegue la IA</button>
         {%else%}
-            {%if isSeleccionada %}
+            {%if esSeleccionable %}
                 <a>Elige la palabra que quieres adivinar <br> (por arriba o por abajo)</a>
             {% else %}
                 <div id="campo_palabra">

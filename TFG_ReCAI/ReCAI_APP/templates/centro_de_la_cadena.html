@@ -20,7 +20,7 @@
         </div>
         <form method=post id="formSeleccionarPalabra">
             {% csrf_token %}
-            <input type="hidden" id="isSeleccionada" name="isSeleccionada" value="{{isSeleccionada}}">
+            <input type="hidden" id="esSeleccionable" name="esSeleccionable" value="{{esSeleccionable}}">
             <input type="hidden" id="palabra_elegida" name="palabra_elegida" value="{{palabra_elegida}}">
         </form>
 

@@ -93,10 +93,10 @@ document.addEventListener('DOMContentLoaded', () => {
 */
 
 function seleccionarPalabra(elemento) {
-    var isSeleccionada = document.getElementById('isSeleccionada');
+    var esSeleccionable = document.getElementById('esSeleccionable');
     var idP =  document.getElementById('palabra_elegida');
     let form = document.getElementById('formSeleccionarPalabra');
-    if (isSeleccionada.value == 1 && elemento.classList.contains("activo")){
+    if (esSeleccionable.value == 1 && elemento.classList.contains("activo")){
         idP.value = elemento.id;
         form.submit()
     }
@@ -120,8 +120,8 @@ document.addEventListener('DOMContentLoaded', function() {
     var actualizarActivos= document.getElementById('actualizarActivos')
     var idP =  document.getElementById('palabra_elegida');
     var liPalabraElegida =  document.getElementById(idP.value);
-    var isSeleccionada = document.getElementById('isSeleccionada');
-    if (isSeleccionada.value == 1){
+    var esSeleccionable = document.getElementById('esSeleccionable');
+    if (esSeleccionable.value == 1){
         jug = document.getElementById('turno_actual').value;
         if ((jug == "IA") | (jug == 'IA 1') | (jug == 'IA 2')){
             seleccionarPalabraIA();
