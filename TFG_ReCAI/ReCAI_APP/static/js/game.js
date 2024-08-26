@@ -6,6 +6,9 @@ document.addEventListener('DOMContentLoaded', function() {
         palabraElement.style.backgroundColor = ''; // Quita el color de fondo
         palabraElement.classList.add('palabraactual'); // Agrega la clase palabraactual
     }
+    // if (window.performance && window.performance.navigation.type === window.performance.navigation.TYPE_BACK_FORWARD) {
+    //     window.location.href = "{% url 'index' %}";
+    // }
 });
 
 
@@ -50,47 +53,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
-
-/*
-    document.addEventListener('DOMContentLoaded', () => {
-        const invisibles = document.querySelectorAll('#panel .invisible');
-        let revealingElement = null; // Almacena el elemento que está siendo revelado
-
-        invisibles.forEach(item => {
-            item.dataset.revealedCount = 0;
-
-            item.addEventListener('click', function() {
-                if (revealingElement && revealingElement !== this) return; // Ignora el clic si no es el elemento en revelación
-
-                const maxReveal = this.textContent.length;
-                let revealedCount = parseInt(this.dataset.revealedCount);
-
-                if (revealedCount < maxReveal) {
-                    revealingElement = this; // Establece el elemento actual como el elemento en revelación
-                    const originalText = this.textContent;
-                    revealedCount++;
-                    this.dataset.revealedCount = revealedCount;
-
-                    const visibleText = originalText.substr(0, revealedCount);
-                    const hiddenText = originalText.substr(revealedCount);
-
-                    this.innerHTML = `<span class="revealed-text">${visibleText}</span>` + '<span style="visibility:hidden;">' + hiddenText + '</span>';
-
-                    if (!this.classList.contains('partially-revealed')) {
-                        this.classList.add('partially-revealed');
-                    }
-
-                    // Cuando se haya revelado completamente, cambia la clase del elemento
-                    if (revealedCount === maxReveal) {
-                        revealingElement = null; // Resetea el elemento en revelación
-                        this.classList.remove('invisible', 'partially-revealed'); // Remueve clases que indiquen estado previo
-                        this.classList.add('visible'); // Añade la clase 'visible' para indicar que está completamente revelado
-                    }
-                }
-            });
-        });
-});
-*/
 
 function seleccionarPalabra(elemento) {
     var esSeleccionable = document.getElementById('esSeleccionable');
@@ -196,29 +158,3 @@ function seleccionarPalabraIA() {
     
     console.log(document.getElementById(elementoAleat), elementoAleat, indiceAleat, elementosActivos);
   }
-
-/*function obtenerIdsActivos() {
-    var ids = [];
-    var elementosActivos = document.querySelectorAll('li.activo');
-    
-    elementosActivos.forEach(function(elemento) {
-        ids.push(elemento.id);
-    });
-    
-    // Envía los IDs al backend (en este caso, a la URL '/ruta/de/tu/vista/')
-    fetch('/centro_de_la_cadena/', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': '{{ csrf_token }}' // Asegúrate de incluir el token CSRF si estás utilizando Django forms
-        },
-        body: JSON.stringify({ ids: ids })
-    })
-    .then(response => {
-        // Maneja la respuesta del servidor si es necesario
-        console.log('IDs enviados al backend');
-    })
-    .catch(error => {
-        console.error('Error al enviar los IDs al backend:', error);
-    });
-}*/

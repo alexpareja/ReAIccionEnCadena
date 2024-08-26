@@ -220,6 +220,7 @@ def palabras_encadenadas(request):
     IA_jugando = 0
     palabras_modificadas = []
     pausaIA_R1 = request.session.get('pausaIA_R1', 1)
+    ultima_respuestaR1 = request.session.get('ultima_respuestaR1', '')
 
     for i in range(1, 7):
         nombre_campo = 'p' + str(i)
@@ -266,6 +267,7 @@ def palabras_encadenadas(request):
             respuestaJSON = json.loads(
                 jsonrespuesta.choices[0].message.content)
             respuesta = respuestaJSON['palabra'].upper()
+            ultima_respuestaR1 = respuesta
 
             if (turno_actual == 'IA 1'):
                 respuestaJugadorIA1 = respuestaIA(
@@ -289,6 +291,8 @@ def palabras_encadenadas(request):
         IA_jugando = 0
         if request.method == 'POST':
             respuesta = request.POST.get('respuesta', '').upper()
+            ultima_respuestaR1 = respuesta
+
             (request, html, j1, j2, jugador1, jugador2,
              puntos_jugador1, puntos_jugador2, turno_actual, palabras,
              palabras_modificadas, n_palabra_adivinado, letras_mostradas,
@@ -310,6 +314,7 @@ def palabras_encadenadas(request):
     request.session['puntos_jugador1'] = puntos_jugador1
     request.session['puntos_jugador2'] = puntos_jugador2
     request.session['ronda'] = 'Ronda 1: Palabras encadenadas'
+    request.session['ultima_respuestaR1'] = ultima_respuestaR1
 
     return render(request, 'palabras_encadenadas.html', {
         'j1': j1, 'j2': j2, 'jugador1': jugador1, 'jugador2': jugador2,
@@ -1120,7 +1125,7 @@ def llamadaAPIChatGPT(palabra_antes, palabra_despues, primera_letra):
                 "content": [
                     {
                         "type": "text",
-                        "text": "Eres un jugador en el programa de televisión de Telecinco \"Palabras Encadenadas\". Debes hacer relaciones basadas en diferentes palabras. Las respuestas que proporciones deben existir en castellano. "
+                        "text": "Eres un jugador en el programa de televisión de Telecinco \"Reaccion en Cadena\". Debes hacer relaciones basadas en diferentes palabras. Las respuestas que proporciones deben existir en castellano. "
                     }]
             },
             {
@@ -1460,9 +1465,9 @@ def generarPanel7huecos():
                   'complementariedad', 'causa-efecto', 'metonimia', 'secuencialidad', 'asociación']
 
     system_prompts = [
-        "Eres un generador de palabras únicas y reales en español para un programa el programa de televisión Reacción en Cadena de Telecinco",
-        "Te encargas de proporcionar una palabra real y única en español para crear un tablero para el programa de televisión Reacción en Cadena de Telecinco.",
-        "Debes generar una palabra única que sea válida en el idioma español para poder utilizarla en el programa de televisión Reacción en Cadena de Telecinco."]
+        "Eres un generador de palabras únicas y reales en español para un programa de televisión.",
+        "Te encargas de proporcionar una palabra real y única en español para crear un tablero para un programa de televisión.",
+        "Debes generar una palabra única que sea válida en el idioma español para un programa de televisión."]
     p4_request = openai.chat.completions.create(
         model="gpt-4o-mini",
         messages=[
@@ -1472,10 +1477,10 @@ def generarPanel7huecos():
             },
             {
                 "role": "user",
-                "content": "Proporciona una palabra, p4, aleatoria no inventada en español. Hay que devolver únicamente la palabra en el siguiente formato JSON:\n{\n\"p4\":\"\"}"
+                "content": "Proporciona un sustantivo o adjetivo, p4, aleatorio no inventado en español. Hay que devolver únicamente la palabra en el siguiente formato JSON:\n{\n\"p4\":\"\"}"
             }
         ],
-        temperature=1.65,
+        temperature=1.55,
         max_tokens=100,
         response_format={"type": "json_object"}
     )
@@ -1486,7 +1491,7 @@ def generarPanel7huecos():
         messages=[
             {
                 "role": "system",
-                "content": "Generas una lista de palabras para el programa de televisión español de Telecinco Reacción en Cadena"
+                "content": "Generas una lista de palabras para un programa de televisión español."
             },
             {
                 "role": "user",
@@ -1504,7 +1509,7 @@ def generarPanel7huecos():
         messages=[
             {
                 "role": "system",
-                "content": "Generas una lista de palabras para el programa de televisión español de Telecinco Reacción en Cadena"
+                "content": "Generas una lista de palabras para un programa de televisión español."
             },
             {
                 "role": "user",
@@ -1522,7 +1527,7 @@ def generarPanel7huecos():
         messages=[
             {
                 "role": "system",
-                "content": "Generas una lista de palabras para el programa de televisión español de Telecinco Reacción en Cadena"
+                "content": "Generas una lista de palabras para un programa de televisión español."
             },
             {
                 "role": "user",
@@ -1539,7 +1544,7 @@ def generarPanel7huecos():
         messages=[
             {
                 "role": "system",
-                "content": "Generas una lista de palabras para el programa de televisión español de Telecinco Reacción en Cadena"
+                "content": "Generas una lista de palabras para un programa de televisión español."
             },
             {
                 "role": "user",
@@ -1557,7 +1562,7 @@ def generarPanel7huecos():
         messages=[
             {
                 "role": "system",
-                "content": "Generas una lista de palabras para el programa de televisión español de Telecinco Reacción en Cadena"
+                "content": "Generas una lista de palabras para un programa de televisión español."
             },
             {
                 "role": "user",
@@ -1575,7 +1580,7 @@ def generarPanel7huecos():
         messages=[
             {
                 "role": "system",
-                "content": "Generas una lista de palabras para el programa de televisión español de Telecinco Reacción en Cadena "
+                "content": "Generas una lista de palabras para un programa de televisión español."
             },
             {
                 "role": "user",
@@ -1602,8 +1607,8 @@ def generarPanel7huecos():
 def generarPanel15huecos():
     array = []
     system_prompts = [
-        "Eres un generador de palabras únicas y reales en español para un programa el programa de televisión Reacción en Cadena de Telecinco",
-        "Te encargas de proporcionar una palabra real y única en español para crear un tablero para el programa de televisión Reacción en Cadena de Telecinco.",
+        "Eres un generador de palabras únicas y reales en español para un programa de televisión español.",
+        "Te encargas de proporcionar una palabra real y única en español para crear un tablero para un programa de televisión",
         "Debes generar una palabra única que sea válida en el idioma español."]
     primer_request = openai.chat.completions.create(
         model="gpt-4o-mini",
@@ -1614,7 +1619,7 @@ def generarPanel15huecos():
             },
             {
                 "role": "user",
-                "content": "Proporciona una palabra, p8, aleatoria no inventada en español. Hay que devolver únicamente la palabra en el siguiente formato JSON:\n{\n\"p8\":\"\"}"
+                "content": "Proporciona un sustantivo o adjetivo, p8, aleatorio no inventado en español. Hay que devolver únicamente la palabra en el siguiente formato JSON:\n{\n\"p8\":\"\"}"
             }
         ],
         temperature=1.45,
@@ -1628,7 +1633,7 @@ def generarPanel15huecos():
         messages=[
             {
                 "role": "system",
-                "content": "Generas una lista de palabras para el programa de televisión español de Telecinco Reacción en Cadena. Contesta con la mayor precisión posible"
+                "content": "Generas una lista de palabras para un programa de televisión español.. Contesta con la mayor precisión posible"
             },
             {
                 "role": "user",
@@ -1647,7 +1652,7 @@ def generarPanel15huecos():
         messages=[
             {
                 "role": "system",
-                "content": "Generas una lista de palabras para el programa de televisión español de Telecinco Reacción en Cadena"
+                "content": "Generas una lista de palabras para un programa de televisión español."
             },
             {
                 "role": "user",
@@ -1666,7 +1671,7 @@ def generarPanel15huecos():
         messages=[
             {
                 "role": "system",
-                "content": "Generas una lista de palabras para el programa de televisión español de Telecinco Reacción en Cadena"
+                "content": "Generas una lista de palabras para un programa de televisión español."
             },
             {
                 "role": "user",
@@ -1685,7 +1690,7 @@ def generarPanel15huecos():
         messages=[
             {
                 "role": "system",
-                "content": "Generas una lista de palabras para el programa de televisión español de Telecinco Reacción en Cadena"
+                "content": "Generas una lista de palabras para un programa de televisión español."
             },
             {
                 "role": "user",
@@ -1704,7 +1709,7 @@ def generarPanel15huecos():
         messages=[
             {
                 "role": "system",
-                "content": "Generas una lista de palabras para el programa de televisión español de Telecinco Reacción en Cadena"
+                "content": "Generas una lista de palabras para un programa de televisión español."
             },
             {
                 "role": "user",
@@ -1723,7 +1728,7 @@ def generarPanel15huecos():
         messages=[
             {
                 "role": "system",
-                "content": "Generas una lista de palabras para el programa de televisión español de Telecinco Reacción en Cadena"
+                "content": "Generas una lista de palabras para un programa de televisión español."
             },
             {
                 "role": "user",
@@ -1742,7 +1747,7 @@ def generarPanel15huecos():
         messages=[
             {
                 "role": "system",
-                "content": "Generas una lista de palabras para el programa de televisión español de Telecinco Reacción en Cadena"
+                "content": "Generas una lista de palabras para un programa de televisión español."
             },
             {
                 "role": "user",
