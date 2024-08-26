@@ -19,4 +19,11 @@
 
       {% block content %}{% endblock %}</div>
   </body>
+<script>
+      const [navigationEntry] = performance.getEntriesByType('navigation');
+            
+            if (navigationEntry && navigationEntry.type === 'back_forward') {
+                window.location.href = "{% url 'index' %}";
+            }
+</script>  
 </html>

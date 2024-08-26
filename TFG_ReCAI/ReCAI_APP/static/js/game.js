@@ -6,9 +6,6 @@ document.addEventListener('DOMContentLoaded', function() {
         palabraElement.style.backgroundColor = ''; // Quita el color de fondo
         palabraElement.classList.add('palabraactual'); // Agrega la clase palabraactual
     }
-    // if (window.performance && window.performance.navigation.type === window.performance.navigation.TYPE_BACK_FORWARD) {
-    //     window.location.href = "{% url 'index' %}";
-    // }
 });
 
 
@@ -87,7 +84,6 @@ document.addEventListener('DOMContentLoaded', function() {
         jug = document.getElementById('turno_actual').value;
         if ((jug == "IA") | (jug == 'IA 1') | (jug == 'IA 2')){
             seleccionarPalabraIA();
-            console.log(jug);
         }
     }
     if (actualizarActivos) {
@@ -97,8 +93,6 @@ document.addEventListener('DOMContentLoaded', function() {
         localStorage.setItem(liPalabraElegida.id, liPalabraElegida.classList)
         var liAnterior = document.getElementById('p'+ String(parseInt(liPalabraElegida.id[1])-1));
         var liPosterior = document.getElementById('p'+ String(parseInt(liPalabraElegida.id[1])+1));
-        console.log(liAnterior);
-        console.log(liPosterior);
 
         if (liAnterior != null){
             if(!liAnterior.classList.contains('resuelto')){
