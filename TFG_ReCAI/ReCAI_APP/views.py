@@ -1513,7 +1513,7 @@ def generarPanel7huecos():
             },
             {
                 "role": "user",
-                "content": "Porporciona una palabra p3, que este relacionda con" + p4 + ". mediante " + relaciones[random.randint(0, 10)] + " Las dos palabras no pueden ser iguales. Devuelve la palabra en el siguiente formato JSON:\n{\n\"p3\":\"\"}"
+                "content": "Porporciona una palabra p3, que este relacionda con " + p4 + " mediante " + relaciones[random.randint(0, 10)] + " Las dos palabras no pueden ser iguales. Devuelve la palabra en el siguiente formato JSON:\n{\n\"p3\":\"\"}"
             }
         ],
         temperature=0.6,
@@ -1531,7 +1531,7 @@ def generarPanel7huecos():
             },
             {
                 "role": "user",
-                "content": "Porporciona una palabra p5, que este relacionda con" + p4 + "  . mediante " + relaciones[random.randint(0, 10)] + " y que no guarde relación con' " + p3 + " ' . Ninguna de las tres palabras puede ser la misma. Devuelve la palabra en el siguiente formato JSON:\n{\n\"p5\":\"\"}"
+                "content": "Porporciona una palabra p5, que este relacionda con " + p4 + " mediante " + relaciones[random.randint(0, 10)] + " y que no guarde relación con' " + p3 + " ' . Ninguna de las tres palabras puede ser la misma. Devuelve la palabra en el siguiente formato JSON:\n{\n\"p5\":\"\"}"
             }
         ],
         temperature=0.6,
@@ -1549,7 +1549,7 @@ def generarPanel7huecos():
             },
             {
                 "role": "user",
-                "content": "Porporciona una palabra p2, que este relacionda con" + p3 + " . mediante " + relaciones[random.randint(0, 10)] + "  y que no guarde relación con" + p4 + "y" + p5 + ". Ninguna de las palabras se pueden repetir. Devuelve la palabra en el siguiente formato JSON:\n{\n\"p2\":\"\"}"
+                "content": "Porporciona una palabra p2, que este relacionda con " + p3 + " mediante " + relaciones[random.randint(0, 10)] + "  y que no guarde relación con" + p4 + "y" + p5 + ". Ninguna de las palabras se pueden repetir. Devuelve la palabra en el siguiente formato JSON:\n{\n\"p2\":\"\"}"
             }
         ],
         temperature=0.6,
@@ -1566,7 +1566,7 @@ def generarPanel7huecos():
             },
             {
                 "role": "user",
-                "content": "Porporciona una palabra p1, que este relacionda con" + p2 + " . mediante " + relaciones[random.randint(0, 10)] + " y que no guarde relación con " + p4 + "," + p3 + "y" + p5 + ". Ninguna de las palabras se pueden repetir. Devuelve la palabra en el siguiente formato JSON:\n{\n\"p1\":\"\"}"
+                "content": "Porporciona una palabra p1, que este relacionda con " + p2 + " mediante " + relaciones[random.randint(0, 10)] + " y que no guarde relación con " + p4 + "," + p3 + "y" + p5 + ". Ninguna de las palabras se pueden repetir. Devuelve la palabra en el siguiente formato JSON:\n{\n\"p1\":\"\"}"
             }
         ],
         temperature=0.6,
@@ -1584,7 +1584,7 @@ def generarPanel7huecos():
             },
             {
                 "role": "user",
-                "content": "Porporciona una palabra p6, que este relacionda con" + p5 + " . mediante " + relaciones[random.randint(0, 10)] + " y que no guarde relación con " + p4 + "," + p3 + "," + p1 + "y" + p2 + ". Ninguna de las palabras se pueden repetir. Devuelve la palabra en el siguiente formato JSON:\n{\n\"p6\":\"\"}"
+                "content": "Porporciona una palabra p6, que este relacionda con " + p5 + " mediante " + relaciones[random.randint(0, 10)] + " y que no guarde relación con " + p4 + "," + p3 + "," + p1 + "y" + p2 + ". Ninguna de las palabras se pueden repetir. Devuelve la palabra en el siguiente formato JSON:\n{\n\"p6\":\"\"}"
             }
         ],
         temperature=0.6,
@@ -1602,7 +1602,7 @@ def generarPanel7huecos():
             },
             {
                 "role": "user",
-                "content": "Porporciona una palabra p7, que este relacionda con" + p6 + " . mediante " + relaciones[random.randint(0, 10)] + " y que no guarde relación con " + p4 + "," + p3 + "," + p1 + "," + p5 + "y" + p2 + ". Ninguna de las palabras se pueden repetir. Devuelve la palabra en el siguiente formato JSON:\n{\n\"p7\":\"\"}"
+                "content": "Porporciona una palabra p7, que este relacionda con " + p6 + " mediante " + relaciones[random.randint(0, 10)] + " y que no guarde relación con " + p4 + "," + p3 + "," + p1 + "," + p5 + "y" + p2 + ". Ninguna de las palabras se pueden repetir. Devuelve la palabra en el siguiente formato JSON:\n{\n\"p7\":\"\"}"
             }
         ],
         temperature=0.6,
@@ -1655,7 +1655,7 @@ def generarPanel15huecos():
             },
             {
                 "role": "user",
-                "content": "Proporciona dos palabras diferentes, p7 y p9, que estén relacionadas con" + p8 + "que no guarden relación entre sí. Devuelve las palabras en el siguiente formato JSON:\n{\n\"p7\":\"\",\n\"p9\":\"\"}"
+                "content": "Proporciona dos palabras diferentes, p7 y p9, que estén relacionadas con " + p8 + " que no guarden relación entre sí. Devuelve las palabras en el siguiente formato JSON:\n{\n\"p7\":\"\",\n\"p9\":\"\"}"
             }
         ],
         temperature=0.6,
