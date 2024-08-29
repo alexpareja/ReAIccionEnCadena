@@ -1,33 +1,33 @@
-{% extends 'base_generic.html' %} 
+{% extends 'base_generic.html' %}
 {% load static %}
 
 
-{% block title %} PARTIDA EN JUEGO {% endblock %} 
+{% block title %} PARTIDA EN JUEGO {% endblock %}
 {%block content %}
 <div class="banner">
-    <span class="text-juego">último eslabón</span>
+    <span class="text-juego">la última palabra</span>
 </div>
 <div id="game">
-    <div id = "panel">
+    <div id="panel">
         <div id=ultimo_palabra>
-                <li>{{ palabra_inicial }}</li>
-                <li id="p2">{{ solucion_mostrada }}</li>
-                <li id="p3">{{ pista_mostrada }}</li>
+            <li>{{ palabra_inicial }}</li>
+            <li id="p2">{{ solucion_mostrada }}</li>
+            <li id="p3">{{ pista_mostrada }}</li>
         </div>
         {% if pistaMostrada %}
         {% if IA_jugando == 0 %}
         <form method="post" id="clueForm">
             {% csrf_token %}
-            <input type="hidden" name="pista" value="yes"> 
-            <input type="submit" class ="comodin" value="Solicitar pista">
+            <input type="hidden" name="pista" value="yes">
+            <input type="submit" class="comodin" value="Solicitar pista">
         </form>
         {% endif %}
         {% endif %}
     </div>
-    
-    <input type="hidden" id="idPalabra" value="{{idPalabra}}"> 
 
-    <div id = "jugador-palabra">
+    <input type="hidden" id="idPalabra" value="{{idPalabra}}">
+
+    <div id="jugador-palabra">
         {% include 'base_final_player.html' %}
     </div>
 </div>
