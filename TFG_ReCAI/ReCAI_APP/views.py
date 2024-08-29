@@ -993,7 +993,7 @@ def ultima_palabra(request):
     pista = getattr(palabras, 'pista', None)
     pista_mostrada = request.session.get('pista_mostrada', '?')
     request.session['pista_mostrada'] = pista_mostrada
-    respuestaIA = ''
+    respuesta_jugadorIA = ''
     pausaIA_R5 = request.session.get('pausaIA_R5', 1)
 
     if juego_acabado:
@@ -1004,9 +1004,6 @@ def ultima_palabra(request):
     if (jFinal == "IA") | (jFinal == 'IA 1') | (jFinal == 'IA 2'):
         if pausaIA_R5 == 0:
             if pistaMostrada == 1:
-
-                # prompt = prompts.PROMPT_PALABRAFINAL_IA_PLAYER.format(
-                #    palabra_inicial, solucion_mostrada)
                 prompt = "Teniendo la palabra " + palabra_inicial + " debes contestar otra que tenga algún tipo de relación con ella. Esta palabra sigue la siguiente estructura: " + solucion_mostrada + " Actualmente estas en un concurso de televisión y puedes ganar " + \
                     str(puntos_jugadorFinal) + \
                     "€ si adivinas esta palabra. Tienes la posibilidad de solicitar una pista (otra palabra relacionada), pero la cantidad de dinero se reducirá a la mitad. Debes responder con un JSON con el siguiente formato:\n{\n\"palabra\": \" \",\n\"quiero_pista\": \" \",\n\"explicacion\":\" \"\n}\nLa explicación debe ser muy breve, y si quieres una pista debes indicar en el campo pista \'SI\'."
@@ -1014,15 +1011,13 @@ def ultima_palabra(request):
                 jsonRespuesta = llamadaAPIChatGPTUltimaPalabra(prompt)
                 data = json.loads(jsonRespuesta)
                 if data["quiero_pista"] == 'SI':
-                    respuestaIA = 'No estoy seguro... Compro la palabra pista.'
+                    respuesta_jugadorIA = 'No estoy seguro... Compro la palabra pista.'
                     (request, pistaMostrada, pista_mostrada, pista,
                      puntos_jugadorFinal) = jugarTurnoUltimaPalabraMostrarPista(request, pistaMostrada,
                                                                                 pista_mostrada, pista, puntos_jugadorFinal)
                 else:
-                    respuesta = data["palabra"]
-                    # cambiaaaar
-                    respuestaIA = 'Mi respuesta es ' + \
-                        data["palabra"].upper() + '. ' + data["explicacion"]
+                    respuesta = data["palabra"].upper()
+                    respuesta_jugadorIA = respuestaIA(respuesta, data["explicacion"])
                     (request, puntos_jugadorFinal, respuesta,
                      solucion, solucion_mostrada, juego_acabado) = jugarTurnoUltimaPalabra(request,
                                                                                            puntos_jugadorFinal, respuesta,
@@ -1033,9 +1028,8 @@ def ultima_palabra(request):
                     " Debes responder con un JSON con el siguiente formato:\n{\n\"palabra\": \" \",\n\"explicacion\":\" \"\n}\nLa explicación debe ser muy breve."
                 jsonRespuesta = llamadaAPIChatGPTUltimaPalabra(prompt)
                 decoded_respuesta = json.loads(jsonRespuesta)
-                print(prompt + decoded_respuesta["palabra"])
-                respuestaIA = 'Tras ver la pista, mi respuesta es ' + \
-                    decoded_respuesta["palabra"] + '. ' + \
+                respuesta_jugadorIA = 'Tras ver la pista, mi respuesta es ' + \
+                    decoded_respuesta["palabra"].upper() + '. ' + \
                     decoded_respuesta["explicacion"]
                 (request, puntos_jugadorFinal, decoded_respuesta["palabra"],
                  solucion, solucion_mostrada, juego_acabado) = jugarTurnoUltimaPalabra(request,
@@ -1080,7 +1074,7 @@ def ultima_palabra(request):
                                                    'fin': 0,
                                                    'juego_acabado': juego_acabado,
                                                    'pistaMostrada': pistaMostrada,
-                                                   'respuesta_jugadorIA': respuestaIA,
+                                                   'respuesta_jugadorIA': respuesta_jugadorIA,
                                                    'IA_jugando': IA_jugando
                                                    })
 

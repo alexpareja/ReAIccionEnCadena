@@ -1,7 +1,10 @@
 document.addEventListener('DOMContentLoaded', function() {
     var idPalabra = document.getElementById('idPalabra').value;
     var palabraElement = document.getElementById(idPalabra);
-    document.getElementById('campo_respuesta').focus();    
+    var campo_respuesta = document.getElementById('campo_respuesta');
+    if(campo_respuesta){
+        campo_respuesta.focus();
+    }
     if (palabraElement) {
         palabraElement.style.backgroundColor = ''; // Quita el color de fondo
         palabraElement.classList.add('palabraactual'); // Agrega la clase palabraactual
@@ -148,7 +151,5 @@ function seleccionarPalabraIA() {
     var elementoAleat = ids[indiceAleat];
 
     // Simular un clic en el recuadro seleccionado por la IA
-    document.getElementById(elementoAleat).click();
-    
-    console.log(document.getElementById(elementoAleat), elementoAleat, indiceAleat, elementosActivos);
+    document.getElementById(elementoAleat).click();    
   }
