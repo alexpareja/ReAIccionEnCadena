@@ -23,7 +23,6 @@ class RegistroFormulario(UserCreationForm):
 
     def __init__(self, *args, **kwargs):
         super(RegistroFormulario, self).__init__(*args, **kwargs)
-        # Agregar clases de estilo a los campos y etiquetas
         self.fields['username'].widget.attrs['class'] = 'registro-input'
         self.fields['email'].widget.attrs['class'] = 'registro-input'
         self.fields['password1'].widget.attrs['class'] = 'registro-input'
@@ -37,7 +36,6 @@ class RegistroFormulario(UserCreationForm):
 class CambiarContraseñaFormulario(PasswordChangeForm):
     def __init__(self, *args, **kwargs):
         super(CambiarContraseñaFormulario, self).__init__(*args, **kwargs)
-        # Agregar clases de estilo a los campos
         self.fields['old_password'].widget.attrs['class'] = 'registro-input'
         self.fields['new_password1'].widget.attrs['class'] = 'registro-input'
         self.fields['new_password2'].widget.attrs['class'] = 'registro-input'

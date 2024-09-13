@@ -1,12 +1,11 @@
 body {
     display: flex;
-    justify-content: center; /* Centra horizontalmente */
-    align-items: center; /* Centra verticalmente */
-    min-height: 100vh; /* Asegura que el body tome al menos el alto completo de la pantalla */
-    margin: 0; /* Elimina los márgenes por defecto */
+    justify-content: center;
+    align-items: center; 
+    min-height: 100vh; 
+    margin: 0; 
 
     background: radial-gradient(circle at center, #b3d9ff 0%, #80bfff 50%, #0061ff 100%);
-    /* Para navegadores que no soportan gradientes */
     background: -webkit-radial-gradient(circle at center, #b3d9ff 0%, #80bfff 50%, #0061ff 100%);
     background: -moz-radial-gradient(circle at center, #b3d9ff 0%, #80bfff 50%, #0061ff 100%);
     background: -o-radial-gradient(circle at center, #b3d9ff 0%, #80bfff 50%, #0061ff 100%);
@@ -31,7 +30,7 @@ body {
     font-weight: bold;
     color: white;
     padding: 10px 40px; 
-    border-radius: 0 30px 30px 30px; /* Redondeado en todas las esquinas menos en la superior izquierda */
+    border-radius: 0 30px 30px 30px;
     background: linear-gradient(to bottom right, #f06 20%, #f90 80%);
     box-shadow: 0 0 10px 3px rgba(255, 255, 255, 0.6); 
     margin-bottom: 40px;

@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', function() {
     var palabraElement = document.getElementById(idPalabra);
     var campo_respuesta = document.getElementById('campo_respuesta');
     if(campo_respuesta){
-        campo_respuesta.focus();
+        campo_respuesta.focus(); // Escribir en el campo respuesta al cargar pag
     }
     if (palabraElement) {
         palabraElement.style.backgroundColor = ''; // Quita el color de fondo
@@ -14,7 +14,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
 document.addEventListener('DOMContentLoaded', () => {
     const grupos = document.querySelectorAll('#panel');
-
     grupos.forEach(grupo => {
         const invisibles = grupo.querySelectorAll('.invisible');
         const elementosPermitidos = [];
@@ -26,7 +25,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (invisibles.length > 1) {
             elementosPermitidos.push(invisibles[invisibles.length - 1]);
         }
-
         invisibles.forEach(item => {
             item.addEventListener('click', function() {
                 // Verifica si el elemento está permitido y no está bloqueado.
@@ -75,7 +73,7 @@ document.addEventListener('DOMContentLoaded', function() {
     elementos.forEach(function(elemento) {
         var estiloGuardado = localStorage.getItem(elemento.id);
         if (estiloGuardado) {
-            elemento.classList = estiloGuardado;
+            elemento.classList = estiloGuardado; 
         }
     });
 
@@ -86,17 +84,17 @@ document.addEventListener('DOMContentLoaded', function() {
     if (esSeleccionable.value == 1){
         jug = document.getElementById('turno_actual').value;
         if ((jug == "IA") | (jug == 'IA 1') | (jug == 'IA 2')){
-            seleccionarPalabraIA();
+            seleccionarPalabraIA();  //elección de palabra por IA
         }
     }
     if (actualizarActivos) {
-        //ver si es turno de la IA
         liPalabraElegida.classList.remove('activo');
         liPalabraElegida.classList.add('resuelto');
         localStorage.setItem(liPalabraElegida.id, liPalabraElegida.classList)
         var liAnterior = document.getElementById('p'+ String(parseInt(liPalabraElegida.id[1])-1));
         var liPosterior = document.getElementById('p'+ String(parseInt(liPalabraElegida.id[1])+1));
 
+        //Cambio de estado de los elementos adyacentes
         if (liAnterior != null){
             if(!liAnterior.classList.contains('resuelto')){
                 liAnterior.classList.add('activo');

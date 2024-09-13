@@ -23,5 +23,4 @@ urlpatterns = [
     path('marcador_ronda', views.marcador_ronda, name='marcador_ronda'),
     path('logout/', auth_views.LogoutView.as_view(template_name= 'logout.html'), name='my_logout'),
 
-    # Agrega más URLs según sea necesario
 ]

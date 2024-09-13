@@ -1,19 +1,14 @@
 from django.shortcuts import render, redirect
 from .forms import RegistroFormulario, LoginFormulario, CambiarContraseñaFormulario, FormNombresJugadores, TurnFormulario
-from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
-from .static import prompts
 import openai
 import json
-from django.templatetags.static import static
 import random
 from django.contrib.auth import update_session_auth_hash, login, authenticate
 from django.contrib.auth.models import User
 from .forms import OpcionForm
 from .models import PalabrasEncadenadas, EslabonCentral, RondaFinal, Puntuaciones
-from django import template
 from django.urls import reverse
 import unicodedata
 import re
@@ -22,6 +17,7 @@ openai.api_key = settings.OPENAI_API_KEY
 
 
 def index(request):
+    #Se borran las variables de sesión menos las de autenticación
     user_id = request.session.get('_auth_user_id')
     user_backend = request.session.get('_auth_user_backend')
     user_hash = request.session.get('_auth_user_hash')
@@ -34,7 +30,6 @@ def index(request):
 
     form = OpcionForm(request.POST or None)
     if request.method == 'POST':
-        print(form.errors)
         if form.is_valid():
             opcion_elegida = form.cleaned_data['opcion_elegida']
             j1 = "Jugador 1"
@@ -368,7 +363,7 @@ def inicializarJugadores(request, n_palabra_adivinado):
 
 
 def actualizarPalabraR2(palabra, n_palabra_adivinado, palabras_modificadas):
-    # Actualiza la palabra adivinada en la lista de palabras modificadas
+    # Actualiza la palabra adivinada en la lista de palabras modificadas en la ronda 2 (centro de la cadena)
     if n_palabra_adivinado > 4:
         palabras_modificadas[int(n_palabra_adivinado)-3] = palabra
     else:
@@ -809,11 +804,8 @@ def my_login(request):
             user = authenticate(request, username=username, password=password)
             if user is not None:
                 login(request, user)
-                # Redirige a la página de inicio o a donde prefieras
                 return redirect('index')
             else:
-                # Aquí puedes manejar el caso de inicio de sesión fallido
-                # Por ejemplo, mostrando un mensaje de error en el formulario
                 form.add_error(
                     None, "Nombre de usuario o contraseña incorrectos")
     else:
@@ -824,9 +816,7 @@ def my_login(request):
 
 def ultima_cadena(request):
     palabras_cargadasR4 = request.session.get('palabras_cargadasR4', False)
-    # prompt = prompts.PROMPT_RONDA4
     if palabras_cargadasR4 == False:
-        # JsonPalabras = llamadaAPIChatGPT(prompt)
         arrayPanel = generarPanel15huecos()
         while len(set(arrayPanel)) != 15:
             arrayPanel = generarPanel15huecos()
@@ -849,6 +839,7 @@ def ultima_cadena(request):
         palabras.save()
         palabras_cargadasR4 = True
         request.session['palabras_cargadasR4'] = palabras_cargadasR4
+        #Borrar variables de las rondas anteriores
     if (request.session.get('j1') != None) | (request.session.get('j2') != None):
         if (request.session.get('puntos_jugador1', 0) >= request.session.get('puntos_jugador2', 0)):
             jFinal = request.session.get('j1', 'Tipo de j1 no ingresado')
@@ -889,7 +880,7 @@ def ultima_cadena(request):
     palabras_modificadas = []
     IA_jugando = 0
 
-    for i in range(1, 14):  # Assuming there are 15 fields in RondaFinal
+    for i in range(1, 14):
         nombre_campo = 'p' + str(i)
         palabra = getattr(palabras, nombre_campo, '')
         palabra_modificada = ''
@@ -921,7 +912,7 @@ def ultima_cadena(request):
 
             respuestaJSON = json.loads(llamadaAPIChatGPT(
                 palabra1, palabra2, primera_letra))
-# cambiaaarrr
+
             respuestaIA = 'Mi respuesta es ' + respuestaJSON["palabra"].upper(
             ) + '. ' + respuestaJSON["explicacion"]
             nombre_campo = 'p' + str(n_palabra_adivinado)
@@ -939,7 +930,6 @@ def ultima_cadena(request):
             request.session['pausaIA_R4'] = pausaIA_R4
     else:
         if request.method == 'POST':
-            print(n_palabra_adivinado)
             form = TurnFormulario(request.POST)
             if form.is_valid():
                 respuesta = form.cleaned_data['respuesta'].upper()
@@ -1007,7 +997,6 @@ def ultima_palabra(request):
                 prompt = "Teniendo la palabra " + palabra_inicial + " debes contestar otra que tenga algún tipo de relación con ella. Esta palabra sigue la siguiente estructura: " + solucion_mostrada + " Actualmente estas en un concurso de televisión y puedes ganar " + \
                     str(puntos_jugadorFinal) + \
                     "€ si adivinas esta palabra. Tienes la posibilidad de solicitar una pista (otra palabra relacionada), pero la cantidad de dinero se reducirá a la mitad. Debes responder con un JSON con el siguiente formato:\n{\n\"palabra\": \" \",\n\"quiero_pista\": \" \",\n\"explicacion\":\" \"\n}\nLa explicación debe ser muy breve, y si quieres una pista debes indicar en el campo pista \'SI\'."
-                print(prompt)
                 jsonRespuesta = llamadaAPIChatGPTUltimaPalabra(prompt)
                 data = json.loads(jsonRespuesta)
                 if data["quiero_pista"] == 'SI':

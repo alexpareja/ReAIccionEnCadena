@@ -50,5 +50,3 @@ class RondaFinal(models.Model):
 
     def __str__(self):
             return self.p1
-
-# Create your models here.
